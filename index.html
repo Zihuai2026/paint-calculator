@@ -13,6 +13,11 @@
 <!-- canonical：防止多地址分散权重，上线时改成正式地址 -->
 <link rel="canonical" href="https://example.com/paint-calculator/">
 
+<!-- hreflang：告知 Google 中英文版本互为替代页面 -->
+<link rel="alternate" hreflang="zh-CN" href="https://example.com/paint-calculator/">
+<link rel="alternate" hreflang="en" href="https://example.com/paint-calculator/en/">
+<link rel="alternate" hreflang="x-default" href="https://example.com/paint-calculator/en/">
+
 <!-- Open Graph：分享到社交平台的卡片标题/描述/类型 -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="免费油漆用量计算器 - 一键算出需要几加仑漆">
@@ -86,9 +91,16 @@ body {
 .container { max-width: 1080px; margin: 0 auto; padding: 24px 16px 60px; }
 
 /* ---------- 顶部标题区 ---------- */
-header { text-align: center; margin-bottom: 28px; }
+header { text-align: center; margin-bottom: 28px; position: relative; }
 header h1 { font-size: 26px; color: var(--primary-dark); letter-spacing: 1px; }
 header p  { color: var(--text-sub); font-size: 14px; margin-top: 6px; }
+/* 语言切换入口：跳转英文版 */
+.lang-switch {
+  position: absolute; top: 0; right: 0;
+  font-size: 13px; color: var(--primary); text-decoration: none;
+  border: 1px solid var(--primary); border-radius: 999px; padding: 3px 14px;
+}
+.lang-switch:hover { background: var(--primary-light); }
 
 /* ---------- 主布局：左输入 + 右线框图 ---------- */
 .main-grid {
@@ -280,6 +292,7 @@ footer { text-align: center; font-size: 12px; color: #94a3b8; margin-top: 40px; 
 
   <!-- ===================== 顶部标题 ===================== -->
   <header>
+    <a class="lang-switch" href="en/">English</a>
     <h1>🏠 家装油漆用量计算器</h1>
     <p>输入房间尺寸，实时计算墙面面积与所需油漆加仑数（含 2 遍涂刷建议）</p>
   </header>

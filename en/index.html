@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ============================================================
+     SEO：上线前把 example.com 替换成你的真实域名
+     ============================================================ -->
+<title>Free Paint Calculator – How Many Gallons of Paint Do You Need?</title>
+<meta name="description" content="Free online paint calculator: enter room length, width, height and door/window area to instantly get wall area and gallons of paint needed (with 2-coat recommendation), plus a live wall-unfold diagram.">
+<meta name="keywords" content="paint calculator, how many gallons of paint, wall area calculator, paint coverage calculator">
+<link rel="canonical" href="https://example.com/paint-calculator/en/">
+
+<!-- hreflang：告知 Google 中英文版本互为替代页面 -->
+<link rel="alternate" hreflang="en" href="https://example.com/paint-calculator/en/">
+<link rel="alternate" hreflang="zh-CN" href="https://example.com/paint-calculator/">
+<link rel="alternate" hreflang="x-default" href="https://example.com/paint-calculator/en/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Free Paint Calculator – Know Your Gallons Before You Buy">
+<meta property="og:description" content="Enter your room dimensions and instantly get wall area and gallons of paint needed, with 2-coat recommendation and a live wall diagram.">
+<meta property="og:url" content="https://example.com/paint-calculator/en/">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#0e7490">
+
+<!-- ============================================================
+     FAQ structured data (JSON-LD): enables rich results in Google
+     ============================================================ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How many gallons of paint do I need for a room?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Wall area = 2 × (Length + Width) × Height − doors and windows area. One gallon covers about 400 sq ft per coat. With the recommended 2 coats: gallons = wall area × 2 ÷ 400, rounded up."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why is a second coat recommended?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The first coat primes and covers, the second ensures even, saturated color. Dark colors or big color changes may even need 3 coats."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should I subtract doors and windows?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. A standard door is about 20 sq ft and a typical window 12–15 sq ft. Enter the total area and the calculator subtracts it automatically."
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+/* ============================================================
+   Global styles: clean & professional
+   Primary: teal #0e7490, light gray background, white cards
+   ============================================================ */
+:root {
+  --primary: #0e7490;
+  --primary-dark: #155e75;
+  --primary-light: #e0f2fe;
+  --text: #1e293b;
+  --text-sub: #64748b;
+  --bg: #f4f7fa;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --ok: #059669;
+  --radius: 12px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.6;
+}
+.container { max-width: 1080px; margin: 0 auto; padding: 24px 16px 60px; }
+
+/* ---------- Header ---------- */
+header { text-align: center; margin-bottom: 28px; position: relative; }
+header h1 { font-size: 26px; color: var(--primary-dark); letter-spacing: .5px; }
+header p  { color: var(--text-sub); font-size: 14px; margin-top: 6px; }
+/* Language switcher */
+.lang-switch {
+  position: absolute; top: 0; right: 0;
+  font-size: 13px; color: var(--primary); text-decoration: none;
+  border: 1px solid var(--primary); border-radius: 999px; padding: 3px 14px;
+}
+.lang-switch:hover { background: var(--primary-light); }
+
+/* ---------- Main layout: left input + right diagram ---------- */
+.main-grid { display: grid; grid-template-columns: 380px 1fr; gap: 20px; align-items: start; }
+@media (max-width: 860px) { .main-grid { grid-template-columns: 1fr; } }
+
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.05);
+}
+.card h2 {
+  font-size: 16px; color: var(--primary); border-left: 4px solid var(--primary);
+  padding-left: 10px; margin-bottom: 16px;
+}
+
+/* ---------- Inputs ---------- */
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 5px; }
+.field .hint { font-size: 12px; color: var(--text-sub); font-weight: 400; }
+.field input, .field select {
+  width: 100%; padding: 10px 12px; border: 1px solid var(--border);
+  border-radius: 8px; font-size: 15px; outline: none; background: #fff;
+  transition: border .2s, box-shadow .2s;
+}
+.field input:focus, .field select:focus {
+  border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light);
+}
+.field-row { display: flex; gap: 12px; }
+.field-row .field { flex: 1; }
+
+/* ---------- Result ---------- */
+.result-box {
+  background: linear-gradient(135deg, #f0fdfa, var(--primary-light));
+  border: 1px solid #bae6fd; border-radius: var(--radius);
+  padding: 20px; text-align: center;
+}
+.result-num { font-size: 46px; font-weight: 800; color: var(--primary-dark); line-height: 1.1; }
+.result-num small { font-size: 16px; font-weight: 600; color: var(--text-sub); }
+.result-detail { font-size: 13px; color: var(--text-sub); margin: 8px 0 16px; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  width: 100%; padding: 11px 16px; border: none; border-radius: 8px;
+  font-size: 15px; font-weight: 600; cursor: pointer;
+  transition: background .2s, transform .1s;
+}
+.btn:active { transform: scale(.98); }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-outline { background: #fff; color: var(--primary); border: 1.5px solid var(--primary); }
+.btn-outline:hover { background: var(--primary-light); }
+.btn + .btn { margin-top: 10px; }
+.btn-outline.pdf { color: #b45309; border-color: #f59e0b; }
+.btn-outline.pdf:hover { background: #fef3c7; }
+
+/* ---------- SVG diagram ---------- */
+#wireframe-wrap { min-height: 300px; display: flex; align-items: center; justify-content: center; }
+#wireframe { width: 100%; height: auto; }
+
+/* ---------- Payment modal ---------- */
+.modal-mask {
+  display: none; position: fixed; inset: 0;
+  background: rgba(15,23,42,.55); z-index: 100;
+  align-items: center; justify-content: center;
+}
+.modal-mask.show { display: flex; }
+.modal {
+  background: #fff; border-radius: 14px; width: 92%; max-width: 420px;
+  padding: 28px; text-align: center; position: relative; animation: pop .25s ease;
+}
+@keyframes pop { from { transform: scale(.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal h3 { color: var(--primary-dark); margin-bottom: 8px; }
+.modal .price { font-size: 34px; font-weight: 800; color: #b45309; margin: 10px 0; }
+.modal .desc { font-size: 13px; color: var(--text-sub); margin-bottom: 18px; }
+.modal-close {
+  position: absolute; top: 10px; right: 14px; border: none; background: none;
+  font-size: 22px; color: var(--text-sub); cursor: pointer;
+}
+.modal-note { font-size: 11px; color: #94a3b8; margin-top: 12px; }
+
+/* ---------- Copy-success toast ---------- */
+.toast {
+  position: fixed; left: 50%; bottom: 48px;
+  transform: translateX(-50%) translateY(24px);
+  background: var(--card); border: 1px solid var(--border);
+  border-left: 5px solid var(--ok);
+  border-radius: 10px; padding: 12px 22px;
+  font-size: 14px; font-weight: 600; color: var(--text);
+  box-shadow: 0 8px 24px rgba(15,23,42,.15);
+  opacity: 0; pointer-events: none; z-index: 200;
+  display: flex; align-items: center; gap: 8px;
+  transition: opacity .25s ease, transform .25s ease;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast .t-icon { font-size: 18px; }
+
+/* ---------- Amazon affiliate ---------- */
+.affiliate { margin-top: 36px; }
+.affiliate h2 {
+  font-size: 16px; color: var(--text-sub); text-align: center; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.affiliate h2::before, .affiliate h2::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+.goods-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+@media (max-width: 680px) { .goods-grid { grid-template-columns: 1fr; } }
+.goods-card {
+  background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: hidden; text-align: center; transition: box-shadow .2s, transform .2s;
+}
+.goods-card:hover { box-shadow: 0 6px 18px rgba(14,116,144,.12); transform: translateY(-2px); }
+.goods-img {
+  height: 120px; background: #f1f5f9; display: flex;
+  align-items: center; justify-content: center; font-size: 40px; /* placeholder icon, swap for <img> */
+}
+.goods-body { padding: 14px; }
+.goods-body .g-name { font-size: 14px; font-weight: 600; }
+.goods-body .g-price { color: #b45309; font-weight: 700; margin: 4px 0 10px; }
+.goods-body a {
+  display: block; padding: 8px; border-radius: 8px; background: #f59e0b;
+  color: #fff; font-size: 13px; font-weight: 600; text-decoration: none;
+}
+.goods-body a:hover { background: #d97706; }
+
+footer { text-align: center; font-size: 12px; color: #94a3b8; margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ===================== Header ===================== -->
+  <header>
+    <a class="lang-switch" href="../">中文版</a>
+    <h1>🏠 Paint Calculator</h1>
+    <p>Enter your room dimensions and instantly get the gallons of paint you need (2-coat recommendation included)</p>
+  </header>
+
+  <!-- ===================== Main: left input / right diagram ===================== -->
+  <div class="main-grid">
+
+    <!-- ===== Left: inputs + result ===== -->
+    <div class="card">
+      <h2>📐 Room Dimensions (feet)</h2>
+
+      <!-- Length / Width side by side -->
+      <div class="field-row">
+        <div class="field">
+          <label for="len">Length <span class="hint">(ft)</span></label>
+          <input type="number" id="len" min="0" step="0.1" placeholder="e.g. 16" value="16">
+        </div>
+        <div class="field">
+          <label for="wid">Width <span class="hint">(ft)</span></label>
+          <input type="number" id="wid" min="0" step="0.1" placeholder="e.g. 12" value="12">
+        </div>
+      </div>
+
+      <!-- Height -->
+      <div class="field">
+        <label for="hei">Height <span class="hint">(ft)</span></label>
+        <input type="number" id="hei" min="0" step="0.1" placeholder="e.g. 9" value="9">
+      </div>
+
+      <!-- Doors & windows total area -->
+      <div class="field">
+        <label for="open">Doors &amp; Windows Total Area <span class="hint">(sq ft, 0 is OK)</span></label>
+        <input type="number" id="open" min="0" step="0.1" placeholder="e.g. 45" value="45">
+      </div>
+
+      <!-- Number of coats -->
+      <div class="field">
+        <label for="coats">Coats of Paint <span class="hint">(2 recommended)</span></label>
+        <select id="coats">
+          <option value="1">1 coat</option>
+          <option value="2" selected>2 coats (recommended)</option>
+          <option value="3">3 coats</option>
+        </select>
+      </div>
+
+      <!-- ===== Result ===== -->
+      <div class="result-box" style="margin-top:18px">
+        <div>Paint You Need</div>
+        <div class="result-num"><span id="gallons">0</span><small> gallons</small></div>
+        <div class="result-detail" id="detail">Wall area — sq ft</div>
+        <!-- Copy result -->
+        <button class="btn btn-primary" id="btnCopy">📋 Copy Result</button>
+        <!-- Paid PDF entry: opens the Stripe payment modal -->
+        <button class="btn btn-outline pdf" id="btnPdf">⬇️ Download Shopping List PDF</button>
+      </div>
+    </div>
+
+    <!-- ===== Right: live unfolded wall diagram (SVG) ===== -->
+    <div class="card">
+      <h2>🖼️ Room Wall Unfolded View</h2>
+      <div id="wireframe-wrap">
+        <svg id="wireframe" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+      <p style="font-size:12px;color:var(--text-sub);text-align:center">
+        Four walls unfolded · shaded area = doors &amp; windows deduction · updates in real time
+      </p>
+    </div>
+  </div>
+
+  <!-- ===================== Amazon affiliate slots (3 cards) ===================== -->
+  <section class="affiliate">
+    <h2>🛒 Recommended Tools (Amazon Affiliate)</h2>
+    <div class="goods-grid">
+      <!-- Product 1: paint — replace href with your Amazon affiliate link -->
+      <div class="goods-card">
+        <div class="goods-img">🪣</div>
+        <div class="goods-body">
+          <div class="g-name">Interior Latex Paint, 1 Gallon</div>
+          <div class="g-price">$32.99</div>
+          <a href="#" target="_blank" rel="nofollow sponsored">Buy on Amazon</a>
+        </div>
+      </div>
+      <!-- Product 2: brushes -->
+      <div class="goods-card">
+        <div class="goods-img">🖌️</div>
+        <div class="goods-body">
+          <div class="g-name">Professional Paint Brush Set (4 pcs)</div>
+          <div class="g-price">$14.99</div>
+          <a href="#" target="_blank" rel="nofollow sponsored">Buy on Amazon</a>
+        </div>
+      </div>
+      <!-- Product 3: painter's tape -->
+      <div class="goods-card">
+        <div class="goods-img">🩹</div>
+        <div class="goods-body">
+          <div class="g-name">Painter's Tape &amp; Masking Film (2 rolls)</div>
+          <div class="g-price">$8.49</div>
+          <a href="#" target="_blank" rel="nofollow sponsored">Buy on Amazon</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Paint Calculator · 1 gallon covers ~400 sq ft per coat · Results are for reference only
+  </footer>
+</div>
+
+<!-- ===================== Copy-success toast ===================== -->
+<div class="toast" id="toast">
+  <span class="t-icon">✅</span>
+  <span>Copied! Results saved to your clipboard</span>
+</div>
+
+<!-- ===================== Payment modal (Stripe placeholder) ===================== -->
+<div class="modal-mask" id="payModal">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">×</button>
+    <h3>📄 Shopping List PDF</h3>
+    <div class="price">$1.99</div>
+    <p class="desc">
+      Includes: paint quantity breakdown, color pairing suggestions,
+      step-by-step painting checklist, and a tools shopping comparison table.<br>
+      Instant download after payment.
+    </p>
+    <!-- TODO: hook up Stripe Checkout — replace the click handler below with
+         stripe.redirectToCheckout({ sessionId }) or a Payment Link redirect -->
+    <button class="btn btn-primary" id="btnPay">💳 Pay with Stripe</button>
+    <p class="modal-note">* Demo placeholder — no real payment gateway connected yet</p>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   Core logic:
+   1) Listen to all inputs, recalculate in real time
+   2) Formulas:
+      wall area = 2 × (length + width) × height − doors/windows area
+      gallons   = wall area × coats ÷ 400 (1 gal covers 400 sq ft per coat), rounded up
+   3) Draw the unfolded four-wall diagram with SVG, redraw on every change
+   ============================================================ */
+
+// ---------- DOM refs ----------
+const $ = (id) => document.getElementById(id);
+const inputLen   = $("len");    // room length
+const inputWid   = $("wid");    // room width
+const inputHei   = $("hei");    // room height
+const inputOpen  = $("open");   // doors & windows total area
+const inputCoats = $("coats");  // number of coats
+
+const elGallons = $("gallons");
+const elDetail  = $("detail");
+const svg       = $("wireframe");
+
+// ---------- Calculation ----------
+function calc() {
+  // Parse inputs; invalid/negative values are treated as 0
+  const L = Math.max(0, parseFloat(inputLen.value)  || 0);
+  const W = Math.max(0, parseFloat(inputWid.value)  || 0);
+  const H = Math.max(0, parseFloat(inputHei.value)  || 0);
+  const O = Math.max(0, parseFloat(inputOpen.value) || 0);
+  const coats = parseInt(inputCoats.value, 10) || 2;
+
+  // Wall area = unfolded four walls − openings
+  const wallArea = Math.max(0, 2 * (L + W) * H - O);
+
+  // Gallons needed (round up to be safe)
+  const gallons = Math.ceil(wallArea * coats / 400);
+
+  // Update result panel
+  elGallons.textContent = wallArea > 0 ? gallons : 0;
+  elDetail.textContent = wallArea > 0
+    ? "Wall area " + wallArea.toFixed(1) + " sq ft × " + coats + " coats ÷ 400 sq ft/gal"
+    : "Please enter valid room dimensions";
+
+  // Redraw the diagram
+  drawWireframe(L, W, H, O);
+}
+
+// ---------- SVG unfolded wall diagram ----------
+// Idea: "flatten" the four walls into one row — [width wall][length wall][width wall][length wall]
+// Each wall is a rectangle (width×height or length×height);
+// the doors/windows deduction is drawn as a shaded block on the first wall
+function drawWireframe(L, W, H, O) {
+  // Empty state when dimensions are invalid
+  if (L <= 0 || W <= 0 || H <= 0) {
+    svg.innerHTML =
+      '<text x="50%" y="50%" text-anchor="middle" fill="#94a3b8" font-size="15">' +
+      'Enter length, width and height to see the diagram</text>';
+    svg.setAttribute("viewBox", "0 0 400 120");
+    return;
+  }
+
+  const gap = 0.6;                          // display gap between walls (logical units)
+  const totalW = 2 * L + 2 * W + gap * 3;   // total unfolded width
+  // Scale: fit the whole diagram into the viewBox
+  const vbW = 640, vbH = Math.min(340, vbW * H / totalW);
+  const scale = Math.min(vbW / totalW, vbH / H);
+  const drawH = H * scale;
+  const offX = (vbW - (totalW * scale)) / 2; // horizontal centering offset
+
+  let html = '<g stroke="#0e7490" stroke-width="2" fill="#f0f9ff">';
+
+  // Draw 4 walls in order: width, length, width, length
+  const walls = [W, L, W, L];
+  const names = ["W " + W + "ft", "L " + L + "ft", "W " + W + "ft", "L " + L + "ft"];
+  let x = offX;
+  walls.forEach((len, i) => {
+    const w = len * scale;
+    html += '<rect x="' + x + '" y="' + 20 + '" width="' + w + '" height="' + drawH + '" rx="3"/>';
+    // Dimension label under each wall
+    html += '<text x="' + (x + w / 2) + '" y="' + (20 + drawH + 18) +
+            '" text-anchor="middle" font-size="11" fill="#64748b" stroke="none">' +
+            names[i] + '</text>';
+    x += w + gap * scale;
+  });
+
+  // Doors/windows deduction: shaded block on the first wall (illustrative, not positional)
+  if (O > 0 && walls[0] > 0) {
+    const w0 = W * scale;
+    // Shaded height = opening area ÷ wall width, capped at wall height
+    const oh = Math.min(drawH * 0.9, (O / W) * scale);
+    html += '<rect x="' + (offX + w0 * 0.25) + '" y="' + (20 + (drawH - oh) / 2) +
+            '" width="' + w0 * 0.5 + '" height="' + oh +
+            '" fill="#fde68a" stroke="#d97706" stroke-dasharray="4 3"/>';
+    html += '<text x="' + (offX + w0 / 2) + '" y="' + (20 + drawH / 2 + 4) +
+            '" text-anchor="middle" font-size="10" fill="#b45309" stroke="none">Doors/Win −' + O + ' sq ft</text>';
+  }
+
+  // Height label on the left
+  html += '<text x="' + (offX - 8) + '" y="' + (20 + drawH / 2) +
+          '" text-anchor="end" font-size="11" fill="#64748b" stroke="none">H ' + H + 'ft</text>';
+  html += "</g>";
+
+  svg.setAttribute("viewBox", "0 0 " + vbW + " " + (vbH + 45));
+  svg.innerHTML = html;
+}
+
+// ---------- Copy-success toast: fades out after 1.8 s ----------
+let toastTimer = null;   // keep the timer so rapid clicks don't cut it short
+function showToast() {
+  const toast = $("toast");
+  toast.classList.add("show");
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () {
+    toast.classList.remove("show");
+  }, 1800);
+}
+
+// ---------- Universal copy helper (with fallback) ----------
+// navigator.clipboard only works on HTTPS/localhost with permission;
+// it silently fails inside iframes, so fall back to execCommand
+function copyText(text) {
+  // Option 1: modern Clipboard API (secure context)
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    return navigator.clipboard.writeText(text);
+  }
+  // Option 2: temporary textarea + execCommand (legacy / restricted iframes)
+  return new Promise(function (resolve, reject) {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand("copy") ? resolve() : reject(new Error("copy failed"));
+    } catch (e) {
+      reject(e);
+    }
+    document.body.removeChild(ta);
+  });
+}
+
+// ---------- Copy result ----------
+$("btnCopy").addEventListener("click", function () {
+  const text =
+    "【Paint Calculation Result】\n" +
+    "Room: " + inputLen.value + " × " + inputWid.value + " × " + inputHei.value + " ft\n" +
+    "Doors & windows: " + (inputOpen.value || 0) + " sq ft\n" +
+    "Coats: " + inputCoats.value + "\n" +
+    "Wall area: " + elDetail.textContent.replace("Wall area ", "").split(" ×")[0] + " sq ft\n" +
+    "Paint needed: " + elGallons.textContent + " gallons";
+
+  copyText(text).then(function () {
+    // Success: button feedback + toast
+    $("btnCopy").textContent = "✅ Copied!";
+    setTimeout(function () { $("btnCopy").textContent = "📋 Copy Result"; }, 1500);
+    showToast();
+  }).catch(function () {
+    // Total failure: fall back to a manual-copy dialog
+    alert("Your browser doesn't support auto copy. Please copy manually:\n\n" + text);
+  });
+});
+
+// ---------- Payment modal (Stripe placeholder) ----------
+$("btnPdf").addEventListener("click", function () {
+  $("payModal").classList.add("show");
+});
+$("modalClose").addEventListener("click", function () {
+  $("payModal").classList.remove("show");
+});
+// Clicking the mask also closes the modal
+$("payModal").addEventListener("click", function (e) {
+  if (e.target === this) this.classList.remove("show");
+});
+// Pay button: placeholder — replace with Stripe Checkout when integrating
+$("btnPay").addEventListener("click", function () {
+  alert("Stripe payment placeholder — call Stripe Checkout here, then trigger the PDF download on success.");
+});
+
+// ---------- Event binding: recalculate on any input change ----------
+[inputLen, inputWid, inputHei, inputOpen].forEach(function (el) {
+  el.addEventListener("input", calc);
+});
+inputCoats.addEventListener("change", calc);
+
+// ---------- Run once on load (with default values) ----------
+calc();
+</script>
+</body>
+</html>
