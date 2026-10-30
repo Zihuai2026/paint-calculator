@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ============================================================
+     SEO 基础标签：上线前把 example.com 替换成你的真实域名
+     ============================================================ -->
+<title>家装油漆用量计算器 - 免费在线计算油漆加仑数 | Paint Calculator</title>
+<meta name="description" content="免费在线油漆用量计算器：输入房间长宽高和门窗面积，实时计算墙面面积与所需油漆加仑数（含 2 遍涂刷建议），附房间墙面展开图与采购清单下载。">
+<meta name="keywords" content="油漆计算器, 油漆用量计算, 墙面面积计算, paint calculator, gallons of paint">
+<!-- canonical：防止多地址分散权重，上线时改成正式地址 -->
+<link rel="canonical" href="https://example.com/paint-calculator/">
+
+<!-- Open Graph：分享到社交平台的卡片标题/描述/类型 -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="免费油漆用量计算器 - 一键算出需要几加仑漆">
+<meta property="og:description" content="输入房间尺寸，实时计算墙面面积与油漆加仑数，含涂刷建议与采购清单。">
+<meta property="og:url" content="https://example.com/paint-calculator/">
+<meta name="twitter:card" content="summary">
+
+<!-- 移动端浏览器主题色，与页面主色一致 -->
+<meta name="theme-color" content="#0e7490">
+
+<!-- ============================================================
+     FAQ 结构化数据（JSON-LD）：让 Google 搜索结果能显示问答富摘要
+     ============================================================ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "一间房间需要多少加仑油漆？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "墙面面积 = 2 × (长 + 宽) × 高 − 门窗面积。1 加仑漆单遍可涂刷约 400 平方英尺，建议涂刷 2 遍，所需加仑数 = 墙面面积 × 2 ÷ 400，向上取整。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "为什么建议涂刷 2 遍？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "第一遍打底覆盖，第二遍保证颜色均匀饱满。深色漆或新旧色差大时甚至需要 3 遍。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "门窗面积需要扣除吗？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "需要。普通门约占 20 平方英尺，标准窗约占 12~15 平方英尺，把总面积填入计算器即可自动扣除。"
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+/* ============================================================
+   全局样式：清爽专业风
+   主色：蓝绿 #0e7490（青碧），辅助：浅灰底、白卡片
+   ============================================================ */
+:root {
+  --primary: #0e7490;        /* 主题色：青碧蓝 */
+  --primary-dark: #155e75;   /* 主题色加深：hover 用 */
+  --primary-light: #e0f2fe;  /* 主题色浅底 */
+  --text: #1e293b;           /* 正文深灰 */
+  --text-sub: #64748b;       /* 次要文字灰 */
+  --bg: #f4f7fa;             /* 页面浅灰蓝底 */
+  --card: #ffffff;           /* 卡片白 */
+  --border: #e2e8f0;         /* 边框浅灰 */
+  --ok: #059669;             /* 成功绿 */
+  --radius: 12px;            /* 统一圆角 */
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+.container { max-width: 1080px; margin: 0 auto; padding: 24px 16px 60px; }
+
+/* ---------- 顶部标题区 ---------- */
+header { text-align: center; margin-bottom: 28px; }
+header h1 { font-size: 26px; color: var(--primary-dark); letter-spacing: 1px; }
+header p  { color: var(--text-sub); font-size: 14px; margin-top: 6px; }
+
+/* ---------- 主布局：左输入 + 右线框图 ---------- */
+.main-grid {
+  display: grid;
+  grid-template-columns: 380px 1fr;   /* 左固定宽，右自适应 */
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 860px) { .main-grid { grid-template-columns: 1fr; } } /* 手机端上下排列 */
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.05);
+}
+.card h2 {
+  font-size: 16px;
+  color: var(--primary);
+  border-left: 4px solid var(--primary);
+  padding-left: 10px;
+  margin-bottom: 16px;
+}
+
+/* ---------- 输入控件 ---------- */
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 5px; }
+.field .hint { font-size: 12px; color: var(--text-sub); font-weight: 400; }
+.field input, .field select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  transition: border .2s, box-shadow .2s;
+  background: #fff;
+}
+.field input:focus, .field select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+.field-row { display: flex; gap: 12px; }        /* 长/宽并排 */
+.field-row .field { flex: 1; }
+
+/* ---------- 结果区 ---------- */
+.result-box {
+  background: linear-gradient(135deg, #f0fdfa, var(--primary-light));
+  border: 1px solid #bae6fd;
+  border-radius: var(--radius);
+  padding: 20px;
+  text-align: center;
+}
+.result-num {
+  font-size: 46px;
+  font-weight: 800;
+  color: var(--primary-dark);
+  line-height: 1.1;
+}
+.result-num small { font-size: 16px; font-weight: 600; color: var(--text-sub); }
+.result-detail { font-size: 13px; color: var(--text-sub); margin: 8px 0 16px; }
+
+/* ---------- 按钮通用 ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  width: 100%;
+  padding: 11px 16px;
+  border: none; border-radius: 8px;
+  font-size: 15px; font-weight: 600;
+  cursor: pointer;
+  transition: background .2s, transform .1s;
+}
+.btn:active { transform: scale(.98); }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-outline {
+  background: #fff; color: var(--primary);
+  border: 1.5px solid var(--primary);
+}
+.btn-outline:hover { background: var(--primary-light); }
+.btn + .btn { margin-top: 10px; }
+.btn-outline.pdf { color: #b45309; border-color: #f59e0b; }  /* PDF 按钮用琥珀色区分 */
+.btn-outline.pdf:hover { background: #fef3c7; }
+
+/* ---------- SVG 线框图容器 ---------- */
+#wireframe-wrap {
+  min-height: 300px;
+  display: flex; align-items: center; justify-content: center;
+}
+#wireframe { width: 100%; height: auto; }
+
+/* ---------- 付费弹窗 ---------- */
+.modal-mask {
+  display: none;                  /* 默认隐藏，JS 控制显示 */
+  position: fixed; inset: 0;
+  background: rgba(15,23,42,.55);
+  z-index: 100;
+  align-items: center; justify-content: center;
+}
+.modal-mask.show { display: flex; }
+.modal {
+  background: #fff;
+  border-radius: 14px;
+  width: 92%; max-width: 420px;
+  padding: 28px;
+  text-align: center;
+  position: relative;
+  animation: pop .25s ease;
+}
+@keyframes pop { from { transform: scale(.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal h3 { color: var(--primary-dark); margin-bottom: 8px; }
+.modal .price { font-size: 34px; font-weight: 800; color: #b45309; margin: 10px 0; }
+.modal .desc { font-size: 13px; color: var(--text-sub); margin-bottom: 18px; }
+.modal-close {
+  position: absolute; top: 10px; right: 14px;
+  border: none; background: none; font-size: 22px; color: var(--text-sub); cursor: pointer;
+}
+.modal-note { font-size: 11px; color: #94a3b8; margin-top: 12px; }
+
+/* ---------- 复制成功 Toast 提示窗 ---------- */
+/* 固定在屏幕底部居中，默认隐藏，JS 加 .show 类触发弹出动画 */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 48px;
+  transform: translateX(-50%) translateY(24px);  /* 初始位置：略下沉，配合淡入 */
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--ok);              /* 左侧绿色竖条：成功语义 */
+  border-radius: 10px;
+  padding: 12px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, .15);
+  opacity: 0;                                    /* 默认完全透明 */
+  pointer-events: none;                          /* 隐藏时不挡住下层点击 */
+  z-index: 200;
+  display: flex; align-items: center; gap: 8px;
+  transition: opacity .25s ease, transform .25s ease;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);     /* 上浮到位 */
+}
+.toast .t-icon { font-size: 18px; }
+
+/* ---------- 亚马逊联盟推荐位 ---------- */
+.affiliate { margin-top: 36px; }
+.affiliate h2 {
+  font-size: 16px; color: var(--text-sub); text-align: center; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.affiliate h2::before, .affiliate h2::after {
+  content: ""; flex: 1; height: 1px; background: var(--border);
+}
+.goods-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+}
+@media (max-width: 680px) { .goods-grid { grid-template-columns: 1fr; } }
+.goods-card {
+  background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: hidden; text-align: center;
+  transition: box-shadow .2s, transform .2s;
+}
+.goods-card:hover { box-shadow: 0 6px 18px rgba(14,116,144,.12); transform: translateY(-2px); }
+.goods-img {
+  height: 120px; background: #f1f5f9;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px;                     /* 占位图标，上线时替换为商品图 <img> */
+}
+.goods-body { padding: 14px; }
+.goods-body .g-name { font-size: 14px; font-weight: 600; }
+.goods-body .g-price { color: #b45309; font-weight: 700; margin: 4px 0 10px; }
+.goods-body a {
+  display: block; padding: 8px; border-radius: 8px;
+  background: #f59e0b; color: #fff; font-size: 13px; font-weight: 600;
+  text-decoration: none;
+}
+.goods-body a:hover { background: #d97706; }
+
+footer { text-align: center; font-size: 12px; color: #94a3b8; margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ===================== 顶部标题 ===================== -->
+  <header>
+    <h1>🏠 家装油漆用量计算器</h1>
+    <p>输入房间尺寸，实时计算墙面面积与所需油漆加仑数（含 2 遍涂刷建议）</p>
+  </header>
+
+  <!-- ===================== 主体：左输入 / 右线框图 ===================== -->
+  <div class="main-grid">
+
+    <!-- ===== 左侧：输入 + 结果卡片 ===== -->
+    <div class="card">
+      <h2>📐 房间尺寸（单位：英尺）</h2>
+
+      <!-- 长 / 宽 并排 -->
+      <div class="field-row">
+        <div class="field">
+          <label for="len">长度 <span class="hint">(ft)</span></label>
+          <input type="number" id="len" min="0" step="0.1" placeholder="如 16" value="16">
+        </div>
+        <div class="field">
+          <label for="wid">宽度 <span class="hint">(ft)</span></label>
+          <input type="number" id="wid" min="0" step="0.1" placeholder="如 12" value="12">
+        </div>
+      </div>
+
+      <!-- 高度 -->
+      <div class="field">
+        <label for="hei">高度 <span class="hint">(ft)</span></label>
+        <input type="number" id="hei" min="0" step="0.1" placeholder="如 9" value="9">
+      </div>
+
+      <!-- 门窗总面积 -->
+      <div class="field">
+        <label for="open">门 / 窗总面积 <span class="hint">(sq ft，可填 0)</span></label>
+        <input type="number" id="open" min="0" step="0.1" placeholder="如 45" value="45">
+      </div>
+
+      <!-- 涂刷遍数 -->
+      <div class="field">
+        <label for="coats">涂刷遍数 <span class="hint">(建议 2 遍)</span></label>
+        <select id="coats">
+          <option value="1">1 遍</option>
+          <option value="2" selected>2 遍（推荐）</option>
+          <option value="3">3 遍</option>
+        </select>
+      </div>
+
+      <!-- ===== 结果区 ===== -->
+      <div class="result-box" style="margin-top:18px">
+        <div>所需油漆</div>
+        <div class="result-num"><span id="gallons">0</span><small> 加仑</small></div>
+        <div class="result-detail" id="detail">墙面面积 — sq ft</div>
+        <!-- 一键复制结果按钮 -->
+        <button class="btn btn-primary" id="btnCopy">📋 一键复制结果</button>
+        <!-- 付费弹窗入口：点击弹出 Stripe 付费 modal -->
+        <button class="btn btn-outline pdf" id="btnPdf">⬇️ 下载采购清单 PDF</button>
+      </div>
+    </div>
+
+    <!-- ===== 右侧：房间展开线框图（SVG 实时绘制） ===== -->
+    <div class="card">
+      <h2>🖼️ 房间墙面展开图</h2>
+      <div id="wireframe-wrap">
+        <svg id="wireframe" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+      <p style="font-size:12px;color:var(--text-sub);text-align:center">
+        四面墙展开示意 · 阴影部分为门窗扣除区 · 尺寸变化实时同步
+      </p>
+    </div>
+  </div>
+
+  <!-- ===================== 亚马逊联盟推荐位（3 个商品卡） ===================== -->
+  <section class="affiliate">
+    <h2>🛒 推荐工具（Amazon 联盟）</h2>
+    <div class="goods-grid">
+      <!-- 商品 1：油漆 —— 将 href 换成你的 Amazon affiliate 链接 -->
+      <div class="goods-card">
+        <div class="goods-img">🪣</div>
+        <div class="goods-body">
+          <div class="g-name">内墙乳胶漆 1 加仑装</div>
+          <div class="g-price">$32.99</div>
+          <a href="#" target="_blank" rel="nofollow sponsored">去 Amazon 购买</a>
+        </div>
+      </div>
+      <!-- 商品 2：刷子 -->
+      <div class="goods-card">
+        <div class="goods-img">🖌️</div>
+        <div class="goods-body">
+          <div class="g-name">专业油漆刷套装（4 支）</div>
+          <div class="g-price">$14.99</div>
+          <a href="#" target="_blank" rel="nofollow sponsored">去 Amazon 购买</a>
+        </div>
+      </div>
+      <!-- 商品 3：美纹纸 -->
+      <div class="goods-card">
+        <div class="goods-img">🩹</div>
+        <div class="goods-body">
+          <div class="g-name">美纹纸胶带 / 遮蔽膜 2 卷</div>
+          <div class="g-price">$8.49</div>
+          <a href="#" target="_blank" rel="nofollow sponsored">去 Amazon 购买</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Paint Calculator · 1 加仑漆可涂刷约 400 平方英尺（单遍） · 计算结果仅供参考
+  </footer>
+</div>
+
+<!-- ===================== 复制成功 Toast 提示窗 ===================== -->
+<div class="toast" id="toast">
+  <span class="t-icon">✅</span>
+  <span>复制成功！结果已保存到剪贴板</span>
+</div>
+
+<!-- ===================== 付费弹窗（Stripe 占位） ===================== -->
+<div class="modal-mask" id="payModal">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">×</button>
+    <h3>📄 采购清单 PDF</h3>
+    <div class="price">$1.99</div>
+    <p class="desc">
+      包含：油漆用量明细、推荐色号搭配、施工步骤清单、工具采购对照表。<br>
+      支付成功后立即下载。
+    </p>
+    <!-- TODO: 接入 Stripe Checkout —— 将下方按钮点击事件替换为
+         stripe.redirectToCheckout({ sessionId }) 或 Payment Link 跳转 -->
+    <button class="btn btn-primary" id="btnPay">💳 使用 Stripe 支付</button>
+    <p class="modal-note">* 当前为付费占位演示，未接入真实支付通道</p>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   核心逻辑：
+   1) 监听所有输入框，实时计算
+   2) 公式：墙面面积 = 2 × (长 + 宽) × 高 − 门窗面积
+      所需加仑 = 墙面面积 × 遍数 ÷ 400（1 加仑刷 400 sq ft 单遍），向上取整
+   3) 同时用 SVG 绘制四面墙展开线框图，尺寸变化即时重绘
+   ============================================================ */
+
+// ---------- 获取 DOM 元素 ----------
+const $ = (id) => document.getElementById(id);
+const inputLen   = $("len");    // 房间长
+const inputWid   = $("wid");    // 房间宽
+const inputHei   = $("hei");    // 房间高
+const inputOpen  = $("open");   // 门窗总面积
+const inputCoats = $("coats");  // 涂刷遍数
+
+const elGallons = $("gallons"); // 加仑数展示
+const elDetail  = $("detail");  // 明细文字
+const svg       = $("wireframe");
+
+// ---------- 计算函数 ----------
+function calc() {
+  // 解析输入，非法/负值统一按 0 处理
+  const L = Math.max(0, parseFloat(inputLen.value)  || 0);
+  const W = Math.max(0, parseFloat(inputWid.value)  || 0);
+  const H = Math.max(0, parseFloat(inputHei.value)  || 0);
+  const O = Math.max(0, parseFloat(inputOpen.value) || 0);
+  const coats = parseInt(inputCoats.value, 10) || 2;
+
+  // 墙面面积 = 四面墙周长展开 − 门窗面积
+  const wallArea = Math.max(0, 2 * (L + W) * H - O);
+
+  // 所需加仑数（向上取整，保证够用）
+  const gallons = Math.ceil(wallArea * coats / 400);
+
+  // 更新结果区
+  elGallons.textContent = wallArea > 0 ? gallons : 0;
+  elDetail.textContent = wallArea > 0
+    ? "墙面面积 " + wallArea.toFixed(1) + " sq ft × " + coats + " 遍 ÷ 400 sq ft/加仑"
+    : "请输入有效的房间尺寸";
+
+  // 同步重绘右侧线框图
+  drawWireframe(L, W, H, O);
+}
+
+// ---------- SVG 线框图绘制 ----------
+// 思路：把四面墙"摊平"成一条横排 —— [宽墙][长墙][宽墙][长墙]
+// 每面墙是一个矩形（宽×高 或 长×高），门窗面积以阴影块画在第一面墙上示意
+function drawWireframe(L, W, H, O) {
+  const NS = "http://www.w3.org/2000/svg";
+
+  // 无有效尺寸时显示空态提示
+  if (L <= 0 || W <= 0 || H <= 0) {
+    svg.innerHTML =
+      '<text x="50%" y="50%" text-anchor="middle" fill="#94a3b8" font-size="15">' +
+      '请输入长、宽、高以生成展开图</text>';
+    svg.setAttribute("viewBox", "0 0 400 120");
+    return;
+  }
+
+  const gap = 0.6;                 // 墙与墙之间的展示间隙（逻辑单位）
+  const totalW = 2 * L + 2 * W + gap * 3;   // 展开总宽
+  // 视图缩放：把整个展开图适配进 viewBox
+  const vbW = 640, vbH = Math.min(340, vbW * H / totalW);
+  const scale = Math.min(vbW / totalW, vbH / H);
+  const drawH = H * scale;
+  const offX = (vbW - (totalW * scale)) / 2; // 水平居中偏移
+
+  let html = '<g stroke="#0e7490" stroke-width="2" fill="#f0f9ff">';
+
+  // 依次画 4 面墙：宽墙、长墙、宽墙、长墙
+  const walls = [W, L, W, L];
+  const names = ["宽 " + W + "ft", "长 " + L + "ft", "宽 " + W + "ft", "长 " + L + "ft"];
+  let x = offX;
+  walls.forEach((len, i) => {
+    const w = len * scale;
+    html += '<rect x="' + x + '" y="' + 20 + '" width="' + w + '" height="' + drawH + '" rx="3"/>';
+    // 墙底标注尺寸文字
+    html += '<text x="' + (x + w / 2) + '" y="' + (20 + drawH + 18) +
+            '" text-anchor="middle" font-size="11" fill="#64748b" stroke="none">' +
+            names[i] + '</text>';
+    x += w + gap * scale;
+  });
+
+  // 门窗扣除区：按门窗面积在第一面墙上画一块阴影（示意，不按真实位置）
+  if (O > 0 && walls[0] > 0) {
+    const w0 = W * scale;
+    // 阴影高度 = 门窗面积 ÷ 墙宽，且不超过墙高
+    const oh = Math.min(drawH * 0.9, (O / W) * scale);
+    html += '<rect x="' + (offX + w0 * 0.25) + '" y="' + (20 + (drawH - oh) / 2) +
+            '" width="' + w0 * 0.5 + '" height="' + oh +
+            '" fill="#fde68a" stroke="#d97706" stroke-dasharray="4 3"/>';
+    html += '<text x="' + (offX + w0 / 2) + '" y="' + (20 + drawH / 2 + 4) +
+            '" text-anchor="middle" font-size="10" fill="#b45309" stroke="none">门窗 −' + O + ' sq ft</text>';
+  }
+
+  // 顶部标注房间高度
+  html += '<text x="' + (offX - 8) + '" y="' + (20 + drawH / 2) +
+          '" text-anchor="end" font-size="11" fill="#64748b" stroke="none">高 ' + H + 'ft</text>';
+  html += "</g>";
+
+  svg.setAttribute("viewBox", "0 0 " + vbW + " " + (vbH + 45));
+  svg.innerHTML = html;
+}
+
+// ---------- 复制成功 Toast：显示 1.8 秒后自动淡出 ----------
+let toastTimer = null;   // 记录定时器，避免连续点击时提前消失
+function showToast() {
+  const toast = $("toast");
+  toast.classList.add("show");
+  // 若上一次提示还未消失，先清除旧定时器再重新计时
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () {
+    toast.classList.remove("show");
+  }, 1800);
+}
+
+// ---------- 通用复制函数（带降级方案） ----------
+// 原因：navigator.clipboard 只在 HTTPS/localhost 且有权限的页面可用，
+// 在 iframe 预览等环境下会被拒绝，因此失败时降级为 execCommand 方案
+function copyText(text) {
+  // 方案一：现代剪贴板 API（需安全上下文）
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    return navigator.clipboard.writeText(text);
+  }
+  // 方案二：临时 textarea + execCommand（兼容旧浏览器 / 受限 iframe）
+  return new Promise(function (resolve, reject) {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand("copy") ? resolve() : reject(new Error("copy failed"));
+    } catch (e) {
+      reject(e);
+    }
+    document.body.removeChild(ta);
+  });
+}
+
+// ---------- 一键复制结果 ----------
+$("btnCopy").addEventListener("click", function () {
+  const text =
+    "【油漆用量计算结果】\n" +
+    "房间尺寸：" + inputLen.value + " × " + inputWid.value + " × " + inputHei.value + " 英尺\n" +
+    "门窗面积：" + (inputOpen.value || 0) + " sq ft\n" +
+    "涂刷遍数：" + inputCoats.value + " 遍\n" +
+    "墙面面积：" + elDetail.textContent.replace("墙面面积 ", "").split(" ×")[0] + " sq ft\n" +
+    "所需油漆：" + elGallons.textContent + " 加仑";
+
+  copyText(text).then(function () {
+    // 成功：按钮文字反馈 + 弹出「复制成功」提示窗
+    $("btnCopy").textContent = "✅ 已复制！";
+    setTimeout(function () { $("btnCopy").textContent = "📋 一键复制结果"; }, 1500);
+    showToast();
+  }).catch(function () {
+    // 彻底失败：降级为弹窗，让用户手动复制
+    alert("当前浏览器不支持自动复制，请手动复制：\n\n" + text);
+  });
+});
+
+// ---------- 付费弹窗（Stripe 占位） ----------
+$("btnPdf").addEventListener("click", function () {
+  $("payModal").classList.add("show");   // 显示弹窗
+});
+$("modalClose").addEventListener("click", function () {
+  $("payModal").classList.remove("show");
+});
+// 点击遮罩层也可关闭弹窗
+$("payModal").addEventListener("click", function (e) {
+  if (e.target === this) this.classList.remove("show");
+});
+// 支付按钮：此处为占位，接入时替换为 Stripe Checkout 逻辑
+$("btnPay").addEventListener("click", function () {
+  alert("Stripe 支付占位 —— 接入时在此调用 Stripe Checkout 完成支付，成功后触发 PDF 下载。");
+});
+
+// ---------- 事件绑定：任何输入变化都立即重算 ----------
+[inputLen, inputWid, inputHei, inputOpen].forEach(function (el) {
+  el.addEventListener("input", calc);
+});
+inputCoats.addEventListener("change", calc);
+
+// ---------- 页面加载后先算一次（使用默认值演示） ----------
+calc();
+</script>
+</body>
+</html>

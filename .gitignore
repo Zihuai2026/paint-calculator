@@ -1,0 +1,8 @@
+# 系统与编辑器杂项
+.DS_Store
+Thumbs.db
+*.log
+
+# HBuilderX / VS Code 本地配置（按需保留）
+.unhistory/
+.vscode/
