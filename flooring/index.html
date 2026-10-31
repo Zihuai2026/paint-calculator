@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ============================================================
+     SEO：标题/描述围绕 "flooring calculator / how many boxes"
+     ============================================================ -->
+<title>Flooring Calculator – How Many Boxes of Flooring Do You Need?</title>
+<meta name="description" content="Free flooring calculator: enter room length, width and waste factor to instantly get floor area, total square feet with waste, and how many boxes of laminate, vinyl or tile you need.">
+<meta name="keywords" content="flooring calculator, how many boxes of flooring, laminate flooring calculator, square footage calculator, tile calculator">
+<link rel="canonical" href="https://zihuai2026.github.io/paint-calculator/flooring/">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Free Flooring Calculator – Boxes, Square Feet and Waste">
+<meta property="og:description" content="Work out floor area and the exact number of flooring boxes you need, waste factor included.">
+<meta property="og:url" content="https://zihuai2026.github.io/paint-calculator/flooring/">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#0e7490">
+
+<!-- FAQ 结构化数据 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How many boxes of flooring do I need?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Floor area = length × width. Add 10% for cuts and waste, then divide by the square footage each box covers and round up. A 12 × 12 ft room (144 sq ft) with 10% waste and 24.5 sq ft per box needs 7 boxes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much waste should I add?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "10% is standard for a simple rectangular room. Use 15% for rooms with many corners, diagonal layouts or lots of doorways, and 5% for tile with a simple straight layout."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need underlayment?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Laminate and many vinyl planks need an underlayment for sound and moisture protection, usually sold in rolls covering 100 sq ft. Buy one roll per 100 sq ft of floor area, rounded up."
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+/* ============================================================
+   与油漆计算器一致的视觉体系
+   ============================================================ */
+:root {
+  --primary: #0e7490;
+  --primary-dark: #155e75;
+  --primary-light: #e0f2fe;
+  --text: #1e293b;
+  --text-sub: #64748b;
+  --bg: #f4f7fa;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --ok: #059669;
+  --radius: 12px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.6;
+}
+.container { max-width: 1080px; margin: 0 auto; padding: 24px 16px 60px; }
+
+/* ---------- Header ---------- */
+header { text-align: center; margin-bottom: 28px; position: relative; }
+header h1 { font-size: 26px; color: var(--primary-dark); letter-spacing: .5px; }
+header p  { color: var(--text-sub); font-size: 14px; margin-top: 6px; }
+.lang-switch {
+  position: absolute; top: 0; right: 0;
+  font-size: 13px; color: var(--primary); text-decoration: none;
+  border: 1px solid var(--primary); border-radius: 999px; padding: 3px 14px;
+}
+.lang-switch:hover { background: var(--primary-light); }
+
+/* ---------- Layout ---------- */
+.main-grid { display: grid; grid-template-columns: 380px 1fr; gap: 20px; align-items: start; }
+@media (max-width: 860px) { .main-grid { grid-template-columns: 1fr; } }
+
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.05);
+}
+.card h2 {
+  font-size: 16px; color: var(--primary); border-left: 4px solid var(--primary);
+  padding-left: 10px; margin-bottom: 16px;
+}
+
+/* ---------- Inputs ---------- */
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 5px; }
+.field .hint { font-size: 12px; color: var(--text-sub); font-weight: 400; }
+.field input, .field select {
+  width: 100%; padding: 10px 12px; border: 1px solid var(--border);
+  border-radius: 8px; font-size: 15px; outline: none; background: #fff;
+  transition: border .2s, box-shadow .2s;
+}
+.field input:focus, .field select:focus {
+  border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light);
+}
+.field-row { display: flex; gap: 12px; }
+.field-row .field { flex: 1; }
+
+/* ---------- Result ---------- */
+.result-box {
+  background: linear-gradient(135deg, #f0fdfa, var(--primary-light));
+  border: 1px solid #bae6fd; border-radius: var(--radius);
+  padding: 20px; text-align: center;
+}
+.result-num { font-size: 46px; font-weight: 800; color: var(--primary-dark); line-height: 1.1; }
+.result-num small { font-size: 16px; font-weight: 600; color: var(--text-sub); }
+.result-detail { font-size: 13px; color: var(--text-sub); margin: 8px 0 16px; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  width: 100%; padding: 11px 16px; border: none; border-radius: 8px;
+  font-size: 15px; font-weight: 600; cursor: pointer;
+  transition: background .2s, transform .1s;
+}
+.btn:active { transform: scale(.98); }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-outline { background: #fff; color: var(--primary); border: 1.5px solid var(--primary); }
+.btn-outline:hover { background: var(--primary-light); }
+.btn + .btn { margin-top: 10px; }
+.btn-outline.pdf { color: #b45309; border-color: #f59e0b; }
+.btn-outline.pdf:hover { background: #fef3c7; }
+
+/* ---------- SVG plan ---------- */
+#plan-wrap { min-height: 300px; display: flex; align-items: center; justify-content: center; }
+#plan { width: 100%; height: auto; }
+
+/* ---------- Modal ---------- */
+.modal-mask {
+  display: none; position: fixed; inset: 0;
+  background: rgba(15,23,42,.55); z-index: 100;
+  align-items: center; justify-content: center;
+}
+.modal-mask.show { display: flex; }
+.modal {
+  background: #fff; border-radius: 14px; width: 92%; max-width: 420px;
+  padding: 28px; text-align: center; position: relative; animation: pop .25s ease;
+}
+@keyframes pop { from { transform: scale(.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal h3 { color: var(--primary-dark); margin-bottom: 8px; }
+.modal .price { font-size: 34px; font-weight: 800; color: #b45309; margin: 10px 0; }
+.modal .desc { font-size: 13px; color: var(--text-sub); margin-bottom: 18px; }
+.modal-close {
+  position: absolute; top: 10px; right: 14px; border: none; background: none;
+  font-size: 22px; color: var(--text-sub); cursor: pointer;
+}
+.modal-note { font-size: 11px; color: #94a3b8; margin-top: 12px; }
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed; left: 50%; bottom: 48px;
+  transform: translateX(-50%) translateY(24px);
+  background: var(--card); border: 1px solid var(--border);
+  border-left: 5px solid var(--ok);
+  border-radius: 10px; padding: 12px 22px;
+  font-size: 14px; font-weight: 600; color: var(--text);
+  box-shadow: 0 8px 24px rgba(15,23,42,.15);
+  opacity: 0; pointer-events: none; z-index: 200;
+  display: flex; align-items: center; gap: 8px;
+  transition: opacity .25s ease, transform .25s ease;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast .t-icon { font-size: 18px; }
+
+/* ---------- Affiliate ---------- */
+.affiliate { margin-top: 36px; }
+.affiliate h2 {
+  font-size: 16px; color: var(--text-sub); text-align: center; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.affiliate h2::before, .affiliate h2::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+.goods-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+@media (max-width: 680px) { .goods-grid { grid-template-columns: 1fr; } }
+.goods-card {
+  background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: hidden; text-align: center; transition: box-shadow .2s, transform .2s;
+}
+.goods-card:hover { box-shadow: 0 6px 18px rgba(14,116,144,.12); transform: translateY(-2px); }
+.goods-img {
+  height: 120px; background: #f1f5f9; display: flex;
+  align-items: center; justify-content: center; font-size: 40px;
+}
+.goods-body { padding: 14px; }
+.goods-body .g-name { font-size: 14px; font-weight: 600; }
+.goods-body .g-price { color: #b45309; font-weight: 700; margin: 4px 0 10px; }
+.goods-body a {
+  display: block; padding: 8px; border-radius: 8px; background: #f59e0b;
+  color: #fff; font-size: 13px; font-weight: 600; text-decoration: none;
+}
+.goods-body a:hover { background: #d97706; }
+
+/* ---------- Guide content ---------- */
+.guide { margin-top: 44px; }
+.guide > h2 {
+  font-size: 22px; color: var(--primary-dark); margin-bottom: 10px;
+  padding-bottom: 10px; border-bottom: 2px solid var(--primary-light);
+}
+.guide > h3 { font-size: 17px; color: var(--primary); margin: 28px 0 12px; }
+.guide p { font-size: 14px; color: #334155; margin-bottom: 12px; }
+.guide .lead { font-size: 15px; color: var(--text-sub); margin-bottom: 20px; }
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+@media (max-width: 760px) { .steps { grid-template-columns: 1fr 1fr; } }
+.step {
+  background: #fff; border: 1px solid var(--border); border-radius: 10px;
+  padding: 16px 14px;
+}
+.step .num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--primary); color: #fff; font-size: 13px; font-weight: 700;
+  margin-bottom: 8px;
+}
+.step h4 { font-size: 14px; margin-bottom: 6px; }
+.step p { font-size: 13px; color: var(--text-sub); margin: 0; }
+.faq-item {
+  border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px 16px; margin-bottom: 10px; background: #fff;
+}
+.faq-item h4 { font-size: 14px; color: var(--primary-dark); margin-bottom: 4px; }
+.faq-item p { font-size: 13.5px; color: #475569; margin: 0; }
+
+footer { text-align: center; font-size: 12px; color: #94a3b8; margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <a class="lang-switch" href="../en/">Paint Calculator</a>
+    <h1>🪵 Flooring Calculator</h1>
+    <p>Enter your room size to get the floor area, waste allowance and the number of boxes you need</p>
+  </header>
+
+  <div class="main-grid">
+
+    <!-- ===== Inputs + result ===== -->
+    <div class="card">
+      <h2>📐 Room Size (feet)</h2>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="len">Length <span class="hint">(ft)</span></label>
+          <input type="number" id="len" min="0" step="0.1" placeholder="e.g. 14" value="14">
+        </div>
+        <div class="field">
+          <label for="wid">Width <span class="hint">(ft)</span></label>
+          <input type="number" id="wid" min="0" step="0.1" placeholder="e.g. 12" value="12">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="coverage">Coverage per Box <span class="hint">(sq ft, printed on the box)</span></label>
+        <input type="number" id="coverage" min="1" step="0.1" placeholder="e.g. 24.5" value="24.5">
+      </div>
+
+      <div class="field">
+        <label for="waste">Waste Factor <span class="hint">(10% is standard)</span></label>
+        <select id="waste">
+          <option value="5">5% — simple straight layout</option>
+          <option value="10" selected>10% — standard room (recommended)</option>
+          <option value="15">15% — many corners / diagonal layout</option>
+          <option value="20">20% — complex shape / lots of cuts</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="price">Price per Box <span class="hint">($, optional)</span></label>
+        <input type="number" id="price" min="0" step="0.01" placeholder="e.g. 42.98" value="42.98">
+      </div>
+
+      <div class="result-box" style="margin-top:18px">
+        <div>Boxes You Need</div>
+        <div class="result-num"><span id="boxes">0</span><small> boxes</small></div>
+        <div class="result-detail" id="detail">Floor area — sq ft</div>
+        <button class="btn btn-primary" id="btnCopy">📋 Copy Result</button>
+        <button class="btn btn-outline pdf" id="btnPdf">⬇️ Download Material List PDF</button>
+      </div>
+    </div>
+
+    <!-- ===== Live floor plan ===== -->
+    <div class="card">
+      <h2>🖼️ Floor Plan</h2>
+      <div id="plan-wrap">
+        <svg id="plan" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+      <p style="font-size:12px;color:var(--text-sub);text-align:center">
+        Plank layout shown to scale · dimensions and area update in real time
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== Affiliate slots ===== -->
+  <section class="affiliate">
+    <h2>🛒 Recommended Tools (Amazon Affiliate)</h2>
+    <div class="goods-grid">
+      <!-- 待接入：把 href 换成你的 Amazon 联盟链接（tag=paintcalc20-20） -->
+      <div class="goods-card">
+        <div class="goods-img">🪵</div>
+        <div class="goods-body">
+          <div class="g-name">Laminate Flooring Planks (per box)</div>
+          <div class="g-price">See price on Amazon</div>
+          <a href="#" target="_blank" rel="nofollow sponsored">Buy on Amazon</a>
+        </div>
+      </div>
+      <div class="goods-card">
+        <div class="goods-img">🧱</div>
+        <div class="goods-body">
+          <div class="g-name">Flooring Underlayment Roll</div>
+          <div class="g-price">See price on Amazon</div>
+          <a href="#" target="_blank" rel="nofollow sponsored">Buy on Amazon</a>
+        </div>
+      </div>
+      <div class="goods-card">
+        <div class="goods-img">🔨</div>
+        <div class="goods-body">
+          <div class="g-name">Flooring Installation Kit</div>
+          <div class="g-price">See price on Amazon</div>
+          <a href="#" target="_blank" rel="nofollow sponsored">Buy on Amazon</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Guide content ===== -->
+  <section class="guide">
+    <h2>How to Work Out How Many Boxes of Flooring You Need</h2>
+    <p class="lead">
+      Flooring is sold by the box, but rooms are not box-shaped. The gap between "room area" and
+      "boxes to buy" is the waste factor — the extra material consumed by end cuts, doorways and
+      damaged planks.
+    </p>
+
+    <div class="steps">
+      <div class="step">
+        <span class="num">1</span>
+        <h4>Measure the room</h4>
+        <p>Length × width in feet gives the floor area. Split L-shaped rooms into two rectangles and add them.</p>
+      </div>
+      <div class="step">
+        <span class="num">2</span>
+        <h4>Add waste</h4>
+        <p>10% for a standard room, 15–20% for many corners or a diagonal layout.</p>
+      </div>
+      <div class="step">
+        <span class="num">3</span>
+        <h4>Check the box coverage</h4>
+        <p>Laminate boxes usually cover 20–25 sq ft; vinyl plank boxes 18–30 sq ft. It's printed on the carton.</p>
+      </div>
+      <div class="step">
+        <span class="num">4</span>
+        <h4>Round up</h4>
+        <p>Divide the area with waste by the coverage, then always round up — you cannot buy half a box.</p>
+      </div>
+    </div>
+
+    <h3>Frequently Asked Questions</h3>
+
+    <div class="faq-item">
+      <h4>How many boxes of flooring do I need?</h4>
+      <p>
+        Floor area = length × width. Add 10% for cuts and waste, then divide by the square footage each
+        box covers and round up. A 12 × 12 ft room (144 sq ft) with 10% waste and 24.5 sq ft per box
+        needs 7 boxes.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h4>How much waste should I add?</h4>
+      <p>
+        10% is standard for a simple rectangular room. Use 15% for rooms with many corners, diagonal
+        layouts or lots of doorways, and 5% for tile with a simple straight layout.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h4>Do I need underlayment?</h4>
+      <p>
+        Laminate and many vinyl planks need an underlayment for sound and moisture protection, usually
+        sold in rolls covering 100 sq ft. Buy one roll per 100 sq ft of floor area, rounded up.
+      </p>
+    </div>
+
+    <h3>Related Tools</h3>
+    <p>
+      Painting the same room? The
+      <a href="../en/" style="color:var(--primary);font-weight:600">paint calculator</a>
+      works out wall area and gallons of paint in one step.
+    </p>
+  </section>
+
+  <footer>
+    Flooring Calculator · Estimates based on straight-layout installation · Results are for reference only<br>
+    As an Amazon Associate I earn from qualifying purchases.
+  </footer>
+</div>
+
+<!-- ===================== Toast ===================== -->
+<div class="toast" id="toast">
+  <span class="t-icon">✅</span>
+  <span>Copied! Results saved to your clipboard</span>
+</div>
+
+<!-- ===================== Payment modal ===================== -->
+<div class="modal-mask" id="payModal">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">×</button>
+    <h3>📄 Material List PDF</h3>
+    <div class="price">$1.99</div>
+    <p class="desc">
+      Includes: box count with waste breakdown, underlayment quantity,
+      trim and transition strip list, and a step-by-step installation checklist.<br>
+      Instant download after payment.
+    </p>
+    <button class="btn btn-primary" id="btnPay">💳 Pay with Stripe</button>
+    <p class="modal-note">* Demo placeholder — no real payment gateway connected yet</p>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   计算逻辑：
+   1) 地面面积 = 长 × 宽
+   2) 含损耗面积 = 面积 × (1 + 损耗%)
+   3) 箱数 = 向上取整(含损耗面积 ÷ 每箱覆盖面积)
+   4) 同步绘制按比例的地面平面图（木板纹理）
+   ============================================================ */
+
+const $ = (id) => document.getElementById(id);
+const inputLen   = $("len");
+const inputWid   = $("wid");
+const inputCov   = $("coverage");
+const inputWaste = $("waste");
+const inputPrice = $("price");
+
+const elBoxes  = $("boxes");
+const elDetail = $("detail");
+const svg      = $("plan");
+
+function calc() {
+  const L = Math.max(0, parseFloat(inputLen.value) || 0);
+  const W = Math.max(0, parseFloat(inputWid.value) || 0);
+  const cov = Math.max(1, parseFloat(inputCov.value) || 1);
+  const waste = parseInt(inputWaste.value, 10) || 0;
+  const price = Math.max(0, parseFloat(inputPrice.value) || 0);
+
+  const area = L * W;                                  // 纯地面面积
+  const areaWithWaste = area * (1 + waste / 100);      // 含损耗
+  const boxes = areaWithWaste > 0 ? Math.ceil(areaWithWaste / cov) : 0;
+  const cost = boxes * price;
+
+  elBoxes.textContent = boxes;
+  if (area > 0) {
+    elDetail.innerHTML =
+      area.toFixed(1) + " sq ft + " + waste + "% waste = " + areaWithWaste.toFixed(1) +
+      " sq ft ÷ " + cov + " sq ft/box" +
+      (cost > 0 ? "<br>Estimated material cost: $" + cost.toFixed(2) : "");
+  } else {
+    elDetail.textContent = "Please enter a valid room size";
+  }
+
+  drawPlan(L, W);
+}
+
+/* ============================================================
+   地面平面图：按真实比例绘制矩形 + 木板纹理
+   ============================================================ */
+function drawPlan(L, W) {
+  if (L <= 0 || W <= 0) {
+    svg.innerHTML = '<text x="50%" y="50%" text-anchor="middle" fill="#94a3b8" font-size="15">' +
+                    'Enter length and width to see the plan</text>';
+    svg.setAttribute("viewBox", "0 0 400 120");
+    return;
+  }
+
+  const vbW = 640, vbH = 320, pad = 46;
+  // 按比例缩放，保证图形完整落在视图内
+  const scale = Math.min((vbW - pad * 2) / L, (vbH - pad * 2) / W);
+  const w = L * scale, h = W * scale;
+  const x = (vbW - w) / 2, y = (vbH - h) / 2;
+
+  let html = "";
+
+  // 木板纹理：用 pattern 生成斜向细线，模拟木地板走向
+  html += '<defs><pattern id="planks" width="14" height="14" patternUnits="userSpaceOnUse"' +
+          ' patternTransform="rotate(0)">' +
+          '<rect width="14" height="14" fill="#f0f9ff"/>' +
+          '<line x1="0" y1="14" x2="14" y2="14" stroke="#bae6fd" stroke-width="1"/>' +
+          '</pattern></defs>';
+
+  // 主体矩形
+  html += '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h +
+          '" fill="url(#planks)" stroke="#0e7490" stroke-width="2.5" rx="3"/>';
+
+  // 尺寸标注：宽度（下边）
+  html += '<line x1="' + x + '" y1="' + (y + h + 22) + '" x2="' + (x + w) + '" y2="' + (y + h + 22) +
+          '" stroke="#94a3b8" stroke-width="1.2" marker-start="url(#ar)" marker-end="url(#ar)"/>';
+  html += '<text x="' + (x + w / 2) + '" y="' + (y + h + 40) +
+          '" text-anchor="middle" font-size="12" fill="#475569">' + L + ' ft</text>';
+
+  // 尺寸标注：高度（左边）
+  html += '<line x1="' + (x - 22) + '" y1="' + y + '" x2="' + (x - 22) + '" y2="' + (y + h) +
+          '" stroke="#94a3b8" stroke-width="1.2"/>';
+  html += '<text x="' + (x - 30) + '" y="' + (y + h / 2) +
+          '" text-anchor="end" font-size="12" fill="#475569">' + W + ' ft</text>';
+
+  // 中心标注面积
+  html += '<text x="' + (x + w / 2) + '" y="' + (y + h / 2 + 5) +
+          '" text-anchor="middle" font-size="15" font-weight="700" fill="#155e75">' +
+          (L * W).toFixed(1) + ' sq ft</text>';
+
+  svg.setAttribute("viewBox", "0 0 " + vbW + " " + vbH);
+  svg.innerHTML = html;
+}
+
+/* ---------- Toast ---------- */
+let toastTimer = null;
+function showToast() {
+  const toast = $("toast");
+  toast.classList.add("show");
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 1800);
+}
+
+/* ---------- 复制（带降级方案） ---------- */
+function copyText(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    return navigator.clipboard.writeText(text);
+  }
+  return new Promise((resolve, reject) => {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand("copy") ? resolve() : reject(new Error("copy failed"));
+    } catch (e) { reject(e); }
+    document.body.removeChild(ta);
+  });
+}
+
+$("btnCopy").addEventListener("click", () => {
+  const text =
+    "【Flooring Calculation Result】\n" +
+    "Room: " + inputLen.value + " × " + inputWid.value + " ft\n" +
+    "Coverage per box: " + inputCov.value + " sq ft\n" +
+    "Waste factor: " + inputWaste.value + "%\n" +
+    "Boxes needed: " + elBoxes.textContent;
+  copyText(text).then(() => {
+    $("btnCopy").textContent = "✅ Copied!";
+    setTimeout(() => { $("btnCopy").textContent = "📋 Copy Result"; }, 1500);
+    showToast();
+  }).catch(() => alert("Your browser doesn't support auto copy:\n\n" + text));
+});
+
+/* ---------- 付费弹窗 ---------- */
+$("btnPdf").addEventListener("click", () => $("payModal").classList.add("show"));
+$("modalClose").addEventListener("click", () => $("payModal").classList.remove("show"));
+$("payModal").addEventListener("click", function (e) {
+  if (e.target === this) this.classList.remove("show");
+});
+$("btnPay").addEventListener("click", () => {
+  const ok = confirm(
+    "Demo mode: no payment gateway connected yet.\n\n" +
+    "Click OK to generate the PDF preview. In production this button redirects " +
+    "to a payment link and the PDF unlocks after payment."
+  );
+  if (!ok) return;
+  $("payModal").classList.remove("show");
+  openPrintablePdf();
+});
+
+/* ============================================================
+   PDF 生成（零依赖）：新建打印优化页面 → 用户选“另存为 PDF”
+   ============================================================ */
+function buildPdfHtml() {
+  const L = parseFloat(inputLen.value) || 0;
+  const W = parseFloat(inputWid.value) || 0;
+  const cov = Math.max(1, parseFloat(inputCov.value) || 1);
+  const waste = parseInt(inputWaste.value, 10) || 0;
+  const price = Math.max(0, parseFloat(inputPrice.value) || 0);
+
+  const area = L * W;
+  const areaWithWaste = area * (1 + waste / 100);
+  const boxes = areaWithWaste > 0 ? Math.ceil(areaWithWaste / cov) : 0;
+  const underlayment = area > 0 ? Math.ceil(area / 100) : 0;   // 每卷约 100 sq ft
+  const cost = boxes * price;
+  const today = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+
+  const rows = [
+    ["Laminate / vinyl planks (" + cov + " sq ft per box)", boxes + " boxes", "https://www.amazon.com/s?k=laminate+flooring&tag=paintcalc20-20"],
+    ["Flooring underlayment (100 sq ft roll)", underlayment + " rolls", "https://www.amazon.com/s?k=flooring+underlayment&tag=paintcalc20-20"],
+    ["Installation kit (spacers, tapping block, pull bar)", "1 kit", "https://www.amazon.com/s?k=flooring+installation+kit&tag=paintcalc20-20"]
+  ];
+  const rowsHtml = rows.map(r =>
+    '<tr><td>' + r[0] + '</td><td class="c">' + r[1] +
+    '</td><td class="c"><a href="' + r[2] + '">Amazon</a></td></tr>'
+  ).join("");
+
+  return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Flooring Material List</title><style>' +
+    'body{font-family:"Segoe UI",Arial,sans-serif;color:#1e293b;padding:36px;max-width:760px;margin:0 auto}' +
+    'h1{font-size:22px;color:#155e75;margin:0 0 4px}' +
+    '.sub{color:#64748b;font-size:12px;margin-bottom:22px}' +
+    'h2{font-size:14px;color:#0e7490;border-left:4px solid #0e7490;padding-left:8px;margin:26px 0 10px}' +
+    'table{width:100%;border-collapse:collapse;font-size:13px}' +
+    'th,td{border:1px solid #e2e8f0;padding:8px 10px;text-align:left}' +
+    'th{background:#f1f5f9;font-size:12px}.c{text-align:center}' +
+    '.kv{font-size:13px;margin:2px 0}.kv b{display:inline-block;width:165px;color:#475569;font-weight:600}' +
+    '.total{background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:12px 14px;margin-top:14px;font-size:13px}' +
+    '.note{font-size:11px;color:#94a3b8;margin-top:24px;border-top:1px solid #e2e8f0;padding-top:10px}' +
+    'a{color:#0e7490}@media print{body{padding:0}a{text-decoration:none}}' +
+    '</style></head><body>' +
+    '<h1>Flooring Material List</h1>' +
+    '<div class="sub">Generated ' + today + ' · ' + window.location.host + '</div>' +
+
+    '<h2>Your room</h2>' +
+    '<div class="kv"><b>Dimensions</b>' + L + ' × ' + W + ' ft</div>' +
+    '<div class="kv"><b>Floor area</b>' + area.toFixed(1) + ' sq ft</div>' +
+    '<div class="kv"><b>Waste factor</b>' + waste + '% (' + areaWithWaste.toFixed(1) + ' sq ft total)</div>' +
+    '<div class="kv"><b>Coverage per box</b>' + cov + ' sq ft</div>' +
+    '<div class="total"><b>' + boxes + ' boxes</b> to order' +
+      (cost > 0 ? ' · estimated material cost <b>$' + cost.toFixed(2) + '</b>' : '') + '</div>' +
+
+    '<h2>Material list</h2>' +
+    '<table><thead><tr><th>Item</th><th class="c">Quantity</th><th class="c">Buy</th></tr></thead>' +
+    '<tbody>' + rowsHtml + '</tbody></table>' +
+
+    '<h2>Installation checklist</h2>' +
+    '<div class="kv">1. Let boxes acclimatise in the room for 48 hours.</div>' +
+    '<div class="kv">2. Check the subfloor is flat within 3/16 in over 10 ft.</div>' +
+    '<div class="kv">3. Roll out underlayment with seams taped.</div>' +
+    '<div class="kv">4. Leave a 1/4 in expansion gap at every wall.</div>' +
+    '<div class="kv">5. Stagger end joints by at least 6 in between rows.</div>' +
+
+    '<div class="note">Estimates assume a straight layout. Diagonal layouts and rooms with many ' +
+    'corners can need 15–20% waste. As an Amazon Associate I earn from qualifying purchases.</div>' +
+    '</body></html>';
+}
+
+function openPrintablePdf() {
+  const w = window.open("", "_blank");
+  if (!w) { alert("Please allow pop-ups for this site to generate the PDF."); return; }
+  w.document.open();
+  w.document.write(buildPdfHtml());
+  w.document.close();
+  w.onload = function () { w.focus(); w.print(); };
+  setTimeout(function () { try { w.focus(); w.print(); } catch (e) {} }, 400);
+}
+
+/* ---------- 事件绑定 ---------- */
+[inputLen, inputWid, inputCov, inputPrice].forEach(el => el.addEventListener("input", calc));
+inputWaste.addEventListener("change", calc);
+
+calc();
+</script>
+</body>
+</html>

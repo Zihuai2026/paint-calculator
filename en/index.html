@@ -56,6 +56,22 @@
         "@type": "Answer",
         "text": "Yes. A standard door is about 20 sq ft and a typical window 12–15 sq ft. Enter the total area and the calculator subtracts it automatically."
       }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need primer?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Primer is not included in this calculation. Bare drywall, patched walls, dark-to-light color changes and stained surfaces all need a primer coat first — add roughly 1 gallon per 400 sq ft of wall area."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much extra paint should I buy?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "10% extra is a common buffer for touch-ups and roller absorption, and it keeps you inside a single color batch. Textured or porous walls can soak up 15–20% more than the calculator estimate."
+      }
     }
   ]
 }
@@ -219,6 +235,49 @@ header p  { color: var(--text-sub); font-size: 14px; margin-top: 6px; }
 }
 .goods-body a:hover { background: #d97706; }
 
+/* ---------- Content / guide section (SEO body copy) ---------- */
+.guide { margin-top: 44px; }
+.guide > h2 {
+  font-size: 22px; color: var(--primary-dark); margin-bottom: 10px;
+  padding-bottom: 10px; border-bottom: 2px solid var(--primary-light);
+}
+.guide > h3 { font-size: 17px; color: var(--primary); margin: 28px 0 12px; }
+.guide p { font-size: 14px; color: #334155; margin-bottom: 12px; }
+.guide .lead { font-size: 15px; color: var(--text-sub); margin-bottom: 20px; }
+
+/* 4-step cards */
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+@media (max-width: 760px) { .steps { grid-template-columns: 1fr 1fr; } }
+.step {
+  background: #fff; border: 1px solid var(--border); border-radius: 10px;
+  padding: 16px 14px; position: relative;
+}
+.step .num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--primary); color: #fff; font-size: 13px; font-weight: 700;
+  margin-bottom: 8px;
+}
+.step h4 { font-size: 14px; margin-bottom: 6px; }
+.step p { font-size: 13px; color: var(--text-sub); margin: 0; }
+
+/* Coverage reference table */
+.ref-table { width: 100%; border-collapse: collapse; font-size: 13.5px; background: #fff; }
+.ref-table th, .ref-table td {
+  border: 1px solid var(--border); padding: 9px 12px; text-align: left;
+}
+.ref-table th { background: #f1f5f9; font-weight: 600; }
+.ref-table tr:nth-child(even) td { background: #fafcfe; }
+.table-scroll { overflow-x: auto; border-radius: 10px; }
+
+/* FAQ list */
+.faq-item {
+  border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px 16px; margin-bottom: 10px; background: #fff;
+}
+.faq-item h4 { font-size: 14px; color: var(--primary-dark); margin-bottom: 4px; }
+.faq-item p { font-size: 13.5px; color: #475569; margin: 0; }
+
 footer { text-align: center; font-size: 12px; color: #94a3b8; margin-top: 40px; }
 </style>
 </head>
@@ -330,6 +389,116 @@ footer { text-align: center; font-size: 12px; color: #94a3b8; margin-top: 40px; 
         </div>
       </div>
     </div>
+  </section>
+
+  <!-- ===================== Guide / SEO content ===================== -->
+  <section class="guide">
+    <h2>How to Calculate How Much Paint You Need</h2>
+    <p class="lead">
+      Painting a room is mostly math, not guesswork. Buying too little means a second trip to the store
+      with a half-painted wall and a slightly different color batch; buying too much wastes $30–$60 a
+      gallon. The four steps below are exactly what this calculator runs for you in real time.
+    </p>
+
+    <div class="steps">
+      <div class="step">
+        <span class="num">1</span>
+        <h4>Measure the room</h4>
+        <p>Measure the length, width and ceiling height in feet. A tape measure laid along the baseboard gives you length and width.</p>
+      </div>
+      <div class="step">
+        <span class="num">2</span>
+        <h4>Add up all four walls</h4>
+        <p>Wall area = 2 × (Length + Width) × Height. This is the perimeter of the room multiplied by the ceiling height.</p>
+      </div>
+      <div class="step">
+        <span class="num">3</span>
+        <h4>Subtract doors and windows</h4>
+        <p>A standard door is about 20 sq ft and a typical window 12–15 sq ft. You don't paint over glass, so subtract them.</p>
+      </div>
+      <div class="step">
+        <span class="num">4</span>
+        <h4>Divide by coverage</h4>
+        <p>One gallon covers roughly 400 sq ft per coat. Divide the wall area by 400, multiply by the number of coats, and round up.</p>
+      </div>
+    </div>
+
+    <h3>Paint Coverage Quick Reference</h3>
+    <p>
+      These figures assume 9 ft ceilings, two coats, and 1 gallon covering 400 sq ft. Doors and windows
+      have already been subtracted.
+    </p>
+    <div class="table-scroll">
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>Room size</th>
+            <th>Wall area (approx.)</th>
+            <th>1 coat</th>
+            <th>2 coats</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>10 × 10 ft</td><td>360 sq ft</td><td>1 gal</td><td>2 gal</td></tr>
+          <tr><td>12 × 12 ft</td><td>432 sq ft</td><td>2 gal</td><td>3 gal</td></tr>
+          <tr><td>12 × 16 ft</td><td>504 sq ft</td><td>2 gal</td><td>3 gal</td></tr>
+          <tr><td>14 × 16 ft</td><td>540 sq ft</td><td>2 gal</td><td>3 gal</td></tr>
+          <tr><td>20 × 20 ft</td><td>720 sq ft</td><td>2 gal</td><td>4 gal</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Frequently Asked Questions</h3>
+
+    <div class="faq-item">
+      <h4>How many gallons of paint do I need for a room?</h4>
+      <p>
+        Wall area = 2 × (Length + Width) × Height − doors and windows area. One gallon covers about
+        400 sq ft per coat. With the recommended 2 coats: gallons = wall area × 2 ÷ 400, rounded up.
+        A typical 12 × 12 ft bedroom needs about 3 gallons.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h4>Why is a second coat recommended?</h4>
+      <p>
+        The first coat primes and covers, the second ensures even, saturated color. Dark colors or big
+        color changes may even need 3 coats — especially when going from a dark wall to a light one.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h4>Should I subtract doors and windows?</h4>
+      <p>
+        Yes. A standard door is about 20 sq ft and a typical window 12–15 sq ft. Enter the total area
+        and the calculator subtracts it automatically.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h4>Do I need primer?</h4>
+      <p>
+        Primer is not included in this calculation. Bare drywall, patched walls, dark-to-light color
+        changes and stained surfaces all need a primer coat first — add roughly 1 gallon per 400 sq ft
+        of wall area.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h4>How much extra paint should I buy?</h4>
+      <p>
+        10% extra is a common buffer for touch-ups and roller absorption, and it keeps you inside a
+        single color batch. Textured or porous walls can soak up 15–20% more than the calculator
+        estimate.
+      </p>
+    </div>
+
+    <h3>Related Tools</h3>
+    <p>
+      Planning a full renovation? Use the
+      <a href="../flooring/" style="color:var(--primary);font-weight:600">flooring calculator</a>
+      to work out how many boxes of planks or tiles you need for the same room.
+    </p>
   </section>
 
   <footer>
@@ -537,10 +706,109 @@ $("modalClose").addEventListener("click", function () {
 $("payModal").addEventListener("click", function (e) {
   if (e.target === this) this.classList.remove("show");
 });
-// Pay button: placeholder — replace with Stripe Checkout when integrating
+// Pay button: demo flow — in production, call Stripe/Paddle here and only
+// generate the PDF after the payment succeeds (see success_url handler)
 $("btnPay").addEventListener("click", function () {
-  alert("Stripe payment placeholder — call Stripe Checkout here, then trigger the PDF download on success.");
+  const ok = confirm(
+    "Demo mode: no payment gateway is connected yet.\n\n" +
+    "Click OK to generate the PDF for preview. In production this button " +
+    "redirects to a Stripe/Paddle payment link, and the PDF is generated " +
+    "only after payment succeeds."
+  );
+  if (!ok) return;
+  $("payModal").classList.remove("show");
+  openPrintablePdf();
 });
+
+/* ============================================================
+   PDF generation (zero dependencies)
+   Strategy: build a print-optimised HTML document in a new window and
+   call window.print(). Every browser's print dialog offers "Save as PDF",
+   which keeps the site a pure static page with no libraries or server.
+   ============================================================ */
+function buildPdfHtml() {
+  const L = parseFloat(inputLen.value) || 0;
+  const W = parseFloat(inputWid.value) || 0;
+  const H = parseFloat(inputHei.value) || 0;
+  const O = parseFloat(inputOpen.value) || 0;
+  const coats = parseInt(inputCoats.value, 10) || 2;
+  const wallArea = Math.max(0, 2 * (L + W) * H - O);
+  const gallons = Math.ceil(wallArea * coats / 400);
+  const buffer = Math.ceil(gallons * 1.1);      // 10% 备用量
+  const today = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+
+  // 采购清单行（含联盟链接，方便用户直接下单）
+  const rows = [
+    ["Interior paint, " + gallons + " gal + 10% buffer", buffer + " gal", "https://www.amazon.com/dp/B08CK28K6M?tag=paintcalc20-20"],
+    ["Paint brushes (walls, trim, 5-piece set)", "1 set", "https://www.amazon.com/dp/B07JHQ4L4F?tag=paintcalc20-20"],
+    ["Painter's tape, multi-surface", "2 rolls", "https://www.amazon.com/dp/B0C7PZWCCT?tag=paintcalc20-20"]
+  ];
+
+  const rowsHtml = rows.map(r =>
+    '<tr><td>' + r[0] + '</td><td class="c">' + r[1] + '</td>' +
+    '<td class="c"><a href="' + r[2] + '">Amazon</a></td></tr>'
+  ).join("");
+
+  return '<!DOCTYPE html><html><head><meta charset="utf-8">' +
+    '<title>Paint Shopping List</title><style>' +
+    'body{font-family:"Segoe UI",Arial,sans-serif;color:#1e293b;padding:36px;max-width:760px;margin:0 auto}' +
+    'h1{font-size:22px;color:#155e75;margin:0 0 4px}' +
+    '.sub{color:#64748b;font-size:12px;margin-bottom:22px}' +
+    'h2{font-size:14px;color:#0e7490;border-left:4px solid #0e7490;padding-left:8px;margin:26px 0 10px}' +
+    'table{width:100%;border-collapse:collapse;font-size:13px}' +
+    'th,td{border:1px solid #e2e8f0;padding:8px 10px;text-align:left}' +
+    'th{background:#f1f5f9;font-size:12px}' +
+    '.c{text-align:center}' +
+    '.kv{font-size:13px;margin:2px 0}' +
+    '.kv b{display:inline-block;width:150px;color:#475569;font-weight:600}' +
+    '.total{background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:12px 14px;margin-top:14px;font-size:13px}' +
+    '.note{font-size:11px;color:#94a3b8;margin-top:24px;border-top:1px solid #e2e8f0;padding-top:10px}' +
+    'a{color:#0e7490}' +
+    '@media print{body{padding:0}a{text-decoration:none}}' +
+    '</style></head><body>' +
+    '<h1>Paint Shopping List</h1>' +
+    '<div class="sub">Generated ' + today + ' · ' + window.location.host + '</div>' +
+
+    '<h2>Your room</h2>' +
+    '<div class="kv"><b>Dimensions</b>' + L + ' × ' + W + ' × ' + H + ' ft</div>' +
+    '<div class="kv"><b>Doors &amp; windows</b>' + O + ' sq ft deducted</div>' +
+    '<div class="kv"><b>Wall area</b>' + wallArea.toFixed(1) + ' sq ft</div>' +
+    '<div class="kv"><b>Coats</b>' + coats + '</div>' +
+    '<div class="total"><b>' + gallons + ' gallons</b> needed (' + wallArea.toFixed(1) +
+      ' × ' + coats + ' ÷ 400, rounded up). Buy <b>' + buffer + ' gallons</b> to cover touch-ups and roller absorption.</div>' +
+
+    '<h2>Shopping list</h2>' +
+    '<table><thead><tr><th>Item</th><th class="c">Quantity</th><th class="c">Buy</th></tr></thead>' +
+    '<tbody>' + rowsHtml + '</tbody></table>' +
+
+    '<h2>Before you start</h2>' +
+    '<div class="kv">1. Sand and patch walls; wipe dust off before taping.</div>' +
+    '<div class="kv">2. Tape trim, baseboards, outlets and window frames.</div>' +
+    '<div class="kv">3. Cut in edges with a brush, then roll the field in W patterns.</div>' +
+    '<div class="kv">4. Wait the full recoat time on the can, then apply coat two.</div>' +
+    '<div class="kv">5. Pull tape while the last coat is still slightly wet.</div>' +
+
+    '<div class="note">' +
+    'Estimates assume 400 sq ft coverage per gallon per coat, on smooth interior walls with two coats. ' +
+    'Textured or porous surfaces may need 15–20% more. As an Amazon Associate I earn from qualifying purchases.' +
+    '</div>' +
+    '</body></html>';
+}
+
+// 打开打印窗口（用户在此选择 “Save as PDF”）
+function openPrintablePdf() {
+  const w = window.open("", "_blank");
+  if (!w) {
+    alert("Please allow pop-ups for this site to generate the PDF.");
+    return;
+  }
+  w.document.open();
+  w.document.write(buildPdfHtml());
+  w.document.close();
+  // 等样式渲染后再唤起打印对话框
+  w.onload = function () { w.focus(); w.print(); };
+  setTimeout(function () { try { w.focus(); w.print(); } catch (e) {} }, 400);
+}
 
 // ---------- Event binding: recalculate on any input change ----------
 [inputLen, inputWid, inputHei, inputOpen].forEach(function (el) {

@@ -601,10 +601,105 @@ $("modalClose").addEventListener("click", function () {
 $("payModal").addEventListener("click", function (e) {
   if (e.target === this) this.classList.remove("show");
 });
-// 支付按钮：此处为占位，接入时替换为 Stripe Checkout 逻辑
+// 支付按钮：演示流程 —— 生产环境应在此调用 Stripe/Paddle，支付成功后再生成 PDF
 $("btnPay").addEventListener("click", function () {
-  alert("Stripe 支付占位 —— 接入时在此调用 Stripe Checkout 完成支付，成功后触发 PDF 下载。");
+  const ok = confirm(
+    "演示模式：尚未接入真实支付通道。\n\n" +
+    "点「确定」直接生成 PDF 预览。正式上线后这里会跳转 Stripe/Paddle 付款，" +
+    "付款成功才生成并下载 PDF。"
+  );
+  if (!ok) return;
+  $("payModal").classList.remove("show");
+  openPrintablePdf();
 });
+
+/* ============================================================
+   PDF 生成（零依赖方案）
+   思路：新建一个打印优化过的 HTML 窗口，调用浏览器打印。
+   用户在打印对话框里选「另存为 PDF」即可，无需任何第三方库或服务端。
+   ============================================================ */
+function buildPdfHtml() {
+  const L = parseFloat(inputLen.value) || 0;
+  const W = parseFloat(inputWid.value) || 0;
+  const H = parseFloat(inputHei.value) || 0;
+  const O = parseFloat(inputOpen.value) || 0;
+  const coats = parseInt(inputCoats.value, 10) || 2;
+  const wallArea = Math.max(0, 2 * (L + W) * H - O);
+  const gallons = Math.ceil(wallArea * coats / 400);
+  const buffer = Math.ceil(gallons * 1.1);          // 10% 备用量
+  const today = new Date().toLocaleDateString("zh-CN");
+
+  // 采购清单：直接带联盟链接，用户打印后也能扫码/点击下单
+  const rows = [
+    ["内墙乳胶漆（含 10% 备用）", buffer + " 加仑", "https://www.amazon.com/dp/B08CK28K6M?tag=paintcalc20-20"],
+    ["油漆刷套装（5 支装）", "1 套", "https://www.amazon.com/dp/B07JHQ4L4F?tag=paintcalc20-20"],
+    ["美纹纸胶带（多表面适用）", "2 卷", "https://www.amazon.com/dp/B0C7PZWCCT?tag=paintcalc20-20"]
+  ];
+
+  const rowsHtml = rows.map(function (r) {
+    return '<tr><td>' + r[0] + '</td><td class="c">' + r[1] +
+           '</td><td class="c"><a href="' + r[2] + '">Amazon</a></td></tr>';
+  }).join("");
+
+  return '<!DOCTYPE html><html><head><meta charset="utf-8">' +
+    '<title>油漆采购清单</title><style>' +
+    'body{font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif;color:#1e293b;padding:36px;max-width:760px;margin:0 auto}' +
+    'h1{font-size:22px;color:#155e75;margin:0 0 4px}' +
+    '.sub{color:#64748b;font-size:12px;margin-bottom:22px}' +
+    'h2{font-size:14px;color:#0e7490;border-left:4px solid #0e7490;padding-left:8px;margin:26px 0 10px}' +
+    'table{width:100%;border-collapse:collapse;font-size:13px}' +
+    'th,td{border:1px solid #e2e8f0;padding:8px 10px;text-align:left}' +
+    'th{background:#f1f5f9;font-size:12px}' +
+    '.c{text-align:center}' +
+    '.kv{font-size:13px;margin:2px 0}' +
+    '.kv b{display:inline-block;width:120px;color:#475569;font-weight:600}' +
+    '.total{background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:12px 14px;margin-top:14px;font-size:13px}' +
+    '.note{font-size:11px;color:#94a3b8;margin-top:24px;border-top:1px solid #e2e8f0;padding-top:10px}' +
+    'a{color:#0e7490}' +
+    '@media print{body{padding:0}a{text-decoration:none}}' +
+    '</style></head><body>' +
+    '<h1>油漆采购清单</h1>' +
+    '<div class="sub">生成日期 ' + today + ' · ' + window.location.host + '</div>' +
+
+    '<h2>房间信息</h2>' +
+    '<div class="kv"><b>房间尺寸</b>' + L + ' × ' + W + ' × ' + H + ' 英尺</div>' +
+    '<div class="kv"><b>门窗面积</b>已扣除 ' + O + ' 平方英尺</div>' +
+    '<div class="kv"><b>墙面面积</b>' + wallArea.toFixed(1) + ' 平方英尺</div>' +
+    '<div class="kv"><b>涂刷遍数</b>' + coats + ' 遍</div>' +
+    '<div class="total">需要 <b>' + gallons + ' 加仑</b>（' + wallArea.toFixed(1) + ' × ' + coats +
+      ' ÷ 400，向上取整）。建议购买 <b>' + buffer + ' 加仑</b>，以覆盖补漆和滚筒吸附损耗。</div>' +
+
+    '<h2>采购清单</h2>' +
+    '<table><thead><tr><th>商品</th><th class="c">数量</th><th class="c">购买</th></tr></thead>' +
+    '<tbody>' + rowsHtml + '</tbody></table>' +
+
+    '<h2>施工步骤</h2>' +
+    '<div class="kv">1. 打磨并修补墙面，清灰后再贴美纹纸。</div>' +
+    '<div class="kv">2. 用美纹纸保护踢脚线、门框、插座和窗框。</div>' +
+    '<div class="kv">3. 先用刷子处理边角（cut in），再用滚筒以 W 形涂刷大面积。</div>' +
+    '<div class="kv">4. 按罐身标注的间隔时间等干透，再刷第二遍。</div>' +
+    '<div class="kv">5. 最后一遍还略有湿度时撕掉美纹纸，避免撕裂漆膜。</div>' +
+
+    '<div class="note">' +
+    '计算假设：每加仑单遍涂刷 400 平方英尺，室内平整墙面，涂刷两遍。粗糙或多孔墙面可能多耗 15~20%。' +
+    '本页为 Amazon 联盟链接，博主可获得佣金。' +
+    '</div>' +
+    '</body></html>';
+}
+
+// 打开打印窗口，用户在打印对话框中选择「另存为 PDF」
+function openPrintablePdf() {
+  const w = window.open("", "_blank");
+  if (!w) {
+    alert("浏览器拦截了弹窗，请允许本站弹出窗口后再生成 PDF。");
+    return;
+  }
+  w.document.open();
+  w.document.write(buildPdfHtml());
+  w.document.close();
+  w.onload = function () { w.focus(); w.print(); };
+  setTimeout(function () { try { w.focus(); w.print(); } catch (e) {} }, 400);
+}
 
 // ---------- 事件绑定：任何输入变化都立即重算 ----------
 [inputLen, inputWid, inputHei, inputOpen].forEach(function (el) {
