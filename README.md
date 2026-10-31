@@ -30,7 +30,7 @@ git push -u origin main
 
 ## 上线前待办（变现闭环）
 
-- [ ] 替换 `index.html` 中所有 `https://example.com/paint-calculator/` 为真实域名
+- [ ] 替换 `index.html` 中所有 `https://zihuai2026.github.io/paint-calculator/` 为真实域名
 - [ ] Amazon 联盟：3 个商品卡 `href="#"` 换成带追踪 ID 的联盟链接
 - [ ] Stripe：创建 Payment Link，替换付费弹窗中 `btnPay` 的占位逻辑
 - [ ] 目标用户为海外时，制作英文版本（`lang="en"`）并提交 Google Search Console
