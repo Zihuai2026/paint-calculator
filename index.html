@@ -59,6 +59,22 @@
         "@type": "Answer",
         "text": "需要。普通门约占 20 平方英尺，标准窗约占 12~15 平方英尺，把总面积填入计算器即可自动扣除。"
       }
+    },
+    {
+      "@type": "Question",
+      "name": "需要先刷底漆吗？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "本计算器不包含底漆。新石膏板、补过腻子的墙面、深色改浅色、有污渍的墙面都需要先刷一遍底漆，用量按每 400 平方英尺约 1 加仑另算。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "建议多买多少备用？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "通常多买 10% 作为补漆和滚筒吸漆的余量，同时能保证补漆时还在同一色号批次内。粗糙墙面或多孔墙面比计算值多吸 15%~20% 的漆。"
+      }
     }
   ]
 }
@@ -283,6 +299,49 @@ header p  { color: var(--text-sub); font-size: 14px; margin-top: 6px; }
 }
 .goods-body a:hover { background: #d97706; }
 
+/* ---------- 图文指南区（SEO 正文内容） ---------- */
+.guide { margin-top: 44px; }
+.guide > h2 {
+  font-size: 22px; color: var(--primary-dark); margin-bottom: 10px;
+  padding-bottom: 10px; border-bottom: 2px solid var(--primary-light);
+}
+.guide > h3 { font-size: 17px; color: var(--primary); margin: 28px 0 12px; }
+.guide p { font-size: 14px; color: #334155; margin-bottom: 12px; }
+.guide .lead { font-size: 15px; color: var(--text-sub); margin-bottom: 20px; }
+
+/* 四步计算说明卡片 */
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+@media (max-width: 760px) { .steps { grid-template-columns: 1fr 1fr; } }  /* 手机端两列 */
+.step {
+  background: #fff; border: 1px solid var(--border); border-radius: 10px;
+  padding: 16px 14px; position: relative;
+}
+.step .num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--primary); color: #fff; font-size: 13px; font-weight: 700;
+  margin-bottom: 8px;
+}
+.step h4 { font-size: 14px; margin-bottom: 6px; }
+.step p { font-size: 13px; color: var(--text-sub); margin: 0; }
+
+/* 用量速查表格 */
+.ref-table { width: 100%; border-collapse: collapse; font-size: 13.5px; background: #fff; }
+.ref-table th, .ref-table td {
+  border: 1px solid var(--border); padding: 9px 12px; text-align: left;
+}
+.ref-table th { background: #f1f5f9; font-weight: 600; }
+.ref-table tr:nth-child(even) td { background: #fafcfe; }
+.table-scroll { overflow-x: auto; border-radius: 10px; }  /* 窄屏可横向滚动 */
+
+/* FAQ 条目 */
+.faq-item {
+  border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px 16px; margin-bottom: 10px; background: #fff;
+}
+.faq-item h4 { font-size: 14px; color: var(--primary-dark); margin-bottom: 4px; }
+.faq-item p { font-size: 13.5px; color: #475569; margin: 0; }
+
 footer { text-align: center; font-size: 12px; color: #94a3b8; margin-top: 40px; }
 </style>
 </head>
@@ -394,6 +453,113 @@ footer { text-align: center; font-size: 12px; color: #94a3b8; margin-top: 40px; 
         </div>
       </div>
     </div>
+  </section>
+
+  <!-- ===================== 图文指南区（SEO 正文，提升收录与转化） ===================== -->
+  <section class="guide">
+    <h2>怎么计算一间房间需要多少油漆？</h2>
+    <p class="lead">
+      刷墙这件事，七分靠算、三分靠刷。买少了要再跑一趟建材店，还可能撞上不同批次的色差；
+      买多了就是一桶几十美元的开销白放着。下面这四步，就是这个计算器在你输入尺寸时实时做的运算。
+    </p>
+
+    <div class="steps">
+      <div class="step">
+        <span class="num">1</span>
+        <h4>量出房间尺寸</h4>
+        <p>用卷尺沿踢脚线量出房间的长和宽，再量地面到天花板的层高，单位统一用英尺。</p>
+      </div>
+      <div class="step">
+        <span class="num">2</span>
+        <h4>四面墙面积相加</h4>
+        <p>墙面面积 = 2 ×（长 + 宽）× 高。本质就是房间周长乘以层高，两面长墙加两面宽墙。</p>
+      </div>
+      <div class="step">
+        <span class="num">3</span>
+        <h4>扣掉门窗面积</h4>
+        <p>普通门约 20 平方英尺，标准窗约 12~15 平方英尺。玻璃和门框不刷漆，这部分要从总面积里减去。</p>
+      </div>
+      <div class="step">
+        <span class="num">4</span>
+        <h4>除以单桶覆盖面积</h4>
+        <p>1 加仑漆单遍约刷 400 平方英尺。墙面面积 ÷ 400 × 涂刷遍数，结果向上取整，保证够用。</p>
+      </div>
+    </div>
+
+    <h3>常见房型用量速查表</h3>
+    <p>
+      下表按层高 9 英尺、涂刷 2 遍、1 加仑覆盖 400 平方英尺估算，且已扣除门窗面积。
+      实际用量会因墙面粗糙度、漆种和涂刷方式略有浮动。
+    </p>
+    <div class="table-scroll">
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>房间尺寸</th>
+            <th>墙面面积（约）</th>
+            <th>1 遍用量</th>
+            <th>2 遍用量</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>10 × 10 ft</td><td>360 sq ft</td><td>1 加仑</td><td>2 加仑</td></tr>
+          <tr><td>12 × 12 ft</td><td>432 sq ft</td><td>2 加仑</td><td>3 加仑</td></tr>
+          <tr><td>12 × 16 ft</td><td>504 sq ft</td><td>2 加仑</td><td>3 加仑</td></tr>
+          <tr><td>14 × 16 ft</td><td>540 sq ft</td><td>2 加仑</td><td>3 加仑</td></tr>
+          <tr><td>20 × 20 ft</td><td>720 sq ft</td><td>2 加仑</td><td>4 加仑</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>常见问题</h3>
+
+    <div class="faq-item">
+      <h4>一间房间需要多少加仑油漆？</h4>
+      <p>
+        墙面面积 = 2 ×（长 + 宽）× 高 − 门窗面积。1 加仑漆单遍可涂刷约 400 平方英尺，
+        建议涂刷 2 遍，所需加仑数 = 墙面面积 × 2 ÷ 400，向上取整。
+        常见 12 × 12 英尺卧室大约需要 3 加仑。
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h4>为什么建议涂刷 2 遍？</h4>
+      <p>
+        第一遍打底覆盖，第二遍保证颜色均匀饱满。深色漆或新旧色差大时甚至需要 3 遍，
+        尤其是从深色墙改成浅色墙的情况。
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h4>门窗面积需要扣除吗？</h4>
+      <p>
+        需要。普通门约占 20 平方英尺，标准窗约占 12~15 平方英尺，
+        把总面积填入计算器即可自动扣除。
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h4>需要先刷底漆吗？</h4>
+      <p>
+        本计算器不包含底漆。新石膏板、补过腻子的墙面、深色改浅色、有污渍的墙面都需要先刷一遍底漆，
+        用量按每 400 平方英尺约 1 加仑另算。
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h4>建议多买多少备用？</h4>
+      <p>
+        通常多买 10% 作为补漆和滚筒吸漆的余量，同时能保证补漆时还在同一色号批次内。
+        粗糙墙面或多孔墙面比计算值多吸 15%~20% 的漆。
+      </p>
+    </div>
+
+    <h3>相关工具</h3>
+    <p>
+      正在做整体装修？试试
+      <a href="flooring/" style="color:var(--primary);font-weight:600">地板用量计算器</a>，
+      算出一间房需要多少箱地板、损耗和材料总价。
+    </p>
   </section>
 
   <footer>
