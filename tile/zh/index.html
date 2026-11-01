@@ -742,17 +742,17 @@ function buildPdfHtml() {
 
   const rows = [
     ["瓷砖 — " + size.w + " × " + size.h + " in", boxes + " 箱（共 " + tiles + " 片）",
-     "https://www.amazon.com/dp/B0758J4HSG?tag=paintcalc20-20"],
+     "建材店"],
     ["瓷砖胶（50 sq ft / 袋）", thinSet + " 袋",
-     "https://www.amazon.com/s?k=thin+set+tile+adhesive&tag=paintcalc20-20"],
+     "建材店"],
     ["填缝剂（约 1 lb / 10 sq ft）", "约 " + grout + " lb",
-     "https://www.amazon.com/dp/B09J6VL5Y2?tag=paintcalc20-20"],
+     "建材店"],
     ["找平器 / 定位卡子", "1 套",
-     "https://www.amazon.com/dp/B0BYSG1JXM?tag=paintcalc20-20"]
+     "建材店"]
   ];
   const rowsHtml = rows.map(r =>
     '<tr><td>' + r[0] + '</td><td class="c">' + r[1] +
-    '</td><td class="c"><a href="' + r[2] + '">Amazon</a></td></tr>'
+    '</td><td class="c">' + r[2] + '</td></tr>'
   ).join("");
 
   return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>瓷砖材料清单</title><style>' +
@@ -780,7 +780,7 @@ function buildPdfHtml() {
       (cost > 0 ? ' · 材料预估总价 <b>$' + cost.toFixed(2) + '</b>' : '') + '</div>' +
 
     '<h2>材料清单</h2>' +
-    '<table><thead><tr><th>材料</th><th class="c">数量</th><th class="c">购买</th></tr></thead>' +
+    '<table><thead><tr><th>材料</th><th class="c">数量</th><th class="c">购买渠道</th></tr></thead>' +
     '<tbody>' + rowsHtml + '</tbody></table>' +
 
     '<h2>施工步骤</h2>' +
@@ -791,7 +791,6 @@ function buildPdfHtml() {
     '<div class="kv">5. 静置 24 小时后再填缝，必要位置做密封处理。</div>' +
 
     '<div class="note">以上按直铺、1/4 英寸缝估算。斜铺、人字拼建议按 15%~20% 损耗。' +
-    'As an Amazon Associate I earn from qualifying purchases.</div>' +
     '</body></html>';
 }
 

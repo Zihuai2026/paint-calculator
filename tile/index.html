@@ -750,17 +750,17 @@ function buildPdfHtml() {
 
   const rows = [
     ["Tile — " + size.w + " × " + size.h + " in", boxes + " boxes (" + tiles + " tiles)",
-     "https://www.amazon.com/dp/B0758J4HSG?tag=paintcalc20-20"],
+     "Hardware store"],
     ["Thin-set adhesive (50 sq ft bag)", thinSet + " bags",
-     "https://www.amazon.com/s?k=thin+set+tile+adhesive&tag=paintcalc20-20"],
+     "Hardware store"],
     ["Grout (approx. 1 lb per 10 sq ft)", "~" + grout + " lb",
-     "https://www.amazon.com/dp/B09J6VL5Y2?tag=paintcalc20-20"],
+     "Hardware store"],
     ["Leveling system / spacers", "1 kit",
-     "https://www.amazon.com/dp/B0BYSG1JXM?tag=paintcalc20-20"]
+     "Hardware store"]
   ];
   const rowsHtml = rows.map(r =>
     '<tr><td>' + r[0] + '</td><td class="c">' + r[1] +
-    '</td><td class="c"><a href="' + r[2] + '">Amazon</a></td></tr>'
+    '</td><td class="c">' + r[2] + '</td></tr>'
   ).join("");
 
   return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Tile Material List</title><style>' +
@@ -788,7 +788,7 @@ function buildPdfHtml() {
       (cost > 0 ? ' · estimated material cost <b>$' + cost.toFixed(2) + '</b>' : '') + '</div>' +
 
     '<h2>Material list</h2>' +
-    '<table><thead><tr><th>Item</th><th class="c">Quantity</th><th class="c">Buy</th></tr></thead>' +
+    '<table><thead><tr><th>Item</th><th class="c">Quantity</th><th class="c">Where to buy</th></tr></thead>' +
     '<tbody>' + rowsHtml + '</tbody></table>' +
 
     '<h2>Installation checklist</h2>' +
@@ -799,7 +799,6 @@ function buildPdfHtml() {
     '<div class="kv">5. Wait 24 hours before grouting, then seal if required.</div>' +
 
     '<div class="note">Estimates assume a straight layout with 1/4 in joints. Diagonal and herringbone ' +
-    'patterns can need 15–20% waste. As an Amazon Associate I earn from qualifying purchases.</div>' +
     '</body></html>';
 }
 

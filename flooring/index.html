@@ -665,13 +665,13 @@ function buildPdfHtml() {
   const today = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 
   const rows = [
-    ["Laminate / vinyl planks (" + cov + " sq ft per box)", boxes + " boxes", "https://www.amazon.com/s?k=laminate+flooring&tag=paintcalc20-20"],
-    ["Flooring underlayment (200 sq ft roll)", underlayment + " rolls", "https://www.amazon.com/s?k=flooring+underlayment&tag=paintcalc20-20"],
-    ["Installation kit (spacers, tapping block, pull bar)", "1 kit", "https://www.amazon.com/s?k=flooring+installation+kit&tag=paintcalc20-20"]
+    ["Laminate / vinyl planks (" + cov + " sq ft per box)", boxes + " boxes", "Hardware store"],
+    ["Flooring underlayment (200 sq ft roll)", underlayment + " rolls", "Hardware store"],
+    ["Installation kit (spacers, tapping block, pull bar)", "1 kit", "Hardware store"]
   ];
   const rowsHtml = rows.map(r =>
     '<tr><td>' + r[0] + '</td><td class="c">' + r[1] +
-    '</td><td class="c"><a href="' + r[2] + '">Amazon</a></td></tr>'
+    '</td><td class="c">' + r[2] + '</td></tr>'
   ).join("");
 
   return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Flooring Material List</title><style>' +
@@ -699,7 +699,7 @@ function buildPdfHtml() {
       (cost > 0 ? ' · estimated material cost <b>$' + cost.toFixed(2) + '</b>' : '') + '</div>' +
 
     '<h2>Material list</h2>' +
-    '<table><thead><tr><th>Item</th><th class="c">Quantity</th><th class="c">Buy</th></tr></thead>' +
+    '<table><thead><tr><th>Item</th><th class="c">Quantity</th><th class="c">Where to buy</th></tr></thead>' +
     '<tbody>' + rowsHtml + '</tbody></table>' +
 
     '<h2>Installation checklist</h2>' +
@@ -710,7 +710,6 @@ function buildPdfHtml() {
     '<div class="kv">5. Stagger end joints by at least 6 in between rows.</div>' +
 
     '<div class="note">Estimates assume a straight layout. Diagonal layouts and rooms with many ' +
-    'corners can need 15–20% waste. As an Amazon Associate I earn from qualifying purchases.</div>' +
     '</body></html>';
 }
 

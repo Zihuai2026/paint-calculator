@@ -838,16 +838,15 @@ function buildPdfHtml() {
   const buffer = Math.ceil(gallons * 1.1);          // 10% 备用量
   const today = new Date().toLocaleDateString("zh-CN");
 
-  // 采购清单：直接带联盟链接，用户打印后也能扫码/点击下单
   const rows = [
-    ["内墙乳胶漆（含 10% 备用）", buffer + " 加仑", "https://www.amazon.com/dp/B08CK28K6M?tag=paintcalc20-20"],
-    ["油漆刷套装（5 支装）", "1 套", "https://www.amazon.com/dp/B07JHQ4L4F?tag=paintcalc20-20"],
-    ["美纹纸胶带（多表面适用）", "2 卷", "https://www.amazon.com/dp/B0C7PZWCCT?tag=paintcalc20-20"]
+    ["内墙乳胶漆（含 10% 备用）", buffer + " 加仑", "建材店"],
+    ["油漆刷套装（5 支装）", "1 套", "建材店"],
+    ["美纹纸胶带（多表面适用）", "2 卷", "建材店"]
   ];
 
   const rowsHtml = rows.map(function (r) {
     return '<tr><td>' + r[0] + '</td><td class="c">' + r[1] +
-           '</td><td class="c"><a href="' + r[2] + '">Amazon</a></td></tr>';
+           '</td><td class="c">' + r[2] + '</td></tr>';
   }).join("");
 
   return '<!DOCTYPE html><html><head><meta charset="utf-8">' +
@@ -879,7 +878,7 @@ function buildPdfHtml() {
       ' ÷ 400，向上取整）。建议购买 <b>' + buffer + ' 加仑</b>，以覆盖补漆和滚筒吸附损耗。</div>' +
 
     '<h2>采购清单</h2>' +
-    '<table><thead><tr><th>商品</th><th class="c">数量</th><th class="c">购买</th></tr></thead>' +
+    '<table><thead><tr><th>商品</th><th class="c">数量</th><th class="c">购买渠道</th></tr></thead>' +
     '<tbody>' + rowsHtml + '</tbody></table>' +
 
     '<h2>施工步骤</h2>' +
@@ -891,7 +890,6 @@ function buildPdfHtml() {
 
     '<div class="note">' +
     '计算假设：每加仑单遍涂刷 400 平方英尺，室内平整墙面，涂刷两遍。粗糙或多孔墙面可能多耗 15~20%。' +
-    '本页为 Amazon 联盟链接，博主可获得佣金。' +
     '</div>' +
     '</body></html>';
 }

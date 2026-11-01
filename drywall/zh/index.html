@@ -793,19 +793,19 @@ function buildPdfHtml() {
 
   const rows = [
     ["石膏板 — " + r.panel.w + " × " + r.panel.h + " 英尺", r.sheets + " 张",
-     "https://www.amazon.com/s?k=1%2F2+inch+drywall+sheet+4x8&tag=paintcalc20-20"],
+     "建材店"],
     ["接缝石膏（4.5 加仑/桶）", r.mudBuckets + " 桶",
-     "https://www.amazon.com/dp/B007PB0I1S?tag=paintcalc20-20"],
+     "建材店"],
     ["接缝纸带（500 英尺/卷）", r.tapeRolls + " 卷",
-     "https://www.amazon.com/s?k=drywall+paper+tape&tag=paintcalc20-20"],
+     "建材店"],
     ["干墙螺丝（1-5/8 英寸）", "约 " + r.screwLb + " 磅",
-     "https://www.amazon.com/s?k=drywall+screws+1-5%2F8&tag=paintcalc20-20"],
+     "建材店"],
     ["抹刀 / 护角工具套装", "1 套",
-     "https://www.amazon.com/dp/B08HJ7TLL1?tag=paintcalc20-20"]
+     "建材店"]
   ];
   const rowsHtml = rows.map(x =>
     '<tr><td>' + x[0] + '</td><td class="c">' + x[1] +
-    '</td><td class="c"><a href="' + x[2] + '">Amazon</a></td></tr>'
+    '</td><td class="c">' + x[2] + '</td></tr>'
   ).join("");
 
   return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>石膏板材料清单</title><style>' +
@@ -834,7 +834,7 @@ function buildPdfHtml() {
       (r.cost > 0 ? ' · 板材费用约 <b>¥' + r.cost.toFixed(2) + '</b>' : '') + '</div>' +
 
     '<h2>材料清单</h2>' +
-    '<table><thead><tr><th>材料</th><th class="c">数量</th><th class="c">购买</th></tr></thead>' +
+    '<table><thead><tr><th>材料</th><th class="c">数量</th><th class="c">购买渠道</th></tr></thead>' +
     '<tbody>' + rowsHtml + '</tbody></table>' +
 
     '<h2>施工顺序</h2>' +
@@ -845,7 +845,6 @@ function buildPdfHtml() {
     '<div class="kv">5. 贴带、三道收浆、打磨，刷底漆后再上面漆。</div>' +
 
     '<div class="note">张数按设定的损耗率计算，默认 10%。接缝石膏按每 100 平方英尺 1 加仑估算（含贴带与三道收浆）。' +
-    '作为 Amazon 联盟成员，我会从符合条件的购买中获得佣金。</div>' +
     '</body></html>';
 }
 

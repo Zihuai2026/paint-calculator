@@ -783,16 +783,15 @@ function buildPdfHtml() {
   const buffer = Math.ceil(gallons * 1.1);      // 10% 备用量
   const today = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 
-  // 采购清单行（含联盟链接，方便用户直接下单）
   const rows = [
-    ["Interior paint, " + gallons + " gal + 10% buffer", buffer + " gal", "https://www.amazon.com/dp/B08CK28K6M?tag=paintcalc20-20"],
-    ["Paint brushes (walls, trim, 5-piece set)", "1 set", "https://www.amazon.com/dp/B07JHQ4L4F?tag=paintcalc20-20"],
-    ["Painter's tape, multi-surface", "2 rolls", "https://www.amazon.com/dp/B0C7PZWCCT?tag=paintcalc20-20"]
+    ["Interior paint, " + gallons + " gal + 10% buffer", buffer + " gal", "Hardware store"],
+    ["Paint brushes (walls, trim, 5-piece set)", "1 set", "Hardware store"],
+    ["Painter's tape, multi-surface", "2 rolls", "Hardware store"]
   ];
 
   const rowsHtml = rows.map(r =>
     '<tr><td>' + r[0] + '</td><td class="c">' + r[1] + '</td>' +
-    '<td class="c"><a href="' + r[2] + '">Amazon</a></td></tr>'
+    '<td class="c">' + r[2] + '</td></tr>'
   ).join("");
 
   return '<!DOCTYPE html><html><head><meta charset="utf-8">' +
@@ -824,7 +823,7 @@ function buildPdfHtml() {
       ' × ' + coats + ' ÷ 400, rounded up). Buy <b>' + buffer + ' gallons</b> to cover touch-ups and roller absorption.</div>' +
 
     '<h2>Shopping list</h2>' +
-    '<table><thead><tr><th>Item</th><th class="c">Quantity</th><th class="c">Buy</th></tr></thead>' +
+    '<table><thead><tr><th>Item</th><th class="c">Quantity</th><th class="c">Where to buy</th></tr></thead>' +
     '<tbody>' + rowsHtml + '</tbody></table>' +
 
     '<h2>Before you start</h2>' +
@@ -836,7 +835,6 @@ function buildPdfHtml() {
 
     '<div class="note">' +
     'Estimates assume 400 sq ft coverage per gallon per coat, on smooth interior walls with two coats. ' +
-    'Textured or porous surfaces may need 15–20% more. As an Amazon Associate I earn from qualifying purchases.' +
     '</div>' +
     '</body></html>';
 }

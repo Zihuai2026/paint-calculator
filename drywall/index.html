@@ -805,19 +805,19 @@ function buildPdfHtml() {
 
   const rows = [
     ["Drywall — " + r.panel.w + " × " + r.panel.h + " ft", r.sheets + " sheets",
-     "https://www.amazon.com/s?k=1%2F2+inch+drywall+sheet+4x8&tag=paintcalc20-20"],
+     "Hardware store"],
     ["Joint compound (4.5 gal bucket)", r.mudBuckets + " buckets",
-     "https://www.amazon.com/dp/B007PB0I1S?tag=paintcalc20-20"],
+     "Hardware store"],
     ["Paper tape (500 ft roll)", r.tapeRolls + " rolls",
-     "https://www.amazon.com/s?k=drywall+paper+tape&tag=paintcalc20-20"],
+     "Hardware store"],
     ["Drywall screws (1-5/8 in)", "~" + r.screwLb + " lb",
-     "https://www.amazon.com/s?k=drywall+screws+1-5%2F8&tag=paintcalc20-20"],
+     "Hardware store"],
     ["Taping knife set / corner tool", "1 set",
-     "https://www.amazon.com/dp/B08HJ7TLL1?tag=paintcalc20-20"]
+     "Hardware store"]
   ];
   const rowsHtml = rows.map(x =>
     '<tr><td>' + x[0] + '</td><td class="c">' + x[1] +
-    '</td><td class="c"><a href="' + x[2] + '">Amazon</a></td></tr>'
+    '</td><td class="c">' + x[2] + '</td></tr>'
   ).join("");
 
   return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Drywall Material List</title><style>' +
@@ -846,7 +846,7 @@ function buildPdfHtml() {
       (r.cost > 0 ? ' · estimated sheet cost <b>$' + r.cost.toFixed(2) + '</b>' : '') + '</div>' +
 
     '<h2>Material list</h2>' +
-    '<table><thead><tr><th>Item</th><th class="c">Quantity</th><th class="c">Buy</th></tr></thead>' +
+    '<table><thead><tr><th>Item</th><th class="c">Quantity</th><th class="c">Where to buy</th></tr></thead>' +
     '<tbody>' + rowsHtml + '</tbody></table>' +
 
     '<h2>Hanging checklist</h2>' +
@@ -857,7 +857,6 @@ function buildPdfHtml() {
     '<div class="kv">5. Tape, three coats of compound, sand, then prime before painting.</div>' +
 
     '<div class="note">Sheet count assumes 10% waste unless you changed it. Joint compound is estimated at ' +
-    '1 gal per 100 sq ft for taping plus three coats. As an Amazon Associate I earn from qualifying purchases.</div>' +
     '</body></html>';
 }
 

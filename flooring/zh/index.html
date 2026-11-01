@@ -659,13 +659,13 @@ function buildPdfHtml() {
   const today = new Date().toLocaleDateString("zh-CN", { year: "numeric", month: "long", day: "numeric" });
 
   const rows = [
-    ["复合地板 / 石塑地板（每箱 " + cov + " sq ft）", boxes + " 箱", "https://www.amazon.com/s?k=laminate+flooring&tag=paintcalc20-20"],
-    ["地板防潮地垫（200 sq ft 一卷）", underlayment + " 卷", "https://www.amazon.com/s?k=flooring+underlayment&tag=paintcalc20-20"],
-    ["安装工具套装（定位块、敲击块、拉钩）", "1 套", "https://www.amazon.com/s?k=flooring+installation+kit&tag=paintcalc20-20"]
+    ["复合地板 / 石塑地板（每箱 " + cov + " sq ft）", boxes + " 箱", "建材店"],
+    ["地板防潮地垫（200 sq ft 一卷）", underlayment + " 卷", "建材店"],
+    ["安装工具套装（定位块、敲击块、拉钩）", "1 套", "建材店"]
   ];
   const rowsHtml = rows.map(r =>
     '<tr><td>' + r[0] + '</td><td class="c">' + r[1] +
-    '</td><td class="c"><a href="' + r[2] + '">Amazon</a></td></tr>'
+    '</td><td class="c">' + r[2] + '</td></tr>'
   ).join("");
 
   return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>地板材料清单</title><style>' +
@@ -693,7 +693,7 @@ function buildPdfHtml() {
       (cost > 0 ? ' · 材料预估总价 <b>$' + cost.toFixed(2) + '</b>' : '') + '</div>' +
 
     '<h2>材料清单</h2>' +
-    '<table><thead><tr><th>材料</th><th class="c">数量</th><th class="c">购买</th></tr></thead>' +
+    '<table><thead><tr><th>材料</th><th class="c">数量</th><th class="c">购买渠道</th></tr></thead>' +
     '<tbody>' + rowsHtml + '</tbody></table>' +
 
     '<h2>施工步骤</h2>' +
@@ -704,7 +704,6 @@ function buildPdfHtml() {
     '<div class="kv">5. 相邻两排的端缝至少错开 6 英寸。</div>' +
 
     '<div class="note">以上按直铺施工估算。斜铺、转角多的房间建议按 15%~20% 损耗。' +
-    'As an Amazon Associate I earn from qualifying purchases.</div>' +
     '</body></html>';
 }
 
