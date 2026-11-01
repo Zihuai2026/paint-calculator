@@ -377,30 +377,34 @@ footer { text-align: center; font-size: 12px; color: #94a3b8; margin-top: 40px; 
     <div class="goods-grid">
       <!-- 联盟位：换成具体商品链接可直接提升转化（search 链接也已带追踪 ID） -->
       <div class="goods-card">
-        <div class="goods-img">🧱</div>
+        <div class="goods-img">🪣</div>
         <div class="goods-body">
-          <div class="g-name">Drywall Sheets 1/2 in · 4 × 8 ft</div>
+          <div class="g-name">DAP DryDex Joint Compound &mdash; 1 gal, Dries White</div>
           <div class="g-price">See price on Amazon</div>
-          <a href="https://www.amazon.com/s?k=1%2F2+inch+drywall+sheet+4x8&tag=paintcalc20-20" target="_blank" rel="nofollow sponsored">Buy on Amazon</a>
+          <a href="https://www.amazon.com/dp/B007PB0I1S?tag=paintcalc20-20" target="_blank" rel="nofollow sponsored">Buy on Amazon</a>
         </div>
       </div>
       <div class="goods-card">
         <div class="goods-img">🔩</div>
         <div class="goods-body">
-          <div class="g-name">Drywall Screws &amp; Screw Gun</div>
+          <div class="g-name">Dimpler Screw Attachment &mdash; Fits Any Drill</div>
           <div class="g-price">See price on Amazon</div>
-          <a href="https://www.amazon.com/s?k=drywall+screw+gun+and+screws&tag=paintcalc20-20" target="_blank" rel="nofollow sponsored">Buy on Amazon</a>
+          <a href="https://www.amazon.com/dp/B09KCRDV11?tag=paintcalc20-20" target="_blank" rel="nofollow sponsored">Buy on Amazon</a>
         </div>
       </div>
       <div class="goods-card">
-        <div class="goods-img">🪣</div>
+        <div class="goods-img">🧰</div>
         <div class="goods-body">
-          <div class="g-name">Joint Compound, Tape &amp; Knife Kit</div>
+          <div class="g-name">Goldblatt Taping Knife Set &mdash; 5 Pieces, 6&ndash;14 in</div>
           <div class="g-price">See price on Amazon</div>
-          <a href="https://www.amazon.com/s?k=drywall+joint+compound+tape+knife+kit&tag=paintcalc20-20" target="_blank" rel="noopener nofollow sponsored">Buy on Amazon</a>
+          <a href="https://www.amazon.com/dp/B08HJ7TLL1?tag=paintcalc20-20" target="_blank" rel="noopener nofollow sponsored">Buy on Amazon</a>
         </div>
       </div>
     </div>
+    <p style="font-size:12px;color:var(--text-sub);margin-top:14px">
+      Full 4 × 8 sheets and bulk screws are usually cheaper at a local lumber yard —
+      Amazon mainly carries tools, patch panels and small packs.
+    </p>
   </section>
 
   <!-- ===== Guide content ===== -->
@@ -803,13 +807,13 @@ function buildPdfHtml() {
     ["Drywall — " + r.panel.w + " × " + r.panel.h + " ft", r.sheets + " sheets",
      "https://www.amazon.com/s?k=1%2F2+inch+drywall+sheet+4x8&tag=paintcalc20-20"],
     ["Joint compound (4.5 gal bucket)", r.mudBuckets + " buckets",
-     "https://www.amazon.com/s?k=drywall+joint+compound&tag=paintcalc20-20"],
+     "https://www.amazon.com/dp/B007PB0I1S?tag=paintcalc20-20"],
     ["Paper tape (500 ft roll)", r.tapeRolls + " rolls",
      "https://www.amazon.com/s?k=drywall+paper+tape&tag=paintcalc20-20"],
     ["Drywall screws (1-5/8 in)", "~" + r.screwLb + " lb",
      "https://www.amazon.com/s?k=drywall+screws+1-5%2F8&tag=paintcalc20-20"],
     ["Taping knife set / corner tool", "1 set",
-     "https://www.amazon.com/s?k=drywall+taping+knife+set&tag=paintcalc20-20"]
+     "https://www.amazon.com/dp/B08HJ7TLL1?tag=paintcalc20-20"]
   ];
   const rowsHtml = rows.map(x =>
     '<tr><td>' + x[0] + '</td><td class="c">' + x[1] +
