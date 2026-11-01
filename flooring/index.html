@@ -443,15 +443,20 @@ footer { text-align: center; font-size: 12px; color: #94a3b8; margin-top: 40px; 
 <div class="modal-mask" id="payModal">
   <div class="modal">
     <button class="modal-close" id="modalClose">×</button>
-    <h3>📄 Material List PDF</h3>
+    <h3>📄 Printable Project Planner</h3>
     <div class="price">$1.99</div>
     <p class="desc">
-      Includes: box count with waste breakdown, underlayment quantity,
-      trim and transition strip list, and a step-by-step installation checklist.<br>
-      Instant download after payment.
+      The 7-page printable planner that pairs with this calculator: room worksheets,
+      a shopping list with budget columns, the 12-step installation sequence,
+      a sheen &amp; color guide, and a room sketch page.<br>
+      After you order, we send a PayPal invoice (card accepted) and email the PDF
+      within 24 hours of payment.
     </p>
-    <button class="btn btn-primary" id="btnPay">💳 Pay with Stripe</button>
-    <p class="modal-note">* Demo placeholder — no real payment gateway connected yet</p>
+    <button class="btn btn-primary" id="btnPay">🛒 Order by Email — $1.99</button>
+    <p style="font-size:12.5px;margin:8px 0 0;text-align:center">
+      <a href="#" id="btnSample" style="color:var(--primary);font-weight:600">Preview a free sample first</a> (generated from your own numbers)
+    </p>
+    <p class="modal-note">Order email: 2549751491@qq.com · No PayPal? Just email us.</p>
   </div>
 </div>
 
@@ -599,13 +604,44 @@ $("modalClose").addEventListener("click", () => $("payModal").classList.remove("
 $("payModal").addEventListener("click", function (e) {
   if (e.target === this) this.classList.remove("show");
 });
+// Order button: opens the visitor's email client with a pre-filled order email.
+// We then send a PayPal invoice from the PayPal dashboard and deliver the PDF by email.
 $("btnPay").addEventListener("click", () => {
-  const ok = confirm(
-    "Demo mode: no payment gateway connected yet.\n\n" +
-    "Click OK to generate the PDF preview. In production this button redirects " +
-    "to a payment link and the PDF unlocks after payment."
-  );
-  if (!ok) return;
+  const email = "2549751491@qq.com";
+  const subject = "Order: Printable Project Planner ($1.99)";
+  const body =
+    "Hi, I'd like to order the Printable Project Planner ($1.99).\n\n" +
+    "My PayPal email (to receive the invoice): \n\n" +
+    "Ordered from: " + window.location.href;
+
+  // Copy the order address first so the visitor can paste it anywhere
+  copyText(email).catch(() => {});
+
+  // Insert the order steps inside the modal instead of jumping to mailto,
+  // which does nothing when no desktop mail client is configured
+  let box = $("orderHint");
+  if (!box) {
+    box = document.createElement("div");
+    box.id = "orderHint";
+    box.style.cssText =
+      "margin-top:12px;padding:12px 14px;border:1px solid #d7e0e5;border-radius:10px;" +
+      "background:#f8fafb;text-align:left;font-size:13px;line-height:1.75;color:#334155";
+    box.innerHTML =
+      "<b>Order address copied:</b> <code style=\"background:#fff;padding:1px 6px;" +
+      "border:1px solid #d7e0e5;border-radius:5px;font-size:12.5px\">" + email + "</code><br>" +
+      "1) Email me a short note with the PayPal address you want the invoice sent to. " +
+      "2) I reply with a $1.99 PayPal invoice — card accepted, no PayPal account needed. " +
+      "3) The PDF lands in your inbox within 24 hours of payment.<br>" +
+      "<a id=\"orderMailLink\" style=\"color:var(--primary);font-weight:600\">" +
+      "Open this email in your mail app →</a>";
+    $("payModal").querySelector(".modal").appendChild(box);
+    $("orderMailLink").href =
+      "mailto:" + email + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+  }
+  box.style.display = "block";
+});
+// Free sample: generates the material list from the visitor's own inputs
+$("btnSample").addEventListener("click", () => {
   $("payModal").classList.remove("show");
   openPrintablePdf();
 });

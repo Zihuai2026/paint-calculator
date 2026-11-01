@@ -487,14 +487,17 @@ footer { text-align: center; font-size: 12px; color: #94a3b8; margin-top: 40px; 
 <div class="modal-mask" id="payModal">
   <div class="modal">
     <button class="modal-close" id="modalClose">×</button>
-    <h3>📄 材料清单 PDF</h3>
+    <h3>📄 可打印《家装项目规划表》</h3>
     <div class="price">$1.99</div>
     <p class="desc">
-      包含：片数与箱数明细、损耗计算、瓷砖胶与填缝剂用量、找平器与抹泥刀清单、分步施工检查表。<br>
-      支付成功后立即下载。
+      7 页 A4 可打印工作表：房间用量工作表、带预算栏的采购清单、12 步施工顺序清单、光泽度与配色指南、房间草图页。<br>
+      下单后我们会从 PayPal 发送 $1.99 发票（支持信用卡），收到付款 24 小时内把 PDF 发到你的邮箱。
     </p>
-    <button class="btn btn-primary" id="btnPay">💳 使用 Stripe 支付</button>
-    <p class="modal-note">* 当前为付费占位演示，未接入真实支付通道</p>
+    <button class="btn btn-primary" id="btnPay">🛒 邮件下单 — $1.99</button>
+    <p style="font-size:12.5px;margin:8px 0 0;text-align:center">
+      <a href="#" id="btnSample" style="color:var(--primary);font-weight:600">先看免费样张</a>（根据你填的尺寸实时生成）
+    </p>
+    <p class="modal-note">下单邮箱：2549751491@qq.com · 没有 PayPal 也可以直接发邮件咨询</p>
   </div>
 </div>
 
@@ -671,13 +674,43 @@ $("modalClose").addEventListener("click", () => $("payModal").classList.remove("
 $("payModal").addEventListener("click", function (e) {
   if (e.target === this) this.classList.remove("show");
 });
+// 下单按钮：打开访客的邮件客户端并预填订单信息；
+// 之后在 PayPal 后台开具 $1.99 发票，收款后把 PDF 回发到对方邮箱
 $("btnPay").addEventListener("click", () => {
-  const ok = confirm(
-    "演示模式：尚未接入支付通道。\n\n" +
-    "点「确定」可直接生成 PDF 预览。正式上线后，这个按钮会跳转支付链接，" +
-    "付款成功后才解锁 PDF。"
-  );
-  if (!ok) return;
+  const email = "2549751491@qq.com";
+  const subject = "订单：可打印家装项目规划表（$1.99）";
+  const body =
+    "你好，我想购买可打印《家装项目规划表》（$1.99）。\n\n" +
+    "我的 PayPal 邮箱（用于接收发票）：\n\n" +
+    "来源页面：" + window.location.href;
+
+  // 先把下单邮箱复制到剪贴板，访客可直接粘贴（失败也不影响下文展示）
+  copyText(email).catch(() => {});
+
+  // 首次点击时在弹窗内插入下单说明，避免直接跳 mailto 导致「点了没反应」
+  let box = $("orderHint");
+  if (!box) {
+    box = document.createElement("div");
+    box.id = "orderHint";
+    box.style.cssText =
+      "margin-top:12px;padding:12px 14px;border:1px solid #d7e0e5;border-radius:10px;" +
+      "background:#f8fafb;text-align:left;font-size:13px;line-height:1.75;color:#334155";
+    box.innerHTML =
+      "<b>下单邮箱已复制：</b><code style=\"background:#fff;padding:1px 6px;" +
+      "border:1px solid #d7e0e5;border-radius:5px;font-size:12.5px\">" + email + "</code><br>" +
+      "① 打开你的邮箱，把这封信发给我（写上你收发票的 PayPal 邮箱）&nbsp;" +
+      "② 我回你一张 $1.99 的 PayPal 发票，可刷卡支付&nbsp;" +
+      "③ 收到款后 24 小时内 PDF 发到你邮箱。<br>" +
+      "<a id=\"orderMailLink\" style=\"color:var(--primary);font-weight:600\">" +
+      "用本机邮件客户端直接写这封信 →</a>";
+    $("payModal").querySelector(".modal").appendChild(box);
+    $("orderMailLink").href =
+      "mailto:" + email + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+  }
+  box.style.display = "block";
+});
+// 免费样张：根据访客自己填的尺寸实时生成材料清单
+$("btnSample").addEventListener("click", () => {
   $("payModal").classList.remove("show");
   openPrintablePdf();
 });
