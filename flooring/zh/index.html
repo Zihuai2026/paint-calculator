@@ -51,7 +51,7 @@
       "name": "需要铺地垫（防潮垫）吗？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "复合地板和多数 PVC 石塑地板都需要地垫，用于隔音和防潮，通常按卷卖，一卷约覆盖 100 平方英尺。每 100 平方英尺地面买 1 卷，向上取整。"
+        "text": "复合地板和多数 PVC 石塑地板都需要地垫，用于隔音和防潮，通常按卷卖，一卷约覆盖 200 平方英尺。每 200 平方英尺地面买 1 卷，向上取整。"
       }
     }
   ]
@@ -335,25 +335,25 @@ footer { text-align: center; font-size: 12px; color: #94a3b8; margin-top: 40px; 
       <div class="goods-card">
         <div class="goods-img">🪵</div>
         <div class="goods-body">
-          <div class="g-name">复合地板（整箱）</div>
+          <div class="g-name">自粘 PVC 木纹地板（54 sq ft / 箱）</div>
           <div class="g-price">价格以 Amazon 为准</div>
-          <a href="#" target="_blank" rel="nofollow sponsored">去 Amazon 购买</a>
+          <a href="https://www.amazon.com/dp/B0GGBBGFVP?tag=paintcalc20-20" target="_blank" rel="nofollow sponsored">去 Amazon 购买</a>
         </div>
       </div>
       <div class="goods-card">
         <div class="goods-img">🧱</div>
         <div class="goods-body">
-          <div class="g-name">地板防潮地垫（整卷）</div>
+          <div class="g-name">地板防潮地垫（200 sq ft / 卷）</div>
           <div class="g-price">价格以 Amazon 为准</div>
-          <a href="#" target="_blank" rel="nofollow sponsored">去 Amazon 购买</a>
+          <a href="https://www.amazon.com/dp/B00KW2CDVU?tag=paintcalc20-20" target="_blank" rel="nofollow sponsored">去 Amazon 购买</a>
         </div>
       </div>
       <div class="goods-card">
         <div class="goods-img">🔨</div>
         <div class="goods-body">
-          <div class="g-name">地板安装工具套装</div>
+          <div class="g-name">地板安装工具套装（4 合 1）</div>
           <div class="g-price">价格以 Amazon 为准</div>
-          <a href="#" target="_blank" rel="nofollow sponsored">去 Amazon 购买</a>
+          <a href="https://www.amazon.com/dp/B0DJVHQC91?tag=paintcalc20-20" target="_blank" rel="nofollow sponsored">去 Amazon 购买</a>
         </div>
       </div>
     </div>
@@ -412,7 +412,7 @@ footer { text-align: center; font-size: 12px; color: #94a3b8; margin-top: 40px; 
       <h4>需要铺地垫（防潮垫）吗？</h4>
       <p>
         复合地板和多数 PVC 石塑地板都需要地垫，用于隔音和防潮，通常按卷卖，一卷约覆盖
-        100 平方英尺。每 100 平方英尺地面买 1 卷，向上取整。
+        200 平方英尺。每 200 平方英尺地面买 1 卷，向上取整。
       </p>
     </div>
 
@@ -619,13 +619,13 @@ function buildPdfHtml() {
   const area = L * W;
   const areaWithWaste = area * (1 + waste / 100);
   const boxes = areaWithWaste > 0 ? Math.ceil(areaWithWaste / cov) : 0;
-  const underlayment = area > 0 ? Math.ceil(area / 100) : 0;   // 每卷约 100 sq ft
+  const underlayment = area > 0 ? Math.ceil(area / 200) : 0;   // 每卷约 200 sq ft
   const cost = boxes * price;
   const today = new Date().toLocaleDateString("zh-CN", { year: "numeric", month: "long", day: "numeric" });
 
   const rows = [
     ["复合地板 / 石塑地板（每箱 " + cov + " sq ft）", boxes + " 箱", "https://www.amazon.com/s?k=laminate+flooring&tag=paintcalc20-20"],
-    ["地板防潮地垫（100 sq ft 一卷）", underlayment + " 卷", "https://www.amazon.com/s?k=flooring+underlayment&tag=paintcalc20-20"],
+    ["地板防潮地垫（200 sq ft 一卷）", underlayment + " 卷", "https://www.amazon.com/s?k=flooring+underlayment&tag=paintcalc20-20"],
     ["安装工具套装（定位块、敲击块、拉钩）", "1 套", "https://www.amazon.com/s?k=flooring+installation+kit&tag=paintcalc20-20"]
   ];
   const rowsHtml = rows.map(r =>
