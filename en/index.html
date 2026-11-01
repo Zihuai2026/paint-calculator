@@ -397,7 +397,7 @@ footer { text-align: center; font-size: 12px; color: #94a3b8; margin-top: 40px; 
         <div class="goods-img">🩹</div>
         <div class="goods-body">
           <div class="g-name">Painter's Tape, Multi-Surface</div>
-          <div class="g-price">价格以 Amazon 为准</div>
+          <div class="g-price">See price on Amazon</div>
           <a href="https://www.amazon.com/dp/B0C7PZWCCT?tag=paintcalc20-20" target="_blank" rel="nofollow sponsored">Buy on Amazon</a>
         </div>
       </div>
@@ -510,7 +510,9 @@ footer { text-align: center; font-size: 12px; color: #94a3b8; margin-top: 40px; 
     <p>
       Planning a full renovation? Use the
       <a href="../flooring/" style="color:var(--primary);font-weight:600">flooring calculator</a>
-      to work out how many boxes of planks or tiles you need for the same room.
+      to work out how many boxes of planks or tiles you need for the same room, or the
+      <a href="../tile/" style="color:var(--primary);font-weight:600">tile calculator</a>
+      to estimate tiles, thin-set mortar and grout for a kitchen or bathroom.
     </p>
   </section>
 
@@ -690,7 +692,7 @@ function copyText(text) {
 // ---------- Copy result ----------
 $("btnCopy").addEventListener("click", function () {
   const text =
-    "【Paint Calculation Result】\n" +
+    "[Paint Calculation Result]\n" +
     "Room: " + inputLen.value + " × " + inputWid.value + " × " + inputHei.value + " ft\n" +
     "Doors & windows: " + (inputOpen.value || 0) + " sq ft\n" +
     "Coats: " + inputCoats.value + "\n" +
