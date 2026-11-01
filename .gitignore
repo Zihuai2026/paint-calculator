@@ -6,3 +6,6 @@ Thumbs.db
 # HBuilderX / VS Code 本地配置（按需保留）
 .unhistory/
 .vscode/
+
+# 付费商品源文件（绝不公开，避免免费下载）
+product/

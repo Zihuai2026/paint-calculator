@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ============================================================
+     SEO：围绕「石膏板用量计算器 / 干墙计算器 / 需要多少张石膏板」
+     ============================================================ -->
+<title>石膏板用量计算器 – 一面墙需要多少张石膏板？</title>
+<meta name="description" content="免费石膏板计算器：输入房间长宽和层高，实时算出墙面与吊顶面积、含损耗的石膏板张数，以及接缝石膏、纸带、螺丝的用量。">
+<meta name="keywords" content="石膏板计算器, 干墙计算器, 需要多少张石膏板, 石膏板用量, 隔墙材料计算, 纸面石膏板">
+<link rel="canonical" href="https://zihuai2026.github.io/paint-calculator/drywall/zh/">
+
+<!-- hreflang：中英文石膏板计算器互为替代页面 -->
+<link rel="alternate" hreflang="en" href="https://zihuai2026.github.io/paint-calculator/drywall/">
+<link rel="alternate" hreflang="zh-CN" href="https://zihuai2026.github.io/paint-calculator/drywall/zh/">
+<link rel="alternate" hreflang="x-default" href="https://zihuai2026.github.io/paint-calculator/drywall/">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="免费石膏板计算器 – 张数、腻子、纸带、螺丝一次算清">
+<meta property="og:description" content="输入房间尺寸，算出石膏板张数与全部辅料用量，含损耗。">
+<meta property="og:url" content="https://zihuai2026.github.io/paint-calculator/drywall/zh/">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#0e7490">
+
+<!-- FAQ 结构化数据（与页面可见 FAQ 完全一致） -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "12×12 英尺的房间需要多少张石膏板？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "12×12 英尺、层高 8 英尺的房间，墙面 384 平方英尺，吊顶 144 平方英尺，合计 528 平方英尺。扣掉两扇门两扇窗约 42 平方英尺后是 486 平方英尺，加 10% 损耗后除以每张 4×8 英尺板材的 32 平方英尺，需要 17 张。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "接缝石膏（腻子）需要买多少？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "按每 100 平方英尺板材约 1 加仑估算，覆盖贴带加三道收浆。486 平方英尺大约需要 5 加仑，也就是两桶 4.5 加仑。做五级精找平或做纹理墙面要再多一些。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "石膏板该用 1/2 英寸还是 5/8 英寸？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "龙骨间距 16 英寸时，墙面和吊顶通常用 1/2 英寸。龙骨间距 24 英寸、车库与住宅之间的防火隔墙、或者希望减少下垂和改善隔音时用 5/8 英寸。5/8 英寸更重，单价也更高。"
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+/* ============================================================
+   与油漆 / 地板 / 瓷砖计算器一致的视觉体系
+   ============================================================ */
+:root {
+  --primary: #0e7490;
+  --primary-dark: #155e75;
+  --primary-light: #e0f2fe;
+  --text: #1e293b;
+  --text-sub: #64748b;
+  --bg: #f4f7fa;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --ok: #059669;
+  --radius: 12px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", Arial, sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.7;
+}
+.container { max-width: 1080px; margin: 0 auto; padding: 24px 16px 60px; }
+
+/* ---------- Header ---------- */
+header { text-align: center; margin-bottom: 28px; position: relative; }
+header h1 { font-size: 26px; color: var(--primary-dark); letter-spacing: .5px; }
+header p  { color: var(--text-sub); font-size: 14px; margin-top: 6px; }
+.header-actions {
+  display: flex; gap: 8px; align-items: center;
+  justify-content: flex-end; flex-wrap: wrap; margin-bottom: 12px;
+}
+@media (max-width: 620px) { .header-actions { justify-content: center; } }
+.nav-link, .lang-switch {
+  font-size: 13px; color: var(--primary); text-decoration: none;
+  border: 1px solid var(--primary); border-radius: 999px; padding: 3px 14px;
+  white-space: nowrap;
+}
+.nav-link:hover, .lang-switch:hover { background: var(--primary-light); }
+.nav-link.is-current { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+/* ---------- Layout ---------- */
+.main-grid { display: grid; grid-template-columns: 380px 1fr; gap: 20px; align-items: start; }
+@media (max-width: 860px) { .main-grid { grid-template-columns: 1fr; } }
+
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.05);
+}
+.card h2 {
+  font-size: 16px; color: var(--primary); border-left: 4px solid var(--primary);
+  padding-left: 10px; margin-bottom: 16px;
+}
+
+/* ---------- Inputs ---------- */
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 5px; }
+.field .hint { font-size: 12px; color: var(--text-sub); font-weight: 400; }
+.field input, .field select {
+  width: 100%; padding: 10px 12px; border: 1px solid var(--border);
+  border-radius: 8px; font-size: 15px; outline: none; background: #fff;
+  transition: border .2s, box-shadow .2s;
+}
+.field input:focus, .field select:focus {
+  border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light);
+}
+.field-row { display: flex; gap: 12px; }
+.field-row .field { flex: 1; }
+.field-check {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 14px; font-weight: 600; margin-bottom: 14px;
+}
+.field-check input { width: 16px; height: 16px; accent-color: var(--primary); }
+
+/* ---------- Result ---------- */
+.result-box {
+  background: linear-gradient(135deg, #f0fdfa, var(--primary-light));
+  border: 1px solid #bae6fd; border-radius: var(--radius);
+  padding: 20px; text-align: center;
+}
+.result-num { font-size: 46px; font-weight: 800; color: var(--primary-dark); line-height: 1.1; }
+.result-num small { font-size: 16px; font-weight: 600; color: var(--text-sub); }
+.result-detail { font-size: 13px; color: var(--text-sub); margin: 8px 0 14px; }
+.result-extra {
+  font-size: 12.5px; color: #334155; text-align: left;
+  background: #fff; border: 1px dashed #bae6fd; border-radius: 8px;
+  padding: 10px 12px; margin-bottom: 14px; line-height: 1.9;
+}
+.result-extra b { color: var(--primary-dark); }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  width: 100%; padding: 11px 16px; border: none; border-radius: 8px;
+  font-size: 15px; font-weight: 600; cursor: pointer;
+  transition: background .2s, transform .1s;
+}
+.btn:active { transform: scale(.98); }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-outline { background: #fff; color: var(--primary); border: 1.5px solid var(--primary); }
+.btn-outline:hover { background: var(--primary-light); }
+.btn + .btn { margin-top: 10px; }
+.btn-outline.pdf { color: #b45309; border-color: #f59e0b; }
+.btn-outline.pdf:hover { background: #fef3c7; }
+
+/* ---------- SVG plan ---------- */
+#plan-wrap { min-height: 300px; display: flex; align-items: center; justify-content: center; }
+#plan { width: 100%; height: auto; }
+
+/* ---------- Modal ---------- */
+.modal-mask {
+  display: none; position: fixed; inset: 0;
+  background: rgba(15,23,42,.55); z-index: 100;
+  align-items: center; justify-content: center;
+}
+.modal-mask.show { display: flex; }
+.modal {
+  background: #fff; border-radius: 14px; width: 92%; max-width: 420px;
+  padding: 28px; text-align: center; position: relative; animation: pop .25s ease;
+}
+@keyframes pop { from { transform: scale(.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal h3 { color: var(--primary-dark); margin-bottom: 8px; }
+.modal .price { font-size: 34px; font-weight: 800; color: #b45309; margin: 10px 0; }
+.modal .desc { font-size: 13px; color: var(--text-sub); margin-bottom: 18px; }
+.modal-close {
+  position: absolute; top: 10px; right: 14px; border: none; background: none;
+  font-size: 22px; color: var(--text-sub); cursor: pointer;
+}
+.modal-note { font-size: 11px; color: #94a3b8; margin-top: 12px; }
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed; left: 50%; bottom: 48px;
+  transform: translateX(-50%) translateY(24px);
+  background: var(--card); border: 1px solid var(--border);
+  border-left: 5px solid var(--ok);
+  border-radius: 10px; padding: 12px 22px;
+  font-size: 14px; font-weight: 600; color: var(--text);
+  box-shadow: 0 8px 24px rgba(15,23,42,.15);
+  opacity: 0; pointer-events: none; z-index: 200;
+  display: flex; align-items: center; gap: 8px;
+  transition: opacity .25s ease, transform .25s ease;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast .t-icon { font-size: 18px; }
+
+/* ---------- Affiliate ---------- */
+.affiliate { margin-top: 36px; }
+.affiliate h2 {
+  font-size: 16px; color: var(--text-sub); text-align: center; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.affiliate h2::before, .affiliate h2::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+.goods-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+@media (max-width: 680px) { .goods-grid { grid-template-columns: 1fr; } }
+.goods-card {
+  background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: hidden; text-align: center; transition: box-shadow .2s, transform .2s;
+}
+.goods-card:hover { box-shadow: 0 6px 18px rgba(14,116,144,.12); transform: translateY(-2px); }
+.goods-img {
+  height: 120px; background: #f1f5f9; display: flex;
+  align-items: center; justify-content: center; font-size: 40px;
+}
+.goods-body { padding: 14px; }
+.goods-body .g-name { font-size: 14px; font-weight: 600; }
+.goods-body .g-price { color: #b45309; font-weight: 700; margin: 4px 0 10px; }
+.goods-body a {
+  display: block; padding: 8px; border-radius: 8px; background: #f59e0b;
+  color: #fff; font-size: 13px; font-weight: 600; text-decoration: none;
+}
+.goods-body a:hover { background: #d97706; }
+
+/* ---------- Guide content ---------- */
+.guide { margin-top: 44px; }
+.guide > h2 {
+  font-size: 22px; color: var(--primary-dark); margin-bottom: 10px;
+  padding-bottom: 10px; border-bottom: 2px solid var(--primary-light);
+}
+.guide > h3 { font-size: 17px; color: var(--primary); margin: 28px 0 12px; }
+.guide p { font-size: 14px; color: #334155; margin-bottom: 12px; }
+.guide .lead { font-size: 15px; color: var(--text-sub); margin-bottom: 20px; }
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+@media (max-width: 760px) { .steps { grid-template-columns: 1fr 1fr; } }
+.step {
+  background: #fff; border: 1px solid var(--border); border-radius: 10px;
+  padding: 16px 14px;
+}
+.step .num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--primary); color: #fff; font-size: 13px; font-weight: 700;
+  margin-bottom: 8px;
+}
+.step h4 { font-size: 14px; margin-bottom: 6px; }
+.step p { font-size: 13px; color: var(--text-sub); margin: 0; }
+.faq-item {
+  border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px 16px; margin-bottom: 10px; background: #fff;
+}
+.faq-item h4 { font-size: 14px; color: var(--primary-dark); margin-bottom: 4px; }
+.faq-item p { font-size: 13.5px; color: #475569; margin: 0; }
+
+/* 常见尺寸对照表 */
+.tbl-wrap { overflow-x: auto; margin-bottom: 8px; }
+table.ref {
+  width: 100%; border-collapse: collapse; font-size: 13px; background: #fff;
+  border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+}
+table.ref th, table.ref td { padding: 9px 12px; border-bottom: 1px solid var(--border); text-align: left; }
+table.ref th { background: #f1f5f9; font-size: 12px; color: #475569; font-weight: 600; }
+table.ref tr:last-child td { border-bottom: none; }
+table.ref td.c { text-align: center; }
+
+footer { text-align: center; font-size: 12px; color: #94a3b8; margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <!-- 顶部导航：三个工具互链（利于收录）+ 语言切换 -->
+    <div class="header-actions">
+      <a class="nav-link" href="../../">🏠 油漆计算器</a>
+      <a class="nav-link" href="../../flooring/zh/">🪵 地板计算器</a>
+      <a class="nav-link" href="../../tile/zh/">🧱 瓷砖计算器</a>
+      <a class="nav-link is-current" href="./">🧰 石膏板计算器</a>
+      <a class="lang-switch" href="../">English</a>
+    </div>
+    <h1>🧰 石膏板用量计算器</h1>
+    <p>输入房间尺寸和层高，算出石膏板张数，以及接缝石膏、纸带、螺丝的用量</p>
+  </header>
+
+  <div class="main-grid">
+
+    <!-- ===== 输入 + 结果 ===== -->
+    <div class="card">
+      <h2>📐 房间尺寸</h2>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="len">房间长 <span class="hint">(英尺)</span></label>
+          <input type="number" id="len" min="0" step="0.1" placeholder="例如 12" value="12">
+        </div>
+        <div class="field">
+          <label for="wid">房间宽 <span class="hint">(英尺)</span></label>
+          <input type="number" id="wid" min="0" step="0.1" placeholder="例如 12" value="12">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="hgt">层高 <span class="hint">(英尺)</span></label>
+        <input type="number" id="hgt" min="0" step="0.1" placeholder="例如 8" value="8">
+      </div>
+
+      <div class="field-check">
+        <input type="checkbox" id="ceil" checked>
+        <label for="ceil" style="margin:0">含吊顶（顶面）</label>
+      </div>
+
+      <div class="field">
+        <label for="open">门窗面积 <span class="hint">(平方英尺，需扣除)</span></label>
+        <input type="number" id="open" min="0" step="1" placeholder="例如 42" value="42">
+      </div>
+
+      <div class="field">
+        <label for="size">板材规格 <span class="hint">(英尺)</span></label>
+        <select id="size">
+          <option value="4x8" selected>4 × 8 英尺 — 每张 32 平方英尺</option>
+          <option value="4x9">4 × 9 英尺 — 每张 36 平方英尺</option>
+          <option value="4x10">4 × 10 英尺 — 每张 40 平方英尺</option>
+          <option value="4x12">4 × 12 英尺 — 每张 48 平方英尺</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="waste">损耗率 <span class="hint">(常规 10%)</span></label>
+        <select id="waste">
+          <option value="5">5% — 空阔方正房间</option>
+          <option value="10" selected>10% — 常规房间（推荐）</option>
+          <option value="15">15% — 拐角、门窗较多</option>
+          <option value="20">20% — 异形房间、裁切多</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="price">每张单价 <span class="hint">(元，可不填)</span></label>
+        <input type="number" id="price" min="0" step="0.01" placeholder="例如 45" value="45">
+      </div>
+
+      <div class="result-box" style="margin-top:18px">
+        <div>需要石膏板</div>
+        <div class="result-num"><span id="sheets">0</span><small> 张</small></div>
+        <div class="result-detail" id="detail">待计算</div>
+        <div class="result-extra" id="extra"></div>
+        <button class="btn btn-primary" id="btnCopy">📋 复制结果</button>
+        <button class="btn btn-outline pdf" id="btnPdf">⬇️ 下载材料清单 PDF</button>
+      </div>
+    </div>
+
+    <!-- ===== 实时展开图 ===== -->
+    <div class="card">
+      <h2>🖼️ 四面墙展开图</h2>
+      <div id="plan-wrap">
+        <svg id="plan" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+      <p style="font-size:12px;color:var(--text-sub);text-align:center">
+        四面墙依次摊平，每 4 英尺一条板材分割线 · 尺寸变化即时重绘
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== 联盟商品位 ===== -->
+  <section class="affiliate">
+    <h2>🛒 相关工具（Amazon 联盟）</h2>
+    <div class="goods-grid">
+      <div class="goods-card">
+        <div class="goods-img">🧱</div>
+        <div class="goods-body">
+          <div class="g-name">纸面石膏板 1/2 英寸 · 4 × 8 英尺</div>
+          <div class="g-price">价格以 Amazon 为准</div>
+          <a href="https://www.amazon.com/s?k=1%2F2+inch+drywall+sheet+4x8&tag=paintcalc20-20" target="_blank" rel="nofollow sponsored">去 Amazon 查看</a>
+        </div>
+      </div>
+      <div class="goods-card">
+        <div class="goods-img">🔩</div>
+        <div class="goods-body">
+          <div class="g-name">干墙螺丝 + 电动螺丝枪</div>
+          <div class="g-price">价格以 Amazon 为准</div>
+          <a href="https://www.amazon.com/s?k=drywall+screw+gun+and+screws&tag=paintcalc20-20" target="_blank" rel="nofollow sponsored">去 Amazon 查看</a>
+        </div>
+      </div>
+      <div class="goods-card">
+        <div class="goods-img">🪣</div>
+        <div class="goods-body">
+          <div class="g-name">接缝石膏 + 纸带 + 抹刀套装</div>
+          <div class="g-price">价格以 Amazon 为准</div>
+          <a href="https://www.amazon.com/s?k=drywall+joint+compound+tape+knife+kit&tag=paintcalc20-20" target="_blank" rel="noopener nofollow sponsored">去 Amazon 查看</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 内容区 ===== -->
+  <section class="guide">
+    <h2>石膏板张数怎么算</h2>
+    <p class="lead">
+      石膏板只能整张买，所以思路是：先算出墙面加顶面的净面积，加上损耗，再除以单张面积，最后向上取整。
+      装修队报价时最常玩的花样就是「大概二十来张」——量一遍、算一遍，就不会白跑两趟建材市场。
+    </p>
+
+    <div class="steps">
+      <div class="step">
+        <span class="num">1</span>
+        <h4>量房间</h4>
+        <p>量长、宽、层高。墙面面积 = 周长 × 层高 = 2 × (长 + 宽) × 高。</p>
+      </div>
+      <div class="step">
+        <span class="num">2</span>
+        <h4>算不算顶面</h4>
+        <p>做吊顶要加 长 × 宽；只换墙面就不加。</p>
+      </div>
+      <div class="step">
+        <span class="num">3</span>
+        <h4>扣门窗</h4>
+        <p>标准门约 21 平方英尺，标准窗约 15 平方英尺，一门一窗合计约 36 平方英尺。</p>
+      </div>
+      <div class="step">
+        <span class="num">4</span>
+        <h4>加损耗再进位</h4>
+        <p>常规加 10%；拐角门窗多、异形房间加 15%~20%。最后按整张向上取整。</p>
+      </div>
+    </div>
+
+    <h3>常见房型速查表（层高 8 英尺 · 扣门窗 42 平方英尺 · 损耗 10%）</h3>
+    <div class="tbl-wrap">
+      <table class="ref">
+        <thead>
+          <tr>
+            <th>房间尺寸</th>
+            <th class="c">墙面 + 顶面</th>
+            <th class="c">净面积</th>
+            <th class="c">4 × 8 张数</th>
+            <th class="c">4 × 12 张数</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>10 × 10 英尺</td><td class="c">420 平方英尺</td><td class="c">378</td><td class="c">13</td><td class="c">9</td></tr>
+          <tr><td>12 × 12 英尺</td><td class="c">528</td><td class="c">486</td><td class="c">17</td><td class="c">12</td></tr>
+          <tr><td>12 × 16 英尺</td><td class="c">640</td><td class="c">598</td><td class="c">21</td><td class="c">14</td></tr>
+          <tr><td>16 × 20 英尺</td><td class="c">896</td><td class="c">854</td><td class="c">30</td><td class="c">20</td></tr>
+          <tr><td>20 × 20 英尺</td><td class="c">1,040</td><td class="c">998</td><td class="c">35</td><td class="c">23</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:12px;color:var(--text-sub)">
+      墙面 = 2 × (长 + 宽) × 8 英尺，再加顶面 长 × 宽；净面积已扣门窗，张数为加 10% 损耗后向上取整的结果。
+      单位换算：1 米 ≈ 3.28 英尺，1 平方米 ≈ 10.76 平方英尺。
+    </p>
+
+    <h3>还要准备哪些辅料</h3>
+    <table class="ref">
+      <thead>
+        <tr><th>材料</th><th class="c">经验用量</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>接缝石膏 / 腻子</td><td class="c">每 100 平方英尺 1 加仑</td><td>贴带 + 三道收浆；成品多为 4.5 加仑一桶</td></tr>
+        <tr><td>接缝纸带</td><td class="c">每平方英尺板材 1.2 英尺</td><td>一卷 500 英尺，约够 600 平方英尺板材</td></tr>
+        <tr><td>干墙螺丝</td><td class="c">每张 4 × 8 约 32 颗</td><td>折合约每 180 平方英尺 1 磅</td></tr>
+        <tr><td>护角条</td><td class="c">8 英尺一根</td><td>每个外阳角一根，从地到顶</td></tr>
+      </tbody>
+    </table>
+
+    <h3>常见问题</h3>
+
+    <div class="faq-item">
+      <h4>12×12 英尺的房间需要多少张石膏板？</h4>
+      <p>
+        12×12 英尺、层高 8 英尺的房间，墙面 384 平方英尺，吊顶 144 平方英尺，合计 528 平方英尺。
+        扣掉两扇门两扇窗约 42 平方英尺后是 486 平方英尺，加 10% 损耗后除以每张 4×8 英尺板材的
+        32 平方英尺，需要 17 张。
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h4>接缝石膏（腻子）需要买多少？</h4>
+      <p>
+        按每 100 平方英尺板材约 1 加仑估算，覆盖贴带加三道收浆。486 平方英尺大约需要 5 加仑，
+        也就是两桶 4.5 加仑。做五级精找平或做纹理墙面要再多一些。
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h4>石膏板该用 1/2 英寸还是 5/8 英寸？</h4>
+      <p>
+        龙骨间距 16 英寸时，墙面和吊顶通常用 1/2 英寸。龙骨间距 24 英寸、车库与住宅之间的防火隔墙、
+        或者希望减少下垂和改善隔音时用 5/8 英寸。5/8 英寸更重，单价也更高。
+      </p>
+    </div>
+
+    <h3>相关工具</h3>
+    <p>
+      封完板还要刮腻子刷漆。用
+      <a href="../../" style="color:var(--primary);font-weight:600">油漆计算器</a>算加仑数，
+      再用<a href="../../flooring/zh/" style="color:var(--primary);font-weight:600">地板计算器</a>和
+      <a href="../../tile/zh/" style="color:var(--primary);font-weight:600">瓷砖计算器</a>把地面也一起算完。
+    </p>
+  </section>
+
+  <footer>
+    石膏板计算器 · 按龙骨间距 16 英寸、三道收浆估算 · 结果仅供参考<br>
+    作为 Amazon 联盟成员，我会从符合条件的购买中获得佣金。
+  </footer>
+</div>
+
+<!-- ===================== Toast ===================== -->
+<div class="toast" id="toast">
+  <span class="t-icon">✅</span>
+  <span>已复制，结果已保存到剪贴板</span>
+</div>
+
+<!-- ===================== 付费弹窗（邮件下单 + PayPal 发票） ===================== -->
+<div class="modal-mask" id="payModal">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">×</button>
+    <h3>📄 可打印《家装项目规划表》</h3>
+    <div class="price">$1.99</div>
+    <p class="desc">
+      7 页 A4 可打印工作表：房间用量工作表、带预算栏的采购清单、12 步施工顺序清单、光泽度与配色指南、房间草图页。<br>
+      下单后我们会从 PayPal 发送 $1.99 发票（支持信用卡），收到付款 24 小时内把 PDF 发到你的邮箱。
+    </p>
+    <button class="btn btn-primary" id="btnPay">🛒 邮件下单 — $1.99</button>
+    <p style="font-size:12.5px;margin:8px 0 0;text-align:center">
+      <a href="#" id="btnSample" style="color:var(--primary);font-weight:600">先看免费样张</a>（根据你填的尺寸实时生成）
+    </p>
+    <p class="modal-note">下单邮箱：2549751491@qq.com · 没有 PayPal 也可以直接发邮件咨询</p>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   计算逻辑：
+   1) 墙面面积 = 2 × (长 + 宽) × 层高
+   2) 顶面面积 = 长 × 宽（勾选「含吊顶」时计入）
+   3) 净面积 = 墙面 + 顶面 − 门窗面积
+   4) 张数 = 向上取整(净面积 × (1 + 损耗%) ÷ 单张面积)
+   5) 辅料按经验值估算：腻子 1 加仑/100 平方英尺、纸带 1.2 ft/sqft、螺丝 32 颗/张
+   6) 同步绘制「四面墙展开图」，每 4 英尺画一条板材竖线
+   ============================================================ */
+
+const $ = (id) => document.getElementById(id);
+const inputLen   = $("len");
+const inputWid   = $("wid");
+const inputHgt   = $("hgt");
+const inputCeil  = $("ceil");
+const inputOpen  = $("open");
+const inputSize  = $("size");
+const inputWaste = $("waste");
+const inputPrice = $("price");
+
+const elSheets = $("sheets");
+const elDetail = $("detail");
+const elExtra  = $("extra");
+const svg      = $("plan");
+
+// 解析 "4x8" 形式的板材尺寸
+function getPanelSize() {
+  const parts = inputSize.value.split("x");
+  return { w: parseFloat(parts[0]) || 4, h: parseFloat(parts[1]) || 8 };
+}
+
+// 统一计算，供界面与 PDF 共用
+function compute() {
+  const L = Math.max(0, parseFloat(inputLen.value) || 0);
+  const W = Math.max(0, parseFloat(inputWid.value) || 0);
+  const H = Math.max(0, parseFloat(inputHgt.value) || 0);
+  const openings = Math.max(0, parseFloat(inputOpen.value) || 0);
+  const waste = parseFloat(inputWaste.value) || 0;
+  const price = Math.max(0, parseFloat(inputPrice.value) || 0);
+  const panel = getPanelSize();
+  const panelSqFt = panel.w * panel.h;
+
+  const wallArea = 2 * (L + W) * H;
+  const ceilArea = inputCeil.checked ? L * W : 0;
+  const gross = wallArea + ceilArea;
+  const net = Math.max(0, gross - openings);
+  const netWithWaste = net * (1 + waste / 100);
+  const sheets = net > 0 ? Math.ceil(netWithWaste / panelSqFt) : 0;
+
+  // 辅料经验值
+  const mudGal = net > 0 ? Math.ceil(net / 100) : 0;           // 1 加仑 ≈ 100 平方英尺（含三道收浆）
+  const mudBuckets = mudGal > 0 ? Math.ceil(mudGal / 4.5) : 0;  // 4.5 加仑/桶
+  const tapeFt = net > 0 ? Math.ceil(net * 1.2) : 0;
+  const tapeRolls = tapeFt > 0 ? Math.ceil(tapeFt / 500) : 0;   // 500 英尺/卷
+  const screws = sheets * 32;                                   // 每张 4 × 8 约 32 颗
+  const screwLb = Math.ceil(screws / 180);
+  const cost = sheets * price;
+
+  return { L, W, H, openings, waste, price, panel, panelSqFt, wallArea, ceilArea, gross, net,
+           netWithWaste, sheets, mudGal, mudBuckets, tapeFt, tapeRolls, screws, screwLb, cost };
+}
+
+function calc() {
+  const r = compute();
+
+  elSheets.textContent = r.sheets;
+  if (r.net > 0) {
+    elDetail.innerHTML =
+      "墙面 " + r.wallArea.toFixed(0) + " + 顶面 " + r.ceilArea.toFixed(0) +
+      " − 门窗 " + r.openings.toFixed(0) + " = " + r.net.toFixed(0) + " 平方英尺<br>" +
+      "加 " + r.waste + "% 损耗 = " + r.netWithWaste.toFixed(0) + " 平方英尺 ÷ 每张 " +
+      r.panelSqFt + " 平方英尺（" + r.panel.w + " × " + r.panel.h + " 英尺）";
+    elExtra.innerHTML =
+      "<b>接缝石膏</b> 约 " + r.mudGal + " 加仑（" + r.mudBuckets + " 桶 × 4.5 加仑）<br>" +
+      "<b>接缝纸带</b> 约 " + r.tapeFt + " 英尺（" + r.tapeRolls + " 卷 × 500 英尺）<br>" +
+      "<b>干墙螺丝</b> 约 " + r.screws + " 颗（约 " + r.screwLb + " 磅）<br>" +
+      (r.cost > 0 ? "<b>板材费用</b> 约 ¥" + r.cost.toFixed(2) : "");
+  } else {
+    elDetail.textContent = "请填写有效的房间尺寸";
+    elExtra.innerHTML = "";
+  }
+
+  drawPlan(r);
+}
+
+/* ============================================================
+   四面墙展开图：L、W、L、W 四面墙依次摊平
+   高度 = 层高；每 4 英尺画一条板材分割线
+   ============================================================ */
+function drawPlan(r) {
+  const L = r.L, W = r.W, H = r.H;
+  if (L <= 0 || W <= 0 || H <= 0) {
+    svg.setAttribute("viewBox", "0 0 400 140");
+    svg.innerHTML = '<text x="200" y="70" text-anchor="middle" fill="#94a3b8" font-size="15">' +
+                    '填入长、宽和层高后显示展开图</text>';
+    return;
+  }
+
+  const vbW = 680, pad = 46, maxH = 200;
+  const stripW = 2 * (L + W);
+  const scale = Math.min((vbW - pad * 2) / stripW, maxH / H);
+  const w = stripW * scale, h = H * scale;
+  const x0 = (vbW - w) / 2, y0 = 52;
+
+  let html = "";
+  html += '<rect x="' + x0 + '" y="' + y0 + '" width="' + w + '" height="' + h +
+          '" fill="#f0f9ff" stroke="#0e7490" stroke-width="2.5" rx="2"/>';
+
+  // 每 4 英尺一条板材竖线
+  let g = '<g stroke="#7dd3fc" stroke-width="0.9">';
+  for (let d = 4; d < stripW; d += 4) {
+    const gx = x0 + d * scale;
+    g += '<line x1="' + gx.toFixed(1) + '" y1="' + y0 + '" x2="' + gx.toFixed(1) +
+         '" y2="' + (y0 + h) + '"/>';
+  }
+  g += '</g>';
+  html += g;
+
+  // 墙面分界（长 | 宽 | 长 | 宽）用虚线区分
+  const segs = [L, W, L, W];
+  const names = ["墙 1", "墙 2", "墙 3", "墙 4"];
+  let acc = 0;
+  for (let i = 0; i < segs.length; i++) {
+    const sx = x0 + acc * scale;
+    const sw = segs[i] * scale;
+    if (i > 0) {
+      html += '<line x1="' + sx.toFixed(1) + '" y1="' + y0 + '" x2="' + sx.toFixed(1) +
+              '" y2="' + (y0 + h) + '" stroke="#0e7490" stroke-width="1.6" stroke-dasharray="4 3"/>';
+    }
+    html += '<text x="' + (sx + sw / 2).toFixed(1) + '" y="' + (y0 + h + 18) +
+            '" text-anchor="middle" font-size="11" fill="#475569">' +
+            names[i] + ' · ' + segs[i] + ' 英尺</text>';
+    acc += segs[i];
+  }
+
+  // 层高标注（左侧）
+  html += '<line x1="' + (x0 - 18) + '" y1="' + y0 + '" x2="' + (x0 - 18) + '" y2="' + (y0 + h) +
+          '" stroke="#94a3b8" stroke-width="1.2"/>';
+  html += '<text x="' + (x0 - 24) + '" y="' + (y0 + h / 2) +
+          '" text-anchor="end" font-size="11" fill="#475569">' + H + ' 英尺</text>';
+
+  // 顶部标题：总张数
+  html += '<text x="' + (vbW / 2) + '" y="30" text-anchor="middle" font-size="14" font-weight="700" fill="#155e75">' +
+          r.sheets + ' 张 ' + r.panel.w + ' × ' + r.panel.h + ' 英尺石膏板 · 净面积 ' +
+          r.net.toFixed(0) + ' 平方英尺' +
+          (inputCeil.checked ? '（含吊顶）' : '（仅墙面）') + '</text>';
+
+  svg.setAttribute("viewBox", "0 0 " + vbW + " " + (y0 + h + 44));
+  svg.innerHTML = html;
+}
+
+/* ---------- 复制成功 Toast ---------- */
+let toastTimer = null;
+function showToast() {
+  const toast = $("toast");
+  toast.classList.add("show");
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 1800);
+}
+
+/* ---------- 通用复制函数（带降级方案） ---------- */
+function copyText(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    return navigator.clipboard.writeText(text);
+  }
+  return new Promise((resolve, reject) => {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand("copy") ? resolve() : reject(new Error("copy failed"));
+    } catch (e) { reject(e); }
+    document.body.removeChild(ta);
+  });
+}
+
+$("btnCopy").addEventListener("click", () => {
+  const r = compute();
+  const text =
+    "【石膏板计算结果】\n" +
+    "房间：" + r.L + " × " + r.W + " 英尺，层高 " + r.H + " 英尺\n" +
+    (inputCeil.checked ? "含吊顶\n" : "仅墙面\n") +
+    "净面积：" + r.net.toFixed(0) + " 平方英尺（含 " + r.waste + "% 损耗）\n" +
+    "石膏板：" + r.sheets + " 张 " + r.panel.w + " × " + r.panel.h + " 英尺\n" +
+    "接缝石膏：" + r.mudGal + " 加仑\n" +
+    "纸带：" + r.tapeFt + " 英尺\n" +
+    "螺丝：约 " + r.screws + " 颗" +
+    (r.cost > 0 ? "\n板材费用：约 ¥" + r.cost.toFixed(2) : "");
+  copyText(text).then(() => {
+    $("btnCopy").textContent = "✅ 已复制";
+    setTimeout(() => { $("btnCopy").textContent = "📋 复制结果"; }, 1500);
+    showToast();
+  }).catch(() => alert("当前浏览器不支持自动复制，请手动复制：\n\n" + text));
+});
+
+/* ---------- 付费弹窗 ---------- */
+$("btnPdf").addEventListener("click", () => $("payModal").classList.add("show"));
+$("modalClose").addEventListener("click", () => $("payModal").classList.remove("show"));
+$("payModal").addEventListener("click", function (e) {
+  if (e.target === this) this.classList.remove("show");
+});
+// 下单按钮：先把邮箱复制到剪贴板，再在弹窗内展示三步下单说明
+$("btnPay").addEventListener("click", () => {
+  const email = "2549751491@qq.com";
+  const subject = "订单：可打印家装项目规划表（$1.99）";
+  const body =
+    "你好，我想购买可打印《家装项目规划表》（$1.99）。\n\n" +
+    "我的 PayPal 邮箱（用于接收发票）：\n\n" +
+    "来源页面：" + window.location.href;
+
+  copyText(email).catch(() => {});
+
+  let box = $("orderHint");
+  if (!box) {
+    box = document.createElement("div");
+    box.id = "orderHint";
+    box.style.cssText =
+      "margin-top:12px;padding:12px 14px;border:1px solid #d7e0e5;border-radius:10px;" +
+      "background:#f8fafb;text-align:left;font-size:13px;line-height:1.75;color:#334155";
+    box.innerHTML =
+      "<b>下单邮箱已复制：</b><code style=\"background:#fff;padding:1px 6px;" +
+      "border:1px solid #d7e0e5;border-radius:5px;font-size:12.5px\">" + email + "</code><br>" +
+      "① 打开你的邮箱，把这封信发给我（写上你收发票的 PayPal 邮箱）&nbsp;" +
+      "② 我回你一张 $1.99 的 PayPal 发票，可刷卡支付&nbsp;" +
+      "③ 收到款后 24 小时内 PDF 发到你邮箱。<br>" +
+      "<a id=\"orderMailLink\" style=\"color:var(--primary);font-weight:600\">" +
+      "用本机邮件客户端直接写这封信 →</a>";
+    $("payModal").querySelector(".modal").appendChild(box);
+    $("orderMailLink").href =
+      "mailto:" + email + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+  }
+  box.style.display = "block";
+});
+// 免费样张：根据访客自己填的尺寸实时生成材料清单
+$("btnSample").addEventListener("click", () => {
+  $("payModal").classList.remove("show");
+  openPrintablePdf();
+});
+
+/* ============================================================
+   PDF 生成（零依赖）：新建打印优化页面 → 用户选「另存为 PDF」
+   ============================================================ */
+function buildPdfHtml() {
+  const r = compute();
+  const today = new Date().toLocaleDateString("zh-CN", { year: "numeric", month: "long", day: "numeric" });
+
+  const rows = [
+    ["石膏板 — " + r.panel.w + " × " + r.panel.h + " 英尺", r.sheets + " 张",
+     "https://www.amazon.com/s?k=1%2F2+inch+drywall+sheet+4x8&tag=paintcalc20-20"],
+    ["接缝石膏（4.5 加仑/桶）", r.mudBuckets + " 桶",
+     "https://www.amazon.com/s?k=drywall+joint+compound&tag=paintcalc20-20"],
+    ["接缝纸带（500 英尺/卷）", r.tapeRolls + " 卷",
+     "https://www.amazon.com/s?k=drywall+paper+tape&tag=paintcalc20-20"],
+    ["干墙螺丝（1-5/8 英寸）", "约 " + r.screwLb + " 磅",
+     "https://www.amazon.com/s?k=drywall+screws+1-5%2F8&tag=paintcalc20-20"],
+    ["抹刀 / 护角工具套装", "1 套",
+     "https://www.amazon.com/s?k=drywall+taping+knife+set&tag=paintcalc20-20"]
+  ];
+  const rowsHtml = rows.map(x =>
+    '<tr><td>' + x[0] + '</td><td class="c">' + x[1] +
+    '</td><td class="c"><a href="' + x[2] + '">Amazon</a></td></tr>'
+  ).join("");
+
+  return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>石膏板材料清单</title><style>' +
+    'body{font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif;color:#1e293b;padding:36px;max-width:760px;margin:0 auto}' +
+    'h1{font-size:22px;color:#155e75;margin:0 0 4px}' +
+    '.sub{color:#64748b;font-size:12px;margin-bottom:22px}' +
+    'h2{font-size:14px;color:#0e7490;border-left:4px solid #0e7490;padding-left:8px;margin:26px 0 10px}' +
+    'table{width:100%;border-collapse:collapse;font-size:13px}' +
+    'th,td{border:1px solid #e2e8f0;padding:8px 10px;text-align:left}' +
+    'th{background:#f1f5f9;font-size:12px}.c{text-align:center}' +
+    '.kv{font-size:13px;margin:2px 0}.kv b{display:inline-block;width:175px;color:#475569;font-weight:600}' +
+    '.total{background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:12px 14px;margin-top:14px;font-size:13px}' +
+    '.note{font-size:11px;color:#94a3b8;margin-top:24px;border-top:1px solid #e2e8f0;padding-top:10px}' +
+    'a{color:#0e7490}@media print{body{padding:0}a{text-decoration:none}}' +
+    '</style></head><body>' +
+    '<h1>石膏板材料清单</h1>' +
+    '<div class="sub">生成于 ' + today + ' · ' + window.location.host + '</div>' +
+
+    '<h2>房间信息</h2>' +
+    '<div class="kv"><b>尺寸</b>' + r.L + ' × ' + r.W + ' 英尺，层高 ' + r.H + ' 英尺</div>' +
+    '<div class="kv"><b>墙面面积</b>' + r.wallArea.toFixed(0) + ' 平方英尺</div>' +
+    '<div class="kv"><b>顶面面积</b>' + (inputCeil.checked ? r.ceilArea.toFixed(0) + ' 平方英尺' : '未计入') + '</div>' +
+    '<div class="kv"><b>扣除门窗</b>' + r.openings.toFixed(0) + ' 平方英尺</div>' +
+    '<div class="kv"><b>净面积</b>' + r.net.toFixed(0) + ' 平方英尺（加 ' + r.waste + '% 损耗 = ' + r.netWithWaste.toFixed(0) + '）</div>' +
+    '<div class="total"><b>' + r.sheets + ' 张</b> ' + r.panel.w + ' × ' + r.panel.h + ' 英尺石膏板' +
+      (r.cost > 0 ? ' · 板材费用约 <b>¥' + r.cost.toFixed(2) + '</b>' : '') + '</div>' +
+
+    '<h2>材料清单</h2>' +
+    '<table><thead><tr><th>材料</th><th class="c">数量</th><th class="c">购买</th></tr></thead>' +
+    '<tbody>' + rowsHtml + '</tbody></table>' +
+
+    '<h2>施工顺序</h2>' +
+    '<div class="kv">1. 标出龙骨位置，常规间距 16 英寸（约 40 厘米）。</div>' +
+    '<div class="kv">2. 先封顶面再封墙面，让墙板托住顶板边缘。</div>' +
+    '<div class="kv">3. 上下两层错缝排板，板底离地留 1/2 英寸防潮。</div>' +
+    '<div class="kv">4. 顶面每 8 英寸一颗螺丝，墙面每 12 英寸一颗，钉头略低于板面。</div>' +
+    '<div class="kv">5. 贴带、三道收浆、打磨，刷底漆后再上面漆。</div>' +
+
+    '<div class="note">张数按设定的损耗率计算，默认 10%。接缝石膏按每 100 平方英尺 1 加仑估算（含贴带与三道收浆）。' +
+    '作为 Amazon 联盟成员，我会从符合条件的购买中获得佣金。</div>' +
+    '</body></html>';
+}
+
+function openPrintablePdf() {
+  const w = window.open("", "_blank");
+  if (!w) { alert("请允许本站弹出窗口，才能生成 PDF。"); return; }
+  w.document.open();
+  w.document.write(buildPdfHtml());
+  w.document.close();
+  w.onload = function () { w.focus(); w.print(); };
+  setTimeout(function () { try { w.focus(); w.print(); } catch (e) {} }, 400);
+}
+
+/* ---------- 事件绑定 ---------- */
+[inputLen, inputWid, inputHgt, inputOpen, inputPrice].forEach(el => el.addEventListener("input", calc));
+[inputSize, inputWaste, inputCeil].forEach(el => el.addEventListener("change", calc));
+
+calc();
+</script>
+</body>
+</html>
