@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ============================================================
+     SEO：围绕 "瓷砖用量计算器 / 一个房间需要多少瓷砖"
+     ============================================================ -->
+<title>瓷砖用量计算器 – 一个房间需要多少片瓷砖、多少箱？</title>
+<meta name="description" content="免费瓷砖用量计算器：输入房间长宽和瓷砖规格，实时算出地面面积、含损耗的瓷砖片数、需要购买多少箱，以及材料预估总价。">
+<meta name="keywords" content="瓷砖用量计算器, 瓷砖片数计算, 瓷砖箱数计算, 铺砖面积计算, 地砖计算器">
+<link rel="canonical" href="https://zihuai2026.github.io/paint-calculator/tile/zh/">
+
+<!-- hreflang：中英文瓷砖计算器互为替代页面 -->
+<link rel="alternate" hreflang="en" href="https://zihuai2026.github.io/paint-calculator/tile/">
+<link rel="alternate" hreflang="zh-CN" href="https://zihuai2026.github.io/paint-calculator/tile/zh/">
+<link rel="alternate" hreflang="x-default" href="https://zihuai2026.github.io/paint-calculator/tile/">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="瓷砖用量计算器 – 算片数、箱数与损耗">
+<meta property="og:description" content="输入房间尺寸和瓷砖规格，算出需要多少片瓷砖、多少箱，以及材料预算。">
+<meta property="og:url" content="https://zihuai2026.github.io/paint-calculator/tile/zh/">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#0e7490">
+
+<!-- FAQ 结构化数据（与页面可见 FAQ 完全一致） -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "12 平米的房间需要多少片瓷砖？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "先算地面面积（长 × 宽），加上 10% 损耗，再除以单片瓷砖面积并向上取整。以 3.6 × 3.3 米（约 12 平米）的房间、600×600 毫米瓷砖为例，加 10% 损耗约 13.1 平米，每片 0.36 平米，需要 37 片。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "铺瓷砖要加多少损耗？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "规则的长方形房间按 10% 计算即可。斜铺、人字拼或转角门洞多的房间建议 15%~20%。另外建议多留 2~3 片备用，方便日后修补。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "一箱瓷砖有多少片、能铺多少平方？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "不同规格和品牌差异较大，包装箱上通常同时标注片数和可铺面积。常见参考：600×600 毫米瓷砖一箱 4 片约 1.44 平米，800×800 毫米一箱 3 片约 1.92 平米。以包装箱标注为准。"
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+/* ============================================================
+   与油漆 / 地板计算器一致的视觉体系
+   ============================================================ */
+:root {
+  --primary: #0e7490;
+  --primary-dark: #155e75;
+  --primary-light: #e0f2fe;
+  --text: #1e293b;
+  --text-sub: #64748b;
+  --bg: #f4f7fa;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --ok: #059669;
+  --radius: 12px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.6;
+}
+.container { max-width: 1080px; margin: 0 auto; padding: 24px 16px 60px; }
+
+/* ---------- Header ---------- */
+header { text-align: center; margin-bottom: 28px; position: relative; }
+header h1 { font-size: 26px; color: var(--primary-dark); letter-spacing: .5px; }
+header p  { color: var(--text-sub); font-size: 14px; margin-top: 6px; }
+.header-actions {
+  display: flex; gap: 8px; align-items: center;
+  justify-content: flex-end; flex-wrap: wrap; margin-bottom: 12px;
+}
+@media (max-width: 620px) { .header-actions { justify-content: center; } }
+.nav-link, .lang-switch {
+  font-size: 13px; color: var(--primary); text-decoration: none;
+  border: 1px solid var(--primary); border-radius: 999px; padding: 3px 14px;
+  white-space: nowrap;
+}
+.nav-link:hover, .lang-switch:hover { background: var(--primary-light); }
+.nav-link.is-current { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+/* ---------- Layout ---------- */
+.main-grid { display: grid; grid-template-columns: 380px 1fr; gap: 20px; align-items: start; }
+@media (max-width: 860px) { .main-grid { grid-template-columns: 1fr; } }
+
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.05);
+}
+.card h2 {
+  font-size: 16px; color: var(--primary); border-left: 4px solid var(--primary);
+  padding-left: 10px; margin-bottom: 16px;
+}
+
+/* ---------- Inputs ---------- */
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 5px; }
+.field .hint { font-size: 12px; color: var(--text-sub); font-weight: 400; }
+.field input, .field select {
+  width: 100%; padding: 10px 12px; border: 1px solid var(--border);
+  border-radius: 8px; font-size: 15px; outline: none; background: #fff;
+  transition: border .2s, box-shadow .2s;
+}
+.field input:focus, .field select:focus {
+  border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light);
+}
+.field-row { display: flex; gap: 12px; }
+.field-row .field { flex: 1; }
+
+/* ---------- Result ---------- */
+.result-box {
+  background: linear-gradient(135deg, #f0fdfa, var(--primary-light));
+  border: 1px solid #bae6fd; border-radius: var(--radius);
+  padding: 20px; text-align: center;
+}
+.result-num { font-size: 46px; font-weight: 800; color: var(--primary-dark); line-height: 1.1; }
+.result-num small { font-size: 16px; font-weight: 600; color: var(--text-sub); }
+.result-detail { font-size: 13px; color: var(--text-sub); margin: 8px 0 16px; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  width: 100%; padding: 11px 16px; border: none; border-radius: 8px;
+  font-size: 15px; font-weight: 600; cursor: pointer;
+  transition: background .2s, transform .1s;
+}
+.btn:active { transform: scale(.98); }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-outline { background: #fff; color: var(--primary); border: 1.5px solid var(--primary); }
+.btn-outline:hover { background: var(--primary-light); }
+.btn + .btn { margin-top: 10px; }
+.btn-outline.pdf { color: #b45309; border-color: #f59e0b; }
+.btn-outline.pdf:hover { background: #fef3c7; }
+
+/* ---------- SVG plan ---------- */
+#plan-wrap { min-height: 300px; display: flex; align-items: center; justify-content: center; }
+#plan { width: 100%; height: auto; }
+
+/* ---------- Modal ---------- */
+.modal-mask {
+  display: none; position: fixed; inset: 0;
+  background: rgba(15,23,42,.55); z-index: 100;
+  align-items: center; justify-content: center;
+}
+.modal-mask.show { display: flex; }
+.modal {
+  background: #fff; border-radius: 14px; width: 92%; max-width: 420px;
+  padding: 28px; text-align: center; position: relative; animation: pop .25s ease;
+}
+@keyframes pop { from { transform: scale(.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal h3 { color: var(--primary-dark); margin-bottom: 8px; }
+.modal .price { font-size: 34px; font-weight: 800; color: #b45309; margin: 10px 0; }
+.modal .desc { font-size: 13px; color: var(--text-sub); margin-bottom: 18px; }
+.modal-close {
+  position: absolute; top: 10px; right: 14px; border: none; background: none;
+  font-size: 22px; color: var(--text-sub); cursor: pointer;
+}
+.modal-note { font-size: 11px; color: #94a3b8; margin-top: 12px; }
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed; left: 50%; bottom: 48px;
+  transform: translateX(-50%) translateY(24px);
+  background: var(--card); border: 1px solid var(--border);
+  border-left: 5px solid var(--ok);
+  border-radius: 10px; padding: 12px 22px;
+  font-size: 14px; font-weight: 600; color: var(--text);
+  box-shadow: 0 8px 24px rgba(15,23,42,.15);
+  opacity: 0; pointer-events: none; z-index: 200;
+  display: flex; align-items: center; gap: 8px;
+  transition: opacity .25s ease, transform .25s ease;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast .t-icon { font-size: 18px; }
+
+/* ---------- Affiliate ---------- */
+.affiliate { margin-top: 36px; }
+.affiliate h2 {
+  font-size: 16px; color: var(--text-sub); text-align: center; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.affiliate h2::before, .affiliate h2::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+.goods-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+@media (max-width: 680px) { .goods-grid { grid-template-columns: 1fr; } }
+.goods-card {
+  background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: hidden; text-align: center; transition: box-shadow .2s, transform .2s;
+}
+.goods-card:hover { box-shadow: 0 6px 18px rgba(14,116,144,.12); transform: translateY(-2px); }
+.goods-img {
+  height: 120px; background: #f1f5f9; display: flex;
+  align-items: center; justify-content: center; font-size: 40px;
+}
+.goods-body { padding: 14px; }
+.goods-body .g-name { font-size: 14px; font-weight: 600; }
+.goods-body .g-price { color: #b45309; font-weight: 700; margin: 4px 0 10px; }
+.goods-body a {
+  display: block; padding: 8px; border-radius: 8px; background: #f59e0b;
+  color: #fff; font-size: 13px; font-weight: 600; text-decoration: none;
+}
+.goods-body a:hover { background: #d97706; }
+
+/* ---------- Guide content ---------- */
+.guide { margin-top: 44px; }
+.guide > h2 {
+  font-size: 22px; color: var(--primary-dark); margin-bottom: 10px;
+  padding-bottom: 10px; border-bottom: 2px solid var(--primary-light);
+}
+.guide > h3 { font-size: 17px; color: var(--primary); margin: 28px 0 12px; }
+.guide p { font-size: 14px; color: #334155; margin-bottom: 12px; }
+.guide .lead { font-size: 15px; color: var(--text-sub); margin-bottom: 20px; }
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+@media (max-width: 760px) { .steps { grid-template-columns: 1fr 1fr; } }
+.step {
+  background: #fff; border: 1px solid var(--border); border-radius: 10px;
+  padding: 16px 14px;
+}
+.step .num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--primary); color: #fff; font-size: 13px; font-weight: 700;
+  margin-bottom: 8px;
+}
+.step h4 { font-size: 14px; margin-bottom: 6px; }
+.step p { font-size: 13px; color: var(--text-sub); margin: 0; }
+.faq-item {
+  border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px 16px; margin-bottom: 10px; background: #fff;
+}
+.faq-item h4 { font-size: 14px; color: var(--primary-dark); margin-bottom: 4px; }
+.faq-item p { font-size: 13.5px; color: #475569; margin: 0; }
+
+/* 常见规格对照表 */
+.tbl-wrap { overflow-x: auto; margin-bottom: 8px; }
+table.ref {
+  width: 100%; border-collapse: collapse; font-size: 13px; background: #fff;
+  border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+}
+table.ref th, table.ref td { padding: 9px 12px; border-bottom: 1px solid var(--border); text-align: left; }
+table.ref th { background: #f1f5f9; font-size: 12px; color: #475569; font-weight: 600; }
+table.ref tr:last-child td { border-bottom: none; }
+table.ref td.c { text-align: center; }
+
+footer { text-align: center; font-size: 12px; color: #94a3b8; margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <!-- 顶部导航：站内工具互链 + 语言切换 -->
+    <div class="header-actions">
+      <a class="nav-link" href="../../">🏠 油漆计算器</a>
+      <a class="nav-link" href="../../flooring/zh/">🪵 地板计算器</a>
+      <a class="nav-link is-current" href="./">🧱 瓷砖计算器</a>
+      <a class="lang-switch" href="../">English</a>
+    </div>
+    <h1>🧱 瓷砖用量计算器</h1>
+    <p>输入房间尺寸和瓷砖规格，算出需要多少片瓷砖、多少箱，以及材料预算</p>
+  </header>
+
+  <div class="main-grid">
+
+    <!-- ===== 输入 + 结果 ===== -->
+    <div class="card">
+      <h2>📐 房间与瓷砖规格</h2>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="len">长度 <span class="hint">(ft)</span></label>
+          <input type="number" id="len" min="0" step="0.1" placeholder="如 12" value="12">
+        </div>
+        <div class="field">
+          <label for="wid">宽度 <span class="hint">(ft)</span></label>
+          <input type="number" id="wid" min="0" step="0.1" placeholder="如 12" value="12">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="size">瓷砖规格 <span class="hint">(英寸)</span></label>
+        <select id="size">
+          <option value="12x12">12 × 12 in — 每片 1.00 sq ft</option>
+          <option value="12x24" selected>12 × 24 in — 每片 2.00 sq ft</option>
+          <option value="18x18">18 × 18 in — 每片 2.25 sq ft</option>
+          <option value="24x24">24 × 24 in — 每片 4.00 sq ft</option>
+          <option value="6x36">6 × 36 in — 每片 1.50 sq ft（长条砖）</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="perbox">每箱片数 <span class="hint">(包装箱上标注)</span></label>
+        <input type="number" id="perbox" min="1" step="1" placeholder="如 8" value="8">
+      </div>
+
+      <div class="field">
+        <label for="waste">损耗率 <span class="hint">(常规 10%)</span></label>
+        <select id="waste">
+          <option value="5">5% — 简单直铺</option>
+          <option value="10" selected>10% — 常规房间（推荐）</option>
+          <option value="15">15% — 斜铺 / 转角多</option>
+          <option value="20">20% — 人字拼 / 异形房间</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="price">每箱价格 <span class="hint">($，可选)</span></label>
+        <input type="number" id="price" min="0" step="0.01" placeholder="如 45.00" value="45.00">
+      </div>
+
+      <div class="result-box" style="margin-top:18px">
+        <div>需要购买</div>
+        <div class="result-num"><span id="tiles">0</span><small> 片</small></div>
+        <div class="result-detail" id="detail">地面面积 — sq ft</div>
+        <button class="btn btn-primary" id="btnCopy">📋 一键复制结果</button>
+        <button class="btn btn-outline pdf" id="btnPdf">⬇️ 下载材料清单 PDF</button>
+      </div>
+    </div>
+
+    <!-- ===== 实时铺贴图 ===== -->
+    <div class="card">
+      <h2>🖼️ 铺贴示意图</h2>
+      <div id="plan-wrap">
+        <svg id="plan" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+      <p style="font-size:12px;color:var(--text-sub);text-align:center">
+        按真实比例绘制 · 网格随瓷砖规格变化 · 尺寸与面积实时更新
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== 联盟位 ===== -->
+  <section class="affiliate">
+    <h2>🛒 推荐工具（Amazon 联盟）</h2>
+    <div class="goods-grid">
+      <div class="goods-card">
+        <div class="goods-img">🧱</div>
+        <div class="goods-body">
+          <div class="g-name">瓷砖（地砖 / 墙砖）</div>
+          <div class="g-price">价格以 Amazon 为准</div>
+          <a href="https://www.amazon.com/s?k=porcelain+floor+tile&tag=paintcalc20-20" target="_blank" rel="nofollow sponsored">去 Amazon 购买</a>
+        </div>
+      </div>
+      <div class="goods-card">
+        <div class="goods-img">📏</div>
+        <div class="goods-body">
+          <div class="g-name">瓷砖找平器 / 定位卡子</div>
+          <div class="g-price">价格以 Amazon 为准</div>
+          <a href="https://www.amazon.com/s?k=tile+leveling+system+spacers&tag=paintcalc20-20" target="_blank" rel="nofollow sponsored">去 Amazon 购买</a>
+        </div>
+      </div>
+      <div class="goods-card">
+        <div class="goods-img">🪣</div>
+        <div class="goods-body">
+          <div class="g-name">填缝剂 + 抹泥刀套装</div>
+          <div class="g-price">价格以 Amazon 为准</div>
+          <a href="https://www.amazon.com/s?k=tile+grout+float+kit&tag=paintcalc20-20" target="_blank" rel="nofollow sponsored">去 Amazon 购买</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 图文指南 ===== -->
+  <section class="guide">
+    <h2>怎么算一间房需要多少片瓷砖？</h2>
+    <p class="lead">
+      瓷砖按片或按箱卖，从来不按平方卖——所以关键是把"地面面积"换算成"片数"，再加上切割损耗。
+      损耗来自墙边收口、门洞、以及对花/斜铺时的废料。
+    </p>
+
+    <div class="steps">
+      <div class="step">
+        <span class="num">1</span>
+        <h4>量地面面积</h4>
+        <p>长 × 宽（英尺）就是面积。L 形房间拆成两个矩形分别算，再相加。</p>
+      </div>
+      <div class="step">
+        <span class="num">2</span>
+        <h4>换算单片面积</h4>
+        <p>瓷砖两边尺寸（英寸）相乘，再除以 144，就是单片占多少平方英尺。</p>
+      </div>
+      <div class="step">
+        <span class="num">3</span>
+        <h4>加上损耗</h4>
+        <p>直铺 10% 即可；斜铺、人字拼、转角门洞多建议 15%~20%。</p>
+      </div>
+      <div class="step">
+        <span class="num">4</span>
+        <h4>两次向上取整</h4>
+        <p>先向上取整到整片，再向上取整到整箱——瓷砖没法买半箱。</p>
+      </div>
+    </div>
+
+    <h3>常见规格速查（12 × 12 英尺房间，10% 损耗）</h3>
+    <div class="tbl-wrap">
+      <table class="ref">
+        <thead>
+          <tr>
+            <th>瓷砖规格</th>
+            <th class="c">单片面积</th>
+            <th class="c">需要片数</th>
+            <th class="c">每箱片数</th>
+            <th class="c">箱数</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>12 × 12 in</td><td class="c">1.00 sq ft</td><td class="c">159</td><td class="c">10</td><td class="c">16</td></tr>
+          <tr><td>12 × 24 in</td><td class="c">2.00 sq ft</td><td class="c">80</td><td class="c">8</td><td class="c">10</td></tr>
+          <tr><td>18 × 18 in</td><td class="c">2.25 sq ft</td><td class="c">71</td><td class="c">6</td><td class="c">12</td></tr>
+          <tr><td>24 × 24 in</td><td class="c">4.00 sq ft</td><td class="c">40</td><td class="c">4</td><td class="c">10</td></tr>
+          <tr><td>6 × 36 in（长条）</td><td class="c">1.50 sq ft</td><td class="c">106</td><td class="c">8</td><td class="c">14</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:12px;color:var(--text-sub)">
+      以 144 sq ft 地面 + 10% 损耗估算。不同品牌每箱片数与覆盖面积略有差异，以包装箱标注为准。
+    </p>
+
+    <h3>常见问题</h3>
+
+    <div class="faq-item">
+      <h4>12 平米的房间需要多少片瓷砖？</h4>
+      <p>
+        先算地面面积（长 × 宽），加上 10% 损耗，再除以单片瓷砖面积并向上取整。以 3.6 × 3.3 米
+        （约 12 平米）的房间、600×600 毫米瓷砖为例，加 10% 损耗约 13.1 平米，每片 0.36 平米，需要 37 片。
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h4>铺瓷砖要加多少损耗？</h4>
+      <p>
+        规则的长方形房间按 10% 计算即可。斜铺、人字拼或转角门洞多的房间建议 15%~20%。
+        另外建议多留 2~3 片备用，方便日后修补。
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h4>一箱瓷砖有多少片、能铺多少平方？</h4>
+      <p>
+        不同规格和品牌差异较大，包装箱上通常同时标注片数和可铺面积。常见参考：600×600 毫米瓷砖一箱
+        4 片约 1.44 平米，800×800 毫米一箱 3 片约 1.92 平米。以包装箱标注为准。
+      </p>
+    </div>
+
+    <h3>相关工具</h3>
+    <p>
+      铺完地砖还要刷墙？用
+      <a href="../../" style="color:var(--primary);font-weight:600">油漆用量计算器</a> 和
+      <a href="../../flooring/zh/" style="color:var(--primary);font-weight:600">地板用量计算器</a>
+      把整间房的材料一次算清。
+    </p>
+  </section>
+
+  <footer>
+    瓷砖用量计算器 · 按直铺施工估算 · 结果仅供参考<br>
+    As an Amazon Associate I earn from qualifying purchases.
+  </footer>
+</div>
+
+<!-- ===================== Toast ===================== -->
+<div class="toast" id="toast">
+  <span class="t-icon">✅</span>
+  <span>复制成功！结果已保存到剪贴板</span>
+</div>
+
+<!-- ===================== 付费弹窗 ===================== -->
+<div class="modal-mask" id="payModal">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">×</button>
+    <h3>📄 材料清单 PDF</h3>
+    <div class="price">$1.99</div>
+    <p class="desc">
+      包含：片数与箱数明细、损耗计算、瓷砖胶与填缝剂用量、找平器与抹泥刀清单、分步施工检查表。<br>
+      支付成功后立即下载。
+    </p>
+    <button class="btn btn-primary" id="btnPay">💳 使用 Stripe 支付</button>
+    <p class="modal-note">* 当前为付费占位演示，未接入真实支付通道</p>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   计算逻辑：
+   1) 地面面积 = 长 × 宽（sq ft）
+   2) 单片面积 = (砖宽 × 砖高) ÷ 144
+   3) 含损耗面积 = 面积 × (1 + 损耗%)
+   4) 片数 = 向上取整(含损耗面积 ÷ 单片面积)
+   5) 箱数 = 向上取整(片数 ÷ 每箱片数)
+   6) 同步绘制按比例的瓷砖网格铺贴图
+   ============================================================ */
+
+const $ = (id) => document.getElementById(id);
+const inputLen    = $("len");
+const inputWid    = $("wid");
+const inputSize   = $("size");
+const inputPerBox = $("perbox");
+const inputWaste  = $("waste");
+const inputPrice  = $("price");
+
+const elTiles  = $("tiles");
+const elDetail = $("detail");
+const svg      = $("plan");
+
+// 解析 "12x24" 形式的规格选择
+function getTileSize() {
+  const parts = inputSize.value.split("x");
+  return { w: parseInt(parts[0], 10) || 12, h: parseInt(parts[1], 10) || 12 };
+}
+
+function calc() {
+  const L = Math.max(0, parseFloat(inputLen.value) || 0);
+  const W = Math.max(0, parseFloat(inputWid.value) || 0);
+  const perBox = Math.max(1, parseInt(inputPerBox.value, 10) || 1);
+  const waste = parseInt(inputWaste.value, 10) || 0;
+  const price = Math.max(0, parseFloat(inputPrice.value) || 0);
+  const size = getTileSize();
+
+  const tileSqFt = (size.w * size.h) / 144;             // 单片面积
+  const area = L * W;                                    // 纯地面面积
+  const areaWithWaste = area * (1 + waste / 100);        // 含损耗
+  const tiles = areaWithWaste > 0 ? Math.ceil(areaWithWaste / tileSqFt) : 0;
+  const boxes = tiles > 0 ? Math.ceil(tiles / perBox) : 0;
+  const cost = boxes * price;
+
+  elTiles.textContent = tiles;
+  if (area > 0) {
+    elDetail.innerHTML =
+      area.toFixed(1) + " sq ft 加 " + waste + "% 损耗 = " + areaWithWaste.toFixed(1) +
+      " sq ft ÷ 每片 " + tileSqFt.toFixed(2) + " sq ft<br>" +
+      "≈ " + boxes + " 箱（每箱 " + perBox + " 片）" +
+      (cost > 0 ? " · 预估总价 $" + cost.toFixed(2) : "");
+  } else {
+    elDetail.textContent = "请输入有效的房间尺寸";
+  }
+
+  drawPlan(L, W, size);
+}
+
+/* ============================================================
+   铺贴图：按真实比例绘制房间 + 按砖尺寸画网格线
+   ============================================================ */
+function drawPlan(L, W, size) {
+  if (L <= 0 || W <= 0) {
+    svg.innerHTML = '<text x="50%" y="50%" text-anchor="middle" fill="#94a3b8" font-size="15">' +
+                    '请输入长和宽以生成铺贴图</text>';
+    svg.setAttribute("viewBox", "0 0 400 120");
+    return;
+  }
+
+  const vbW = 640, vbH = 320, pad = 46;
+  // 按比例缩放，保证图形完整落在视图内
+  const scale = Math.min((vbW - pad * 2) / L, (vbH - pad * 2) / W);
+  const w = L * scale, h = W * scale;
+  const x = (vbW - w) / 2, y = (vbH - h) / 2;
+
+  // 单片砖在画布上的尺寸（英尺 → 像素）
+  const tileWpx = (size.w / 12) * scale;
+  const tileHpx = (size.h / 12) * scale;
+
+  let gridLines = "";
+  // 网格过密时不画（避免上万条线拖慢渲染），改为纯色块
+  if (tileWpx > 5 && tileHpx > 5) {
+    let g = '<g stroke="#7dd3fc" stroke-width="0.8">';
+    for (let gx = x + tileWpx; gx < x + w; gx += tileWpx) {
+      g += '<line x1="' + gx.toFixed(1) + '" y1="' + y + '" x2="' + gx.toFixed(1) + '" y2="' + (y + h) + '"/>';
+    }
+    for (let gy = y + tileHpx; gy < y + h; gy += tileHpx) {
+      g += '<line x1="' + x + '" y1="' + gy.toFixed(1) + '" x2="' + (x + w) + '" y2="' + gy.toFixed(1) + '"/>';
+    }
+    g += '</g>';
+    gridLines = g;
+  }
+
+  let html = "";
+  html += '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h +
+          '" fill="#f0f9ff" stroke="#0e7490" stroke-width="2.5" rx="2"/>';
+  html += gridLines;
+
+  // 尺寸标注：长度（下边）
+  html += '<line x1="' + x + '" y1="' + (y + h + 22) + '" x2="' + (x + w) + '" y2="' + (y + h + 22) +
+          '" stroke="#94a3b8" stroke-width="1.2"/>';
+  html += '<text x="' + (x + w / 2) + '" y="' + (y + h + 40) +
+          '" text-anchor="middle" font-size="12" fill="#475569">' + L + ' ft</text>';
+
+  // 尺寸标注：宽度（左边）
+  html += '<line x1="' + (x - 22) + '" y1="' + y + '" x2="' + (x - 22) + '" y2="' + (y + h) +
+          '" stroke="#94a3b8" stroke-width="1.2"/>';
+  html += '<text x="' + (x - 30) + '" y="' + (y + h / 2) +
+          '" text-anchor="end" font-size="12" fill="#475569">' + W + ' ft</text>';
+
+  // 中心标注面积 + 砖规格
+  html += '<text x="' + (x + w / 2) + '" y="' + (y + h / 2 - 4) +
+          '" text-anchor="middle" font-size="15" font-weight="700" fill="#155e75">' +
+          (L * W).toFixed(1) + ' sq ft</text>';
+  html += '<text x="' + (x + w / 2) + '" y="' + (y + h / 2 + 14) +
+          '" text-anchor="middle" font-size="11" fill="#64748b">' +
+          size.w + ' × ' + size.h + ' in</text>';
+
+  svg.setAttribute("viewBox", "0 0 " + vbW + " " + vbH);
+  svg.innerHTML = html;
+}
+
+/* ---------- Toast ---------- */
+let toastTimer = null;
+function showToast() {
+  const toast = $("toast");
+  toast.classList.add("show");
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 1800);
+}
+
+/* ---------- 复制（带降级方案） ---------- */
+function copyText(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    return navigator.clipboard.writeText(text);
+  }
+  return new Promise((resolve, reject) => {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand("copy") ? resolve() : reject(new Error("copy failed"));
+    } catch (e) { reject(e); }
+    document.body.removeChild(ta);
+  });
+}
+
+$("btnCopy").addEventListener("click", () => {
+  const size = getTileSize();
+  const boxesPart = elDetail.textContent.split("≈ ")[1];
+  const text =
+    "【瓷砖用量计算结果】\n" +
+    "房间尺寸：" + inputLen.value + " × " + inputWid.value + " 英尺\n" +
+    "瓷砖规格：" + size.w + " × " + size.h + " 英寸\n" +
+    "损耗率：" + inputWaste.value + "%\n" +
+    "需要片数：" + elTiles.textContent + " 片" +
+    (boxesPart ? "\n箱数：" + boxesPart.split(" · ")[0] : "");
+  copyText(text).then(() => {
+    $("btnCopy").textContent = "✅ 已复制！";
+    setTimeout(() => { $("btnCopy").textContent = "📋 一键复制结果"; }, 1500);
+    showToast();
+  }).catch(() => alert("当前浏览器不支持自动复制，请手动复制：\n\n" + text));
+});
+
+/* ---------- 付费弹窗 ---------- */
+$("btnPdf").addEventListener("click", () => $("payModal").classList.add("show"));
+$("modalClose").addEventListener("click", () => $("payModal").classList.remove("show"));
+$("payModal").addEventListener("click", function (e) {
+  if (e.target === this) this.classList.remove("show");
+});
+$("btnPay").addEventListener("click", () => {
+  const ok = confirm(
+    "演示模式：尚未接入支付通道。\n\n" +
+    "点「确定」可直接生成 PDF 预览。正式上线后，这个按钮会跳转支付链接，" +
+    "付款成功后才解锁 PDF。"
+  );
+  if (!ok) return;
+  $("payModal").classList.remove("show");
+  openPrintablePdf();
+});
+
+/* ============================================================
+   PDF 生成（零依赖）：新建打印优化页面 → 用户选“另存为 PDF”
+   ============================================================ */
+function buildPdfHtml() {
+  const L = parseFloat(inputLen.value) || 0;
+  const W = parseFloat(inputWid.value) || 0;
+  const perBox = Math.max(1, parseInt(inputPerBox.value, 10) || 1);
+  const waste = parseInt(inputWaste.value, 10) || 0;
+  const price = Math.max(0, parseFloat(inputPrice.value) || 0);
+  const size = getTileSize();
+
+  const tileSqFt = (size.w * size.h) / 144;
+  const area = L * W;
+  const areaWithWaste = area * (1 + waste / 100);
+  const tiles = areaWithWaste > 0 ? Math.ceil(areaWithWaste / tileSqFt) : 0;
+  const boxes = tiles > 0 ? Math.ceil(tiles / perBox) : 0;
+  const cost = boxes * price;
+
+  // 辅料估算：瓷砖胶约 50 sq ft/袋；填缝剂约 1 lb / 10 sq ft（参考值）
+  const thinSet = area > 0 ? Math.ceil(area / 50) : 0;
+  const grout = area > 0 ? Math.ceil(area / 10) : 0;
+
+  const today = new Date().toLocaleDateString("zh-CN", { year: "numeric", month: "long", day: "numeric" });
+
+  const rows = [
+    ["瓷砖 — " + size.w + " × " + size.h + " in", boxes + " 箱（共 " + tiles + " 片）",
+     "https://www.amazon.com/s?k=porcelain+floor+tile&tag=paintcalc20-20"],
+    ["瓷砖胶（50 sq ft / 袋）", thinSet + " 袋",
+     "https://www.amazon.com/s?k=thin+set+tile+adhesive&tag=paintcalc20-20"],
+    ["填缝剂（约 1 lb / 10 sq ft）", "约 " + grout + " lb",
+     "https://www.amazon.com/s?k=tile+grout&tag=paintcalc20-20"],
+    ["找平器 / 定位卡子", "1 套",
+     "https://www.amazon.com/s?k=tile+leveling+system+spacers&tag=paintcalc20-20"]
+  ];
+  const rowsHtml = rows.map(r =>
+    '<tr><td>' + r[0] + '</td><td class="c">' + r[1] +
+    '</td><td class="c"><a href="' + r[2] + '">Amazon</a></td></tr>'
+  ).join("");
+
+  return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>瓷砖材料清单</title><style>' +
+    'body{font-family:"PingFang SC","Microsoft YaHei",Arial,sans-serif;color:#1e293b;padding:36px;max-width:760px;margin:0 auto}' +
+    'h1{font-size:22px;color:#155e75;margin:0 0 4px}' +
+    '.sub{color:#64748b;font-size:12px;margin-bottom:22px}' +
+    'h2{font-size:14px;color:#0e7490;border-left:4px solid #0e7490;padding-left:8px;margin:26px 0 10px}' +
+    'table{width:100%;border-collapse:collapse;font-size:13px}' +
+    'th,td{border:1px solid #e2e8f0;padding:8px 10px;text-align:left}' +
+    'th{background:#f1f5f9;font-size:12px}.c{text-align:center}' +
+    '.kv{font-size:13px;margin:2px 0}.kv b{display:inline-block;width:165px;color:#475569;font-weight:600}' +
+    '.total{background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:12px 14px;margin-top:14px;font-size:13px}' +
+    '.note{font-size:11px;color:#94a3b8;margin-top:24px;border-top:1px solid #e2e8f0;padding-top:10px}' +
+    'a{color:#0e7490}@media print{body{padding:0}a{text-decoration:none}}' +
+    '</style></head><body>' +
+    '<h1>瓷砖材料清单</h1>' +
+    '<div class="sub">生成日期 ' + today + ' · ' + window.location.host + '</div>' +
+
+    '<h2>房间信息</h2>' +
+    '<div class="kv"><b>房间尺寸</b>' + L + ' × ' + W + ' 英尺</div>' +
+    '<div class="kv"><b>地面面积</b>' + area.toFixed(1) + ' sq ft</div>' +
+    '<div class="kv"><b>瓷砖规格</b>' + size.w + ' × ' + size.h + ' in（每片 ' + tileSqFt.toFixed(2) + ' sq ft）</div>' +
+    '<div class="kv"><b>损耗率</b>' + waste + '%（含损耗共 ' + areaWithWaste.toFixed(1) + ' sq ft）</div>' +
+    '<div class="total">建议下单 <b>' + tiles + ' 片</b> ≈ <b>' + boxes + ' 箱</b>' +
+      (cost > 0 ? ' · 材料预估总价 <b>$' + cost.toFixed(2) + '</b>' : '') + '</div>' +
+
+    '<h2>材料清单</h2>' +
+    '<table><thead><tr><th>材料</th><th class="c">数量</th><th class="c">购买</th></tr></thead>' +
+    '<tbody>' + rowsHtml + '</tbody></table>' +
+
+    '<h2>施工步骤</h2>' +
+    '<div class="kv">1. 检查地面平整度：10 英尺内高低差不超过 1/8 英寸。</div>' +
+    '<div class="kv">2. 先干铺一排确认排砖方向和起铺点。</div>' +
+    '<div class="kv">3. 用对应齿深的抹泥刀刮瓷砖胶，大砖要背面抹胶。</div>' +
+    '<div class="kv">4. 用找平器或定位卡子保证缝隙均匀。</div>' +
+    '<div class="kv">5. 静置 24 小时后再填缝，必要位置做密封处理。</div>' +
+
+    '<div class="note">以上按直铺、1/4 英寸缝估算。斜铺、人字拼建议按 15%~20% 损耗。' +
+    'As an Amazon Associate I earn from qualifying purchases.</div>' +
+    '</body></html>';
+}
+
+function openPrintablePdf() {
+  const w = window.open("", "_blank");
+  if (!w) { alert("请允许本站弹出新窗口，才能生成 PDF。"); return; }
+  w.document.open();
+  w.document.write(buildPdfHtml());
+  w.document.close();
+  w.onload = function () { w.focus(); w.print(); };
+  setTimeout(function () { try { w.focus(); w.print(); } catch (e) {} }, 400);
+}
+
+/* ---------- 事件绑定 ---------- */
+[inputLen, inputWid, inputPerBox, inputPrice].forEach(el => el.addEventListener("input", calc));
+[inputSize, inputWaste].forEach(el => el.addEventListener("change", calc));
+
+calc();
+</script>
+</body>
+</html>

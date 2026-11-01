@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ============================================================
+     SEO：围绕 "tile calculator / how many tiles do I need"
+     ============================================================ -->
+<title>Tile Calculator – How Many Tiles and Boxes Do You Need?</title>
+<meta name="description" content="Free tile calculator: enter room size and tile size to instantly get floor area, number of tiles with waste, boxes to buy and estimated cost for ceramic, porcelain or vinyl tile.">
+<meta name="keywords" content="tile calculator, how many tiles do I need, tile square footage calculator, porcelain tile calculator, how many boxes of tile">
+<link rel="canonical" href="https://zihuai2026.github.io/paint-calculator/tile/">
+
+<!-- hreflang：中英文瓷砖计算器互为替代页面 -->
+<link rel="alternate" hreflang="en" href="https://zihuai2026.github.io/paint-calculator/tile/">
+<link rel="alternate" hreflang="zh-CN" href="https://zihuai2026.github.io/paint-calculator/tile/zh/">
+<link rel="alternate" hreflang="x-default" href="https://zihuai2026.github.io/paint-calculator/tile/">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Free Tile Calculator – Tiles, Boxes and Waste">
+<meta property="og:description" content="Work out how many tiles and boxes you need for any room, waste factor included.">
+<meta property="og:url" content="https://zihuai2026.github.io/paint-calculator/tile/">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#0e7490">
+
+<!-- FAQ 结构化数据（与页面可见 FAQ 完全一致） -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How many tiles do I need for a 12x12 room?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A 12 × 12 ft room is 144 sq ft. With 10% waste that is 158.4 sq ft. Using 12 × 12 inch tiles (1 sq ft each) you need 159 tiles; with 12 × 24 inch tiles (2 sq ft each) you need 80 tiles."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much extra tile should I buy?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "10% is standard for a simple rectangular room. Use 15% for diagonal layouts, herringbone patterns or rooms with many corners and doorways. Keeping a few spare tiles is also wise for future repairs."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How many square feet does a box of tile cover?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It varies by tile size and brand. A box usually lists both the piece count and the coverage. Common examples: 12 × 12 inch tiles about 10 sq ft per box, 12 × 24 inch tiles about 16 sq ft per box. Always check the carton."
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+/* ============================================================
+   与油漆 / 地板计算器一致的视觉体系
+   ============================================================ */
+:root {
+  --primary: #0e7490;
+  --primary-dark: #155e75;
+  --primary-light: #e0f2fe;
+  --text: #1e293b;
+  --text-sub: #64748b;
+  --bg: #f4f7fa;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --ok: #059669;
+  --radius: 12px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.6;
+}
+.container { max-width: 1080px; margin: 0 auto; padding: 24px 16px 60px; }
+
+/* ---------- Header ---------- */
+header { text-align: center; margin-bottom: 28px; position: relative; }
+header h1 { font-size: 26px; color: var(--primary-dark); letter-spacing: .5px; }
+header p  { color: var(--text-sub); font-size: 14px; margin-top: 6px; }
+.header-actions {
+  display: flex; gap: 8px; align-items: center;
+  justify-content: flex-end; flex-wrap: wrap; margin-bottom: 12px;
+}
+@media (max-width: 620px) { .header-actions { justify-content: center; } }
+.nav-link, .lang-switch {
+  font-size: 13px; color: var(--primary); text-decoration: none;
+  border: 1px solid var(--primary); border-radius: 999px; padding: 3px 14px;
+  white-space: nowrap;
+}
+.nav-link:hover, .lang-switch:hover { background: var(--primary-light); }
+.nav-link.is-current { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+/* ---------- Layout ---------- */
+.main-grid { display: grid; grid-template-columns: 380px 1fr; gap: 20px; align-items: start; }
+@media (max-width: 860px) { .main-grid { grid-template-columns: 1fr; } }
+
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.05);
+}
+.card h2 {
+  font-size: 16px; color: var(--primary); border-left: 4px solid var(--primary);
+  padding-left: 10px; margin-bottom: 16px;
+}
+
+/* ---------- Inputs ---------- */
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 5px; }
+.field .hint { font-size: 12px; color: var(--text-sub); font-weight: 400; }
+.field input, .field select {
+  width: 100%; padding: 10px 12px; border: 1px solid var(--border);
+  border-radius: 8px; font-size: 15px; outline: none; background: #fff;
+  transition: border .2s, box-shadow .2s;
+}
+.field input:focus, .field select:focus {
+  border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light);
+}
+.field-row { display: flex; gap: 12px; }
+.field-row .field { flex: 1; }
+
+/* ---------- Result ---------- */
+.result-box {
+  background: linear-gradient(135deg, #f0fdfa, var(--primary-light));
+  border: 1px solid #bae6fd; border-radius: var(--radius);
+  padding: 20px; text-align: center;
+}
+.result-num { font-size: 46px; font-weight: 800; color: var(--primary-dark); line-height: 1.1; }
+.result-num small { font-size: 16px; font-weight: 600; color: var(--text-sub); }
+.result-detail { font-size: 13px; color: var(--text-sub); margin: 8px 0 16px; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  width: 100%; padding: 11px 16px; border: none; border-radius: 8px;
+  font-size: 15px; font-weight: 600; cursor: pointer;
+  transition: background .2s, transform .1s;
+}
+.btn:active { transform: scale(.98); }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-outline { background: #fff; color: var(--primary); border: 1.5px solid var(--primary); }
+.btn-outline:hover { background: var(--primary-light); }
+.btn + .btn { margin-top: 10px; }
+.btn-outline.pdf { color: #b45309; border-color: #f59e0b; }
+.btn-outline.pdf:hover { background: #fef3c7; }
+
+/* ---------- SVG plan ---------- */
+#plan-wrap { min-height: 300px; display: flex; align-items: center; justify-content: center; }
+#plan { width: 100%; height: auto; }
+
+/* ---------- Modal ---------- */
+.modal-mask {
+  display: none; position: fixed; inset: 0;
+  background: rgba(15,23,42,.55); z-index: 100;
+  align-items: center; justify-content: center;
+}
+.modal-mask.show { display: flex; }
+.modal {
+  background: #fff; border-radius: 14px; width: 92%; max-width: 420px;
+  padding: 28px; text-align: center; position: relative; animation: pop .25s ease;
+}
+@keyframes pop { from { transform: scale(.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal h3 { color: var(--primary-dark); margin-bottom: 8px; }
+.modal .price { font-size: 34px; font-weight: 800; color: #b45309; margin: 10px 0; }
+.modal .desc { font-size: 13px; color: var(--text-sub); margin-bottom: 18px; }
+.modal-close {
+  position: absolute; top: 10px; right: 14px; border: none; background: none;
+  font-size: 22px; color: var(--text-sub); cursor: pointer;
+}
+.modal-note { font-size: 11px; color: #94a3b8; margin-top: 12px; }
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed; left: 50%; bottom: 48px;
+  transform: translateX(-50%) translateY(24px);
+  background: var(--card); border: 1px solid var(--border);
+  border-left: 5px solid var(--ok);
+  border-radius: 10px; padding: 12px 22px;
+  font-size: 14px; font-weight: 600; color: var(--text);
+  box-shadow: 0 8px 24px rgba(15,23,42,.15);
+  opacity: 0; pointer-events: none; z-index: 200;
+  display: flex; align-items: center; gap: 8px;
+  transition: opacity .25s ease, transform .25s ease;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast .t-icon { font-size: 18px; }
+
+/* ---------- Affiliate ---------- */
+.affiliate { margin-top: 36px; }
+.affiliate h2 {
+  font-size: 16px; color: var(--text-sub); text-align: center; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.affiliate h2::before, .affiliate h2::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+.goods-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+@media (max-width: 680px) { .goods-grid { grid-template-columns: 1fr; } }
+.goods-card {
+  background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: hidden; text-align: center; transition: box-shadow .2s, transform .2s;
+}
+.goods-card:hover { box-shadow: 0 6px 18px rgba(14,116,144,.12); transform: translateY(-2px); }
+.goods-img {
+  height: 120px; background: #f1f5f9; display: flex;
+  align-items: center; justify-content: center; font-size: 40px;
+}
+.goods-body { padding: 14px; }
+.goods-body .g-name { font-size: 14px; font-weight: 600; }
+.goods-body .g-price { color: #b45309; font-weight: 700; margin: 4px 0 10px; }
+.goods-body a {
+  display: block; padding: 8px; border-radius: 8px; background: #f59e0b;
+  color: #fff; font-size: 13px; font-weight: 600; text-decoration: none;
+}
+.goods-body a:hover { background: #d97706; }
+
+/* ---------- Guide content ---------- */
+.guide { margin-top: 44px; }
+.guide > h2 {
+  font-size: 22px; color: var(--primary-dark); margin-bottom: 10px;
+  padding-bottom: 10px; border-bottom: 2px solid var(--primary-light);
+}
+.guide > h3 { font-size: 17px; color: var(--primary); margin: 28px 0 12px; }
+.guide p { font-size: 14px; color: #334155; margin-bottom: 12px; }
+.guide .lead { font-size: 15px; color: var(--text-sub); margin-bottom: 20px; }
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+@media (max-width: 760px) { .steps { grid-template-columns: 1fr 1fr; } }
+.step {
+  background: #fff; border: 1px solid var(--border); border-radius: 10px;
+  padding: 16px 14px;
+}
+.step .num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--primary); color: #fff; font-size: 13px; font-weight: 700;
+  margin-bottom: 8px;
+}
+.step h4 { font-size: 14px; margin-bottom: 6px; }
+.step p { font-size: 13px; color: var(--text-sub); margin: 0; }
+.faq-item {
+  border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px 16px; margin-bottom: 10px; background: #fff;
+}
+.faq-item h4 { font-size: 14px; color: var(--primary-dark); margin-bottom: 4px; }
+.faq-item p { font-size: 13.5px; color: #475569; margin: 0; }
+
+/* 常见尺寸对照表 */
+.tbl-wrap { overflow-x: auto; margin-bottom: 8px; }
+table.ref {
+  width: 100%; border-collapse: collapse; font-size: 13px; background: #fff;
+  border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+}
+table.ref th, table.ref td { padding: 9px 12px; border-bottom: 1px solid var(--border); text-align: left; }
+table.ref th { background: #f1f5f9; font-size: 12px; color: #475569; font-weight: 600; }
+table.ref tr:last-child td { border-bottom: none; }
+table.ref td.c { text-align: center; }
+
+footer { text-align: center; font-size: 12px; color: #94a3b8; margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <!-- Header nav: internal links between tools (helps indexing) + language switch -->
+    <div class="header-actions">
+      <a class="nav-link" href="../en/">🏠 Paint Calculator</a>
+      <a class="nav-link" href="../flooring/">🪵 Flooring Calculator</a>
+      <a class="nav-link is-current" href="./">🧱 Tile Calculator</a>
+      <a class="lang-switch" href="zh/">中文版</a>
+    </div>
+    <h1>🧱 Tile Calculator</h1>
+    <p>Enter your room size and tile size to get the tile count, boxes to buy and estimated cost</p>
+  </header>
+
+  <div class="main-grid">
+
+    <!-- ===== Inputs + result ===== -->
+    <div class="card">
+      <h2>📐 Room &amp; Tile Size</h2>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="len">Length <span class="hint">(ft)</span></label>
+          <input type="number" id="len" min="0" step="0.1" placeholder="e.g. 12" value="12">
+        </div>
+        <div class="field">
+          <label for="wid">Width <span class="hint">(ft)</span></label>
+          <input type="number" id="wid" min="0" step="0.1" placeholder="e.g. 12" value="12">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="size">Tile Size <span class="hint">(inches)</span></label>
+        <select id="size">
+          <option value="12x12">12 × 12 in — 1.0 sq ft per tile</option>
+          <option value="12x24" selected>12 × 24 in — 2.0 sq ft per tile</option>
+          <option value="18x18">18 × 18 in — 2.25 sq ft per tile</option>
+          <option value="24x24">24 × 24 in — 4.0 sq ft per tile</option>
+          <option value="6x36">6 × 36 in — 1.5 sq ft per tile (plank)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="perbox">Tiles per Box <span class="hint">(printed on the carton)</span></label>
+        <input type="number" id="perbox" min="1" step="1" placeholder="e.g. 8" value="8">
+      </div>
+
+      <div class="field">
+        <label for="waste">Waste Factor <span class="hint">(10% is standard)</span></label>
+        <select id="waste">
+          <option value="5">5% — simple straight layout</option>
+          <option value="10" selected>10% — standard room (recommended)</option>
+          <option value="15">15% — diagonal / many corners</option>
+          <option value="20">20% — herringbone / complex shape</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="price">Price per Box <span class="hint">($, optional)</span></label>
+        <input type="number" id="price" min="0" step="0.01" placeholder="e.g. 45.00" value="45.00">
+      </div>
+
+      <div class="result-box" style="margin-top:18px">
+        <div>Tiles You Need</div>
+        <div class="result-num"><span id="tiles">0</span><small> tiles</small></div>
+        <div class="result-detail" id="detail">Floor area — sq ft</div>
+        <button class="btn btn-primary" id="btnCopy">📋 Copy Result</button>
+        <button class="btn btn-outline pdf" id="btnPdf">⬇️ Download Material List PDF</button>
+      </div>
+    </div>
+
+    <!-- ===== Live tile layout ===== -->
+    <div class="card">
+      <h2>🖼️ Tile Layout</h2>
+      <div id="plan-wrap">
+        <svg id="plan" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+      <p style="font-size:12px;color:var(--text-sub);text-align:center">
+        Grid drawn to scale for your tile size · dimensions and area update in real time
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== Affiliate slots ===== -->
+  <section class="affiliate">
+    <h2>🛒 Recommended Tools (Amazon Affiliate)</h2>
+    <div class="goods-grid">
+      <!-- 联盟位：换成具体商品链接可直接提升转化（search 链接也已带追踪 ID） -->
+      <div class="goods-card">
+        <div class="goods-img">🧱</div>
+        <div class="goods-body">
+          <div class="g-name">Porcelain &amp; Ceramic Floor Tile</div>
+          <div class="g-price">See price on Amazon</div>
+          <a href="https://www.amazon.com/s?k=porcelain+floor+tile&tag=paintcalc20-20" target="_blank" rel="nofollow sponsored">Buy on Amazon</a>
+        </div>
+      </div>
+      <div class="goods-card">
+        <div class="goods-img">📏</div>
+        <div class="goods-body">
+          <div class="g-name">Tile Leveling System &amp; Spacers</div>
+          <div class="g-price">See price on Amazon</div>
+          <a href="https://www.amazon.com/s?k=tile+leveling+system+spacers&tag=paintcalc20-20" target="_blank" rel="nofollow sponsored">Buy on Amazon</a>
+        </div>
+      </div>
+      <div class="goods-card">
+        <div class="goods-img">🪣</div>
+        <div class="goods-body">
+          <div class="g-name">Tile Grout &amp; Float Kit</div>
+          <div class="g-price">See price on Amazon</div>
+          <a href="https://www.amazon.com/s?k=tile+grout+float+kit&tag=paintcalc20-20" target="_blank" rel="nofollow noopener sponsored">Buy on Amazon</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Guide content ===== -->
+  <section class="guide">
+    <h2>How to Work Out How Many Tiles You Need</h2>
+    <p class="lead">
+      Tiles are sold by the piece or by the box, never by the square foot — so the job is to convert
+      your floor area into a piece count, then add a waste allowance for cuts around walls, doorways
+      and any pattern you are laying.
+    </p>
+
+    <div class="steps">
+      <div class="step">
+        <span class="num">1</span>
+        <h4>Measure the floor</h4>
+        <p>Length × width in feet gives the area. Split L-shaped rooms into two rectangles and add them.</p>
+      </div>
+      <div class="step">
+        <span class="num">2</span>
+        <h4>Convert tile size</h4>
+        <p>Multiply the tile's two sides in inches, then divide by 144 to get square feet per tile.</p>
+      </div>
+      <div class="step">
+        <span class="num">3</span>
+        <h4>Add waste</h4>
+        <p>10% for a straight layout, 15–20% for diagonal, herringbone or rooms with many corners.</p>
+      </div>
+      <div class="step">
+        <span class="num">4</span>
+        <h4>Round up twice</h4>
+        <p>Round up to whole tiles, then round that up to whole boxes — you cannot buy part of a box.</p>
+      </div>
+    </div>
+
+    <h3>Tile Size Quick Reference (12 × 12 ft room, 10% waste)</h3>
+    <div class="tbl-wrap">
+      <table class="ref">
+        <thead>
+          <tr>
+            <th>Tile size</th>
+            <th class="c">Sq ft per tile</th>
+            <th class="c">Tiles needed</th>
+            <th class="c">Tiles per box</th>
+            <th class="c">Boxes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>12 × 12 in</td><td class="c">1.00</td><td class="c">159</td><td class="c">10</td><td class="c">16</td></tr>
+          <tr><td>12 × 24 in</td><td class="c">2.00</td><td class="c">80</td><td class="c">8</td><td class="c">10</td></tr>
+          <tr><td>18 × 18 in</td><td class="c">2.25</td><td class="c">71</td><td class="c">6</td><td class="c">12</td></tr>
+          <tr><td>24 × 24 in</td><td class="c">4.00</td><td class="c">40</td><td class="c">4</td><td class="c">10</td></tr>
+          <tr><td>6 × 36 in (plank)</td><td class="c">1.50</td><td class="c">106</td><td class="c">8</td><td class="c">14</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:12px;color:var(--text-sub)">
+      Based on a 144 sq ft floor with 10% waste. Your box count may differ slightly — carton coverage varies by brand.
+    </p>
+
+    <h3>Frequently Asked Questions</h3>
+
+    <div class="faq-item">
+      <h4>How many tiles do I need for a 12x12 room?</h4>
+      <p>
+        A 12 × 12 ft room is 144 sq ft. With 10% waste that is 158.4 sq ft. Using 12 × 12 inch tiles
+        (1 sq ft each) you need 159 tiles; with 12 × 24 inch tiles (2 sq ft each) you need 80 tiles.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h4>How much extra tile should I buy?</h4>
+      <p>
+        10% is standard for a simple rectangular room. Use 15% for diagonal layouts, herringbone
+        patterns or rooms with many corners and doorways. Keeping a few spare tiles is also wise for
+        future repairs.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h4>How many square feet does a box of tile cover?</h4>
+      <p>
+        It varies by tile size and brand. A box usually lists both the piece count and the coverage.
+        Common examples: 12 × 12 inch tiles about 10 sq ft per box, 12 × 24 inch tiles about 16 sq ft
+        per box. Always check the carton.
+      </p>
+    </div>
+
+    <h3>Related Tools</h3>
+    <p>
+      Laying new floor tile and repainting the walls? The
+      <a href="../en/" style="color:var(--primary);font-weight:600">paint calculator</a> and the
+      <a href="../flooring/" style="color:var(--primary);font-weight:600">flooring calculator</a>
+      cover the rest of the job.
+    </p>
+  </section>
+
+  <footer>
+    Tile Calculator · Estimates based on straight-layout installation · Results are for reference only<br>
+    As an Amazon Associate I earn from qualifying purchases.
+  </footer>
+</div>
+
+<!-- ===================== Toast ===================== -->
+<div class="toast" id="toast">
+  <span class="t-icon">✅</span>
+  <span>Copied! Results saved to your clipboard</span>
+</div>
+
+<!-- ===================== Payment modal ===================== -->
+<div class="modal-mask" id="payModal">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">×</button>
+    <h3>📄 Material List PDF</h3>
+    <div class="price">$1.99</div>
+    <p class="desc">
+      Includes: tile and box count with waste breakdown, adhesive and grout quantities,
+      spacer and trowel checklist, and a step-by-step installation plan.<br>
+      Instant download after payment.
+    </p>
+    <button class="btn btn-primary" id="btnPay">💳 Pay with Stripe</button>
+    <p class="modal-note">* Demo placeholder — no real payment gateway connected yet</p>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   计算逻辑：
+   1) 地面面积 = 长 × 宽（sq ft）
+   2) 单片面积 = (砖宽 × 砖高) ÷ 144
+   3) 含损耗面积 = 面积 × (1 + 损耗%)
+   4) 片数 = 向上取整(含损耗面积 ÷ 单片面积)
+   5) 箱数 = 向上取整(片数 ÷ 每箱片数)
+   6) 同步绘制按比例的瓷砖网格平面图
+   ============================================================ */
+
+const $ = (id) => document.getElementById(id);
+const inputLen    = $("len");
+const inputWid    = $("wid");
+const inputSize   = $("size");
+const inputPerBox = $("perbox");
+const inputWaste  = $("waste");
+const inputPrice  = $("price");
+
+const elTiles  = $("tiles");
+const elDetail = $("detail");
+const svg      = $("plan");
+
+// 解析 "12x24" 形式的尺寸选择
+function getTileSize() {
+  const parts = inputSize.value.split("x");
+  return { w: parseInt(parts[0], 10) || 12, h: parseInt(parts[1], 10) || 12 };
+}
+
+function calc() {
+  const L = Math.max(0, parseFloat(inputLen.value) || 0);
+  const W = Math.max(0, parseFloat(inputWid.value) || 0);
+  const perBox = Math.max(1, parseInt(inputPerBox.value, 10) || 1);
+  const waste = parseInt(inputWaste.value, 10) || 0;
+  const price = Math.max(0, parseFloat(inputPrice.value) || 0);
+  const size = getTileSize();
+
+  const tileSqFt = (size.w * size.h) / 144;             // 单片面积
+  const area = L * W;                                    // 纯地面面积
+  const areaWithWaste = area * (1 + waste / 100);        // 含损耗
+  const tiles = areaWithWaste > 0 ? Math.ceil(areaWithWaste / tileSqFt) : 0;
+  const boxes = tiles > 0 ? Math.ceil(tiles / perBox) : 0;
+  const cost = boxes * price;
+
+  elTiles.textContent = tiles;
+  if (area > 0) {
+    elDetail.innerHTML =
+      area.toFixed(1) + " sq ft + " + waste + "% waste = " + areaWithWaste.toFixed(1) +
+      " sq ft ÷ " + tileSqFt.toFixed(2) + " sq ft/tile<br>" +
+      "≈ " + boxes + " boxes (" + perBox + " tiles per box)" +
+      (cost > 0 ? " · estimated cost $" + cost.toFixed(2) : "");
+  } else {
+    elDetail.textContent = "Please enter a valid room size";
+  }
+
+  drawPlan(L, W, size);
+}
+
+/* ============================================================
+   瓷砖平面图：按真实比例绘制房间 + 按砖尺寸画网格线
+   ============================================================ */
+function drawPlan(L, W, size) {
+  if (L <= 0 || W <= 0) {
+    svg.innerHTML = '<text x="50%" y="50%" text-anchor="middle" fill="#94a3b8" font-size="15">' +
+                    'Enter length and width to see the layout</text>';
+    svg.setAttribute("viewBox", "0 0 400 120");
+    return;
+  }
+
+  const vbW = 640, vbH = 320, pad = 46;
+  // 按比例缩放，保证图形完整落在视图内
+  const scale = Math.min((vbW - pad * 2) / L, (vbH - pad * 2) / W);
+  const w = L * scale, h = W * scale;
+  const x = (vbW - w) / 2, y = (vbH - h) / 2;
+
+  // 单片砖在画布上的尺寸（英尺 → 像素）
+  const tileWpx = (size.w / 12) * scale;
+  const tileHpx = (size.h / 12) * scale;
+
+  let gridLines = "";
+  // 网格过密时不画（避免上万条线拖慢渲染），改为纯色块
+  if (tileWpx > 5 && tileHpx > 5) {
+    let g = '<g stroke="#7dd3fc" stroke-width="0.8">';
+    for (let gx = x + tileWpx; gx < x + w; gx += tileWpx) {
+      g += '<line x1="' + gx.toFixed(1) + '" y1="' + y + '" x2="' + gx.toFixed(1) + '" y2="' + (y + h) + '"/>';
+    }
+    for (let gy = y + tileHpx; gy < y + h; gy += tileHpx) {
+      g += '<line x1="' + x + '" y1="' + gy.toFixed(1) + '" x2="' + (x + w) + '" y2="' + gy.toFixed(1) + '"/>';
+    }
+    g += '</g>';
+    gridLines = g;
+  }
+
+  let html = "";
+  html += '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h +
+          '" fill="#f0f9ff" stroke="#0e7490" stroke-width="2.5" rx="2"/>';
+  html += gridLines;
+
+  // 尺寸标注：长度（下边）
+  html += '<line x1="' + x + '" y1="' + (y + h + 22) + '" x2="' + (x + w) + '" y2="' + (y + h + 22) +
+          '" stroke="#94a3b8" stroke-width="1.2"/>';
+  html += '<text x="' + (x + w / 2) + '" y="' + (y + h + 40) +
+          '" text-anchor="middle" font-size="12" fill="#475569">' + L + ' ft</text>';
+
+  // 尺寸标注：宽度（左边）
+  html += '<line x1="' + (x - 22) + '" y1="' + y + '" x2="' + (x - 22) + '" y2="' + (y + h) +
+          '" stroke="#94a3b8" stroke-width="1.2"/>';
+  html += '<text x="' + (x - 30) + '" y="' + (y + h / 2) +
+          '" text-anchor="end" font-size="12" fill="#475569">' + W + ' ft</text>';
+
+  // 中心标注面积 + 砖规格
+  html += '<text x="' + (x + w / 2) + '" y="' + (y + h / 2 - 4) +
+          '" text-anchor="middle" font-size="15" font-weight="700" fill="#155e75">' +
+          (L * W).toFixed(1) + ' sq ft</text>';
+  html += '<text x="' + (x + w / 2) + '" y="' + (y + h / 2 + 14) +
+          '" text-anchor="middle" font-size="11" fill="#64748b">' +
+          size.w + ' × ' + size.h + ' in tiles</text>';
+
+  svg.setAttribute("viewBox", "0 0 " + vbW + " " + vbH);
+  svg.innerHTML = html;
+}
+
+/* ---------- Toast ---------- */
+let toastTimer = null;
+function showToast() {
+  const toast = $("toast");
+  toast.classList.add("show");
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 1800);
+}
+
+/* ---------- 复制（带降级方案） ---------- */
+function copyText(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    return navigator.clipboard.writeText(text);
+  }
+  return new Promise((resolve, reject) => {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand("copy") ? resolve() : reject(new Error("copy failed"));
+    } catch (e) { reject(e); }
+    document.body.removeChild(ta);
+  });
+}
+
+$("btnCopy").addEventListener("click", () => {
+  const size = getTileSize();
+  const boxesPart = elDetail.textContent.split("≈ ")[1];
+  const text =
+    "【Tile Calculation Result】\n" +
+    "Room: " + inputLen.value + " × " + inputWid.value + " ft\n" +
+    "Tile size: " + size.w + " × " + size.h + " in\n" +
+    "Waste factor: " + inputWaste.value + "%\n" +
+    "Tiles needed: " + elTiles.textContent +
+    (boxesPart ? "\nBoxes: " + boxesPart.split(" · ")[0] : "");
+  copyText(text).then(() => {
+    $("btnCopy").textContent = "✅ Copied!";
+    setTimeout(() => { $("btnCopy").textContent = "📋 Copy Result"; }, 1500);
+    showToast();
+  }).catch(() => alert("Your browser doesn't support auto copy:\n\n" + text));
+});
+
+/* ---------- 付费弹窗 ---------- */
+$("btnPdf").addEventListener("click", () => $("payModal").classList.add("show"));
+$("modalClose").addEventListener("click", () => $("payModal").classList.remove("show"));
+$("payModal").addEventListener("click", function (e) {
+  if (e.target === this) this.classList.remove("show");
+});
+$("btnPay").addEventListener("click", () => {
+  const ok = confirm(
+    "Demo mode: no payment gateway connected yet.\n\n" +
+    "Click OK to generate the PDF preview. In production this button redirects " +
+    "to a payment link and the PDF unlocks after payment."
+  );
+  if (!ok) return;
+  $("payModal").classList.remove("show");
+  openPrintablePdf();
+});
+
+/* ============================================================
+   PDF 生成（零依赖）：新建打印优化页面 → 用户选“另存为 PDF”
+   ============================================================ */
+function buildPdfHtml() {
+  const L = parseFloat(inputLen.value) || 0;
+  const W = parseFloat(inputWid.value) || 0;
+  const perBox = Math.max(1, parseInt(inputPerBox.value, 10) || 1);
+  const waste = parseInt(inputWaste.value, 10) || 0;
+  const price = Math.max(0, parseFloat(inputPrice.value) || 0);
+  const size = getTileSize();
+
+  const tileSqFt = (size.w * size.h) / 144;
+  const area = L * W;
+  const areaWithWaste = area * (1 + waste / 100);
+  const tiles = areaWithWaste > 0 ? Math.ceil(areaWithWaste / tileSqFt) : 0;
+  const boxes = tiles > 0 ? Math.ceil(tiles / perBox) : 0;
+  const cost = boxes * price;
+
+  // 辅料估算：瓷砖胶约 50 sq ft / 袋；填缝剂约 1 lb / 10 sq ft（12×12 砖、1/4 缝参考值）
+  const thinSet = area > 0 ? Math.ceil(area / 50) : 0;
+  const grout = area > 0 ? Math.ceil(area / 10) : 0;
+
+  const today = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+
+  const rows = [
+    ["Tile — " + size.w + " × " + size.h + " in", boxes + " boxes (" + tiles + " tiles)",
+     "https://www.amazon.com/s?k=porcelain+floor+tile&tag=paintcalc20-20"],
+    ["Thin-set adhesive (50 sq ft bag)", thinSet + " bags",
+     "https://www.amazon.com/s?k=thin+set+tile+adhesive&tag=paintcalc20-20"],
+    ["Grout (approx. 1 lb per 10 sq ft)", "~" + grout + " lb",
+     "https://www.amazon.com/s?k=tile+grout&tag=paintcalc20-20"],
+    ["Leveling system / spacers", "1 kit",
+     "https://www.amazon.com/s?k=tile+leveling+system+spacers&tag=paintcalc20-20"]
+  ];
+  const rowsHtml = rows.map(r =>
+    '<tr><td>' + r[0] + '</td><td class="c">' + r[1] +
+    '</td><td class="c"><a href="' + r[2] + '">Amazon</a></td></tr>'
+  ).join("");
+
+  return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Tile Material List</title><style>' +
+    'body{font-family:"Segoe UI",Arial,sans-serif;color:#1e293b;padding:36px;max-width:760px;margin:0 auto}' +
+    'h1{font-size:22px;color:#155e75;margin:0 0 4px}' +
+    '.sub{color:#64748b;font-size:12px;margin-bottom:22px}' +
+    'h2{font-size:14px;color:#0e7490;border-left:4px solid #0e7490;padding-left:8px;margin:26px 0 10px}' +
+    'table{width:100%;border-collapse:collapse;font-size:13px}' +
+    'th,td{border:1px solid #e2e8f0;padding:8px 10px;text-align:left}' +
+    'th{background:#f1f5f9;font-size:12px}.c{text-align:center}' +
+    '.kv{font-size:13px;margin:2px 0}.kv b{display:inline-block;width:165px;color:#475569;font-weight:600}' +
+    '.total{background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:12px 14px;margin-top:14px;font-size:13px}' +
+    '.note{font-size:11px;color:#94a3b8;margin-top:24px;border-top:1px solid #e2e8f0;padding-top:10px}' +
+    'a{color:#0e7490}@media print{body{padding:0}a{text-decoration:none}}' +
+    '</style></head><body>' +
+    '<h1>Tile Material List</h1>' +
+    '<div class="sub">Generated ' + today + ' · ' + window.location.host + '</div>' +
+
+    '<h2>Your room</h2>' +
+    '<div class="kv"><b>Dimensions</b>' + L + ' × ' + W + ' ft</div>' +
+    '<div class="kv"><b>Floor area</b>' + area.toFixed(1) + ' sq ft</div>' +
+    '<div class="kv"><b>Tile size</b>' + size.w + ' × ' + size.h + ' in (' + tileSqFt.toFixed(2) + ' sq ft each)</div>' +
+    '<div class="kv"><b>Waste factor</b>' + waste + '% (' + areaWithWaste.toFixed(1) + ' sq ft total)</div>' +
+    '<div class="total"><b>' + tiles + ' tiles</b> ≈ <b>' + boxes + ' boxes</b> to order' +
+      (cost > 0 ? ' · estimated material cost <b>$' + cost.toFixed(2) + '</b>' : '') + '</div>' +
+
+    '<h2>Material list</h2>' +
+    '<table><thead><tr><th>Item</th><th class="c">Quantity</th><th class="c">Buy</th></tr></thead>' +
+    '<tbody>' + rowsHtml + '</tbody></table>' +
+
+    '<h2>Installation checklist</h2>' +
+    '<div class="kv">1. Check the subfloor is flat within 1/8 in over 10 ft.</div>' +
+    '<div class="kv">2. Dry-lay one row to confirm your layout and starting point.</div>' +
+    '<div class="kv">3. Spread thin-set with the correct notched trowel and back-butter large tiles.</div>' +
+    '<div class="kv">4. Use spacers or a leveling system to keep joints even.</div>' +
+    '<div class="kv">5. Wait 24 hours before grouting, then seal if required.</div>' +
+
+    '<div class="note">Estimates assume a straight layout with 1/4 in joints. Diagonal and herringbone ' +
+    'patterns can need 15–20% waste. As an Amazon Associate I earn from qualifying purchases.</div>' +
+    '</body></html>';
+}
+
+function openPrintablePdf() {
+  const w = window.open("", "_blank");
+  if (!w) { alert("Please allow pop-ups for this site to generate the PDF."); return; }
+  w.document.open();
+  w.document.write(buildPdfHtml());
+  w.document.close();
+  w.onload = function () { w.focus(); w.print(); };
+  setTimeout(function () { try { w.focus(); w.print(); } catch (e) {} }, 400);
+}
+
+/* ---------- 事件绑定 ---------- */
+[inputLen, inputWid, inputPerBox, inputPrice].forEach(el => el.addEventListener("input", calc));
+[inputSize, inputWaste].forEach(el => el.addEventListener("change", calc));
+
+calc();
+</script>
+</body>
+</html>
