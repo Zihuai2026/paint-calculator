@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  站点地图：告诉搜索引擎本站有哪些页面、各自的语言版本
+  xhtml:link 里的 hreflang 与页面头部的 hreflang 保持一致
+  新增页面后记得在这里补一条 <url>
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- 中文版油漆计算器（默认首页） -->
+  <url>
+    <loc>https://zihuai2026.github.io/paint-calculator/</loc>
+    <lastmod>2026-11-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://zihuai2026.github.io/paint-calculator/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://zihuai2026.github.io/paint-calculator/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://zihuai2026.github.io/paint-calculator/en/"/>
+  </url>
+
+  <!-- 英文版油漆计算器 -->
+  <url>
+    <loc>https://zihuai2026.github.io/paint-calculator/en/</loc>
+    <lastmod>2026-11-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://zihuai2026.github.io/paint-calculator/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://zihuai2026.github.io/paint-calculator/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://zihuai2026.github.io/paint-calculator/en/"/>
+  </url>
+
+  <!-- 英文版地板计算器 -->
+  <url>
+    <loc>https://zihuai2026.github.io/paint-calculator/flooring/</loc>
+    <lastmod>2026-11-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://zihuai2026.github.io/paint-calculator/flooring/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://zihuai2026.github.io/paint-calculator/flooring/zh/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://zihuai2026.github.io/paint-calculator/flooring/"/>
+  </url>
+
+  <!-- 中文版地板计算器 -->
+  <url>
+    <loc>https://zihuai2026.github.io/paint-calculator/flooring/zh/</loc>
+    <lastmod>2026-11-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://zihuai2026.github.io/paint-calculator/flooring/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://zihuai2026.github.io/paint-calculator/flooring/zh/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://zihuai2026.github.io/paint-calculator/flooring/"/>
+  </url>
+
+</urlset>

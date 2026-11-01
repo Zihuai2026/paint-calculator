@@ -1,0 +1,6 @@
+# robots.txt —— 告诉搜索引擎可以抓取整站，并指明站点地图位置
+User-agent: *
+Allow: /
+
+# 站点地图（Google / Bing 都能直接读这个）
+Sitemap: https://zihuai2026.github.io/paint-calculator/sitemap.xml
